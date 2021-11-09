@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
@@ -14,7 +13,7 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-
+  //hello
   var onBoardController = PageController();
   int currentIndex=0;
   List<OnBoard> list = [
