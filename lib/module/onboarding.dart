@@ -13,7 +13,6 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  //hello
   var onBoardController = PageController();
   int currentIndex=0;
   List<OnBoard> list = [
