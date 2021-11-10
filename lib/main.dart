@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
-import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/module/onboarding.dart';
 import 'package:flutter/services.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
         ]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:/*startWidget*/LoginScreen(),
+      home:startWidget,
     );
   }
 }

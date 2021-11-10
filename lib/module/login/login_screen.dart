@@ -51,7 +51,7 @@ class LoginScreen extends StatelessWidget {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15.0),
-                                      border: Border.all(color: Colors.grey)
+                                      border: Border.all(color: Colors.blueGrey)
                                   ),
                                   child: MaterialButton(
                                     onPressed: (){},
@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                                     Text(
                                       'G',
                                       style:TextStyle(
-                                        color: Colors.grey,
+                                        color: Colors.grey[500],
                                         fontSize: 30.0,
                                       ),
                                     ),
@@ -74,7 +74,7 @@ class LoginScreen extends StatelessWidget {
 
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15.0),
-                                      border: Border.all(color: Colors.grey)
+                                      border: Border.all(color: Colors.blueGrey)
                                   ),
                                   child: MaterialButton(
                                     onPressed: (){},
@@ -106,6 +106,7 @@ class LoginScreen extends StatelessWidget {
                           label: "Email",
                           containerRadius: 10.0,
                           borderColor: Colors.pink,
+
                         ),
                         SizedBox(height: 20.0,),
                         Text(

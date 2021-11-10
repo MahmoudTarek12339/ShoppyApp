@@ -58,6 +58,7 @@ Widget defaultFormField({
 
   Color borderColor=Colors.white,
   Color textColor=Colors.white,
+  Color hintColor=Colors.grey,
   Color prefixColor=Colors.white,
   Color suffixColor=Colors.white,
 
@@ -83,7 +84,7 @@ Widget defaultFormField({
           decoration: InputDecoration(
 
             hintText: label,
-            hintStyle: TextStyle(color: textColor),
+            hintStyle: TextStyle(color: hintColor),
             prefixIcon: prefix != null
                 ? Icon(prefix,color: prefixColor,)
                 :null,
