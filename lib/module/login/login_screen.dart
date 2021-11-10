@@ -8,8 +8,8 @@ import 'package:shoppy/shared/components/components.dart';
 import 'cubit/cubit.dart';
 
 class LoginScreen extends StatelessWidget {
-  var emailController=TextEditingController();
-  var passwordController=TextEditingController();
+  final TextEditingController emailController=TextEditingController();
+  final TextEditingController passwordController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
