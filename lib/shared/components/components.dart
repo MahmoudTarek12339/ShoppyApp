@@ -45,4 +45,60 @@ void navigateAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
       (route) => false,
 );
 
+Widget defaultFormField({
+  required TextEditingController controller,
+  required TextInputType type,
+  required String? Function(String?)? validate,
+  required String label,
+
+  bool isPassword = false,
+
+  IconData? prefix,
+  IconData? suffix,
+
+  Color borderColor=Colors.white,
+  Color textColor=Colors.white,
+  Color prefixColor=Colors.white,
+  Color suffixColor=Colors.white,
+
+  VoidCallback? suffixPressed,
+
+  double containerRadius=25.0,
+
+  InputBorder borderForm=InputBorder.none,
+}) =>
+    Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(containerRadius),
+        border: Border.all(color: borderColor)
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: TextFormField(
+          controller: controller,
+          keyboardType: type,
+          obscureText: isPassword,
+          validator: validate,
+          style: TextStyle(color: textColor),
+          decoration: InputDecoration(
+
+            hintText: label,
+            hintStyle: TextStyle(color: textColor),
+            prefixIcon: prefix != null
+                ? Icon(prefix,color: prefixColor,)
+                :null,
+            suffixIcon: suffix != null
+                ? IconButton(
+              onPressed: suffixPressed,
+              icon: Icon(
+                suffix,
+                color: suffixColor,
+              ),
+            )
+                : null,
+            border: borderForm,
+          ),
+        ),
+      ),
+    );
 
