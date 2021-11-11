@@ -103,8 +103,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             });
                           },
                           text: 'Get Started',
-                          background: Colors.white,
-                          buttonColor: Colors.blueGrey,
+                          backgroundColor: Colors.blueGrey,
+                          radius: 5.0
                         )),
                   ),
                 ),

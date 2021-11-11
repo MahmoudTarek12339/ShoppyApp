@@ -1,20 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shoppy/module/login/cubit/states.dart';
-import 'package:shoppy/module/signup/signup_screen.dart';
+import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 
 import 'cubit/cubit.dart';
+import 'cubit/states.dart';
 
-class LoginScreen extends StatelessWidget {
+class SignupScreen extends StatelessWidget {
   final TextEditingController emailController=TextEditingController();
   final TextEditingController passwordController=TextEditingController();
+  final TextEditingController numberController=TextEditingController();
+  final TextEditingController firstNameController=TextEditingController();
+  final TextEditingController lastNameController=TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context)=>ShoppyLoginCubit(),
-      child: BlocConsumer<ShoppyLoginCubit,ShoppyLoginStates>(
+      create: (BuildContext context)=>ShoppySignupCubit(),
+      child: BlocConsumer<ShoppySignupCubit,ShoppySignupStates>(
           listener: (context,state){
 
           },
@@ -24,7 +28,7 @@ class LoginScreen extends StatelessWidget {
               appBar: AppBar(
                 backgroundColor: Colors.black,
                 title: Text(
-                  'Login',
+                  'Sign up',
                   style: TextStyle(
                       color: Colors.white
                   ),
@@ -39,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Login with one of The following Options',
+                          'Sign up with one of The following Options',
                           style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.grey),
                         ),
                         SizedBox(height: 15.0,),
@@ -94,9 +98,57 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 20.0,),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'First Name',
+                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 15.0),
+                                  ),
+                                  SizedBox(height: 15.0,),
+                                  defaultFormField(
+                                    controller: firstNameController,
+                                    type: TextInputType.name,
+                                    validate: (value){},
+                                    label: "First Name",
+                                    containerRadius: 10.0,
+                                    borderColor: Colors.pink,
+                                  ),
+                                ],
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              ),
+                            ),
+                            SizedBox(width: 20.0,),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Last Name',
+                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 15.0),
+                                  ),
+                                  SizedBox(height: 15.0,),
+                                  defaultFormField(
+                                    controller: lastNameController,
+                                    type: TextInputType.name,
+                                    validate: (value){},
+                                    label: "Last Name",
+                                    containerRadius: 10.0,
+                                    borderColor: Colors.pink,
+
+
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15.0,),
                         Text(
                           'Email',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 20.0),
+                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 15.0),
                         ),
                         SizedBox(height: 15.0,),
                         defaultFormField(
@@ -106,6 +158,7 @@ class LoginScreen extends StatelessWidget {
                           label: "Email",
                           containerRadius: 10.0,
                           borderColor: Colors.pink,
+
 
                         ),
                         SizedBox(height: 20.0,),
@@ -118,25 +171,26 @@ class LoginScreen extends StatelessWidget {
                           controller: passwordController,
                           type: TextInputType.visiblePassword,
                           validate: (value){},
-                          isPassword: ShoppyLoginCubit.get(context).isPassword,
+                          isPassword: ShoppySignupCubit.get(context).isPassword,
                           label: "Password",
                           containerRadius: 10.0,
                           borderColor: Colors.pink,
-                          suffix: ShoppyLoginCubit.get(context).icon,
+                          suffix: ShoppySignupCubit.get(context).icon,
                           suffixPressed: () {
-                            ShoppyLoginCubit.get(context).changePasswordVisibility();
+                            ShoppySignupCubit.get(context).changePasswordVisibility();
                           },
                         ),
+
                         SizedBox(
                           height: 25.0,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: defaultButton(
-                            onPressFunction: () {  },
-                            text: 'LOGIN',
-                            backgroundColor: Colors.pink,
-                            radius: 15.0
+                              onPressFunction: () {  },
+                              text: 'Create Account',
+                              backgroundColor: Colors.pink,
+                              radius: 15.0
                           ),
                         ),
                         SizedBox(
@@ -146,14 +200,14 @@ class LoginScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Don\'t have an account?',
+                              'already have account!',
                               style: TextStyle(color: Colors.white),
 
                             ),
                             TextButton(onPressed: (){
-                              navigateTo(context,SignupScreen());
+                              navigateAndFinish(context,LoginScreen());
                             },
-                                child: Text('Register Now'))
+                                child: Text('Log in'))
                           ],
                         )
                       ],
@@ -163,7 +217,7 @@ class LoginScreen extends StatelessWidget {
               ),
             );
           }
-          ),
+      ),
     );
   }
 }

@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 
 //default button style
 Widget defaultButton({
-  double width = double.infinity,
-  Color background = Colors.blue,
-  bool isUpperCase = true,
-  double radius = 3.0,
-  Color textColor= Colors.white,
-  Color buttonColor= Colors.blueAccent,
   required VoidCallback onPressFunction,
   required String text,
+  double width = double.infinity,
+  double height = 40.0,
+  double radius = 3.0,
+  bool isUpperCase = true,
+  Color backgroundColor = Colors.blue,
+  Color textColor= Colors.white,
 }) =>
     Container(
       width: width,
-      height: 40.0,
+      height: height,
       child: MaterialButton(
-        color: buttonColor,
         onPressed: onPressFunction,
         child: Text(
           isUpperCase ? text.toUpperCase() : text,
@@ -23,12 +22,13 @@ Widget defaultButton({
             color: textColor,
           ),
         ),
+        clipBehavior: Clip.antiAlias, // Add This
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
           radius,
         ),
-        color: background,
+        color: backgroundColor,
       ),
     );
 
@@ -82,7 +82,6 @@ Widget defaultFormField({
           validator: validate,
           style: TextStyle(color: textColor),
           decoration: InputDecoration(
-
             hintText: label,
             hintStyle: TextStyle(color: hintColor),
             prefixIcon: prefix != null
