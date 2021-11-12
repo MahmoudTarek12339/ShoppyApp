@@ -6,10 +6,12 @@ import 'package:shoppy/shared/components/components.dart';
 
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
+import 'mobile_verification.dart';
 
 class SignupScreen extends StatelessWidget {
   final TextEditingController emailController=TextEditingController();
   final TextEditingController passwordController=TextEditingController();
+  final TextEditingController confirmPasswordController=TextEditingController();
   final TextEditingController numberController=TextEditingController();
   final TextEditingController firstNameController=TextEditingController();
   final TextEditingController lastNameController=TextEditingController();
@@ -97,60 +99,35 @@ class SignupScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 20.0,),
+                        SizedBox(height: 25.0,),
                         Row(
                           children: [
                             Expanded(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'First Name',
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 15.0),
-                                  ),
-                                  SizedBox(height: 15.0,),
-                                  defaultFormField(
-                                    controller: firstNameController,
-                                    type: TextInputType.name,
-                                    validate: (value){},
-                                    label: "First Name",
-                                    containerRadius: 10.0,
-                                    borderColor: Colors.pink,
-                                  ),
-                                ],
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              child: defaultFormField(
+                                controller: firstNameController,
+                                type: TextInputType.name,
+                                validate: (value){},
+                                label: "First Name",
+                                containerRadius: 10.0,
+                                borderColor: Colors.pink,
+                                focusBorderColor: Colors.pinkAccent,
                               ),
                             ),
                             SizedBox(width: 20.0,),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Last Name',
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 15.0),
-                                  ),
-                                  SizedBox(height: 15.0,),
-                                  defaultFormField(
-                                    controller: lastNameController,
-                                    type: TextInputType.name,
-                                    validate: (value){},
-                                    label: "Last Name",
-                                    containerRadius: 10.0,
-                                    borderColor: Colors.pink,
-
-
-                                  ),
-                                ],
+                              child: defaultFormField(
+                                controller: lastNameController,
+                                type: TextInputType.name,
+                                validate: (value){},
+                                label: "Last Name",
+                                containerRadius: 10.0,
+                                borderColor: Colors.pink,
+                                focusBorderColor: Colors.pinkAccent,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 15.0,),
-                        Text(
-                          'Email',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 15.0),
-                        ),
-                        SizedBox(height: 15.0,),
+                        SizedBox(height: 20.0,),
                         defaultFormField(
                           controller: emailController,
                           type: TextInputType.emailAddress,
@@ -158,15 +135,9 @@ class SignupScreen extends StatelessWidget {
                           label: "Email",
                           containerRadius: 10.0,
                           borderColor: Colors.pink,
-
-
+                          focusBorderColor: Colors.pinkAccent,
                         ),
                         SizedBox(height: 20.0,),
-                        Text(
-                          'Password',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 20.0),
-                        ),
-                        SizedBox(height: 15.0,),
                         defaultFormField(
                           controller: passwordController,
                           type: TextInputType.visiblePassword,
@@ -175,19 +146,32 @@ class SignupScreen extends StatelessWidget {
                           label: "Password",
                           containerRadius: 10.0,
                           borderColor: Colors.pink,
+                          focusBorderColor: Colors.pinkAccent,
                           suffix: ShoppySignupCubit.get(context).icon,
                           suffixPressed: () {
                             ShoppySignupCubit.get(context).changePasswordVisibility();
                           },
                         ),
-
+                        SizedBox(height: 20.0,),
+                        defaultFormField(
+                          controller: confirmPasswordController,
+                          type: TextInputType.visiblePassword,
+                          validate: (value){},
+                          isPassword: ShoppySignupCubit.get(context).isPassword,
+                          label: "Confirm Password",
+                          containerRadius: 10.0,
+                          borderColor: Colors.pink,
+                          focusBorderColor: Colors.pinkAccent,
+                        ),
                         SizedBox(
-                          height: 25.0,
+                          height: 35.0,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: defaultButton(
-                              onPressFunction: () {  },
+                              onPressFunction: () {
+                                navigateTo(context, MobileVerificationScreen());
+                              },
                               text: 'Create Account',
                               backgroundColor: Colors.pink,
                               radius: 15.0

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/module/search_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 
@@ -50,7 +51,7 @@ class ShoppyLayout extends StatelessWidget {
                               'https://avatars.githubusercontent.com/u/34492145?v=4'),
                         ),
                         onTap: (){
-                          print('image tapped');
+                          navigateTo(context, LoginScreen());
                         },
                       ),
                     ),

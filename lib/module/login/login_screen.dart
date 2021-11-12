@@ -106,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                           label: "Email",
                           containerRadius: 10.0,
                           borderColor: Colors.pink,
-
+                          focusBorderColor: Colors.pinkAccent,
                         ),
                         SizedBox(height: 20.0,),
                         Text(
@@ -122,6 +122,7 @@ class LoginScreen extends StatelessWidget {
                           label: "Password",
                           containerRadius: 10.0,
                           borderColor: Colors.pink,
+                          focusBorderColor: Colors.pinkAccent,
                           suffix: ShoppyLoginCubit.get(context).icon,
                           suffixPressed: () {
                             ShoppyLoginCubit.get(context).changePasswordVisibility();

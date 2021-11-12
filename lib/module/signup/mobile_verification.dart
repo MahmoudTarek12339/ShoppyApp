@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoppy/module/signup/cubit/code_verification.dart';
+import 'package:shoppy/module/signup/code_verification.dart';
 import 'package:shoppy/shared/components/components.dart';
 
 class MobileVerificationScreen extends StatefulWidget {

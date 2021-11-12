@@ -57,6 +57,7 @@ Widget defaultFormField({
   IconData? suffix,
 
   Color borderColor=Colors.white,
+  Color focusBorderColor=Colors.blue,
   Color textColor=Colors.white,
   Color hintColor=Colors.grey,
   Color prefixColor=Colors.white,
@@ -68,37 +69,29 @@ Widget defaultFormField({
 
   InputBorder borderForm=InputBorder.none,
 }) =>
-    Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(containerRadius),
-        border: Border.all(color: borderColor)
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: TextFormField(
-          controller: controller,
-          keyboardType: type,
-          obscureText: isPassword,
-          validator: validate,
-          style: TextStyle(color: textColor),
-          decoration: InputDecoration(
-            hintText: label,
-            hintStyle: TextStyle(color: hintColor),
-            prefixIcon: prefix != null
-                ? Icon(prefix,color: prefixColor,)
-                :null,
-            suffixIcon: suffix != null
-                ? IconButton(
-              onPressed: suffixPressed,
-              icon: Icon(
-                suffix,
-                color: suffixColor,
-              ),
-            )
-                : null,
-            border: borderForm,
+    TextFormField(
+      controller: controller,
+      keyboardType: type,
+      obscureText: isPassword,
+      validator: validate,
+      style: TextStyle(color: textColor),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: hintColor),
+        prefixIcon: prefix != null
+            ? Icon(prefix,color: prefixColor,)
+            :null,
+        suffixIcon: suffix != null
+            ? IconButton(
+          onPressed: suffixPressed,
+          icon: Icon(
+            suffix,
+            color: suffixColor,
           ),
-        ),
+        )
+            : null,
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(containerRadius),borderSide: BorderSide(color: borderColor)),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(containerRadius),borderSide: BorderSide(color: focusBorderColor)),
       ),
     );
 
