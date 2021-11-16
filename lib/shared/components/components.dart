@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 Widget defaultButton({
   required VoidCallback onPressFunction,
   required String text,
+  required BuildContext context,
   double width = double.infinity,
   double height = 40.0,
-  double radius = 3.0,
+  double radius = 15.0,
   bool isUpperCase = true,
-  Color backgroundColor = Colors.blue,
-  Color textColor= Colors.white,
+  Color? backgroundColor ,
 }) =>
     Container(
       width: width,
@@ -19,7 +19,7 @@ Widget defaultButton({
         child: Text(
           isUpperCase ? text.toUpperCase() : text,
           style: TextStyle(
-            color: textColor,
+            color: Theme.of(context).iconTheme.color,
           ),
         ),
         clipBehavior: Clip.antiAlias, // Add This
@@ -28,7 +28,7 @@ Widget defaultButton({
         borderRadius: BorderRadius.circular(
           radius,
         ),
-        color: backgroundColor,
+        color: backgroundColor!=null?backgroundColor:Theme.of(context).buttonColor,
       ),
     );
 
@@ -50,22 +50,21 @@ Widget defaultFormField({
   required TextInputType type,
   required String? Function(String?)? validate,
   required String label,
-
+  required BuildContext context,
   bool isPassword = false,
 
   IconData? prefix,
   IconData? suffix,
 
-  Color borderColor=Colors.white,
-  Color focusBorderColor=Colors.blue,
-  Color textColor=Colors.white,
+  Color? borderColor,
+  Color? focusBorderColor,
   Color hintColor=Colors.grey,
-  Color prefixColor=Colors.white,
-  Color suffixColor=Colors.white,
+  Color? prefixColor,
+  Color? suffixColor,
 
   VoidCallback? suffixPressed,
 
-  double containerRadius=25.0,
+  double containerRadius=10.0,
 
   InputBorder borderForm=InputBorder.none,
 }) =>
@@ -74,24 +73,31 @@ Widget defaultFormField({
       keyboardType: type,
       obscureText: isPassword,
       validator: validate,
-      style: TextStyle(color: textColor),
+      style: TextStyle(color: Theme.of(context).iconTheme.color),
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(color: hintColor),
         prefixIcon: prefix != null
-            ? Icon(prefix,color: prefixColor,)
+            ? Icon(prefix,
+          color: prefixColor!=null?prefixColor
+          :Theme.of(context).iconTheme.color,)
             :null,
         suffixIcon: suffix != null
             ? IconButton(
           onPressed: suffixPressed,
           icon: Icon(
             suffix,
-            color: suffixColor,
+            color: suffixColor!=null?suffixColor
+                :Theme.of(context).iconTheme.color,
           ),
         )
             : null,
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(containerRadius),borderSide: BorderSide(color: borderColor)),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(containerRadius),borderSide: BorderSide(color: focusBorderColor)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(containerRadius),borderSide: BorderSide(
+            color: borderColor!=null?borderColor:Theme.of(context).backgroundColor,
+        )),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(containerRadius),borderSide: BorderSide(
+            color: focusBorderColor!=null?focusBorderColor:Theme.of(context).focusColor,
+        )),
       ),
     );
 

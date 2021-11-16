@@ -26,14 +26,10 @@ class SignupScreen extends StatelessWidget {
           },
           builder: (context,state){
             return Scaffold(
-              backgroundColor: Colors.black,
               appBar: AppBar(
-                backgroundColor: Colors.black,
                 title: Text(
                   'Sign up',
-                  style: TextStyle(
-                      color: Colors.white
-                  ),
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
               body: Center(
@@ -46,7 +42,7 @@ class SignupScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Sign up with one of The following Options',
-                          style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.grey),
+                          style: Theme.of(context).textTheme.caption,
                         ),
                         SizedBox(height: 15.0,),
                         Padding(
@@ -104,49 +100,41 @@ class SignupScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: defaultFormField(
+                                context: context,
                                 controller: firstNameController,
                                 type: TextInputType.name,
                                 validate: (value){},
                                 label: "First Name",
-                                containerRadius: 10.0,
-                                borderColor: Colors.pink,
-                                focusBorderColor: Colors.pinkAccent,
                               ),
                             ),
                             SizedBox(width: 20.0,),
                             Expanded(
                               child: defaultFormField(
+                                context: context,
                                 controller: lastNameController,
                                 type: TextInputType.name,
                                 validate: (value){},
                                 label: "Last Name",
-                                containerRadius: 10.0,
-                                borderColor: Colors.pink,
-                                focusBorderColor: Colors.pinkAccent,
                               ),
                             ),
                           ],
                         ),
                         SizedBox(height: 20.0,),
                         defaultFormField(
+                          context: context,
                           controller: emailController,
                           type: TextInputType.emailAddress,
                           validate: (value){},
                           label: "Email",
-                          containerRadius: 10.0,
-                          borderColor: Colors.pink,
-                          focusBorderColor: Colors.pinkAccent,
                         ),
                         SizedBox(height: 20.0,),
                         defaultFormField(
+                          context: context,
                           controller: passwordController,
                           type: TextInputType.visiblePassword,
                           validate: (value){},
                           isPassword: ShoppySignupCubit.get(context).isPassword,
                           label: "Password",
-                          containerRadius: 10.0,
-                          borderColor: Colors.pink,
-                          focusBorderColor: Colors.pinkAccent,
                           suffix: ShoppySignupCubit.get(context).icon,
                           suffixPressed: () {
                             ShoppySignupCubit.get(context).changePasswordVisibility();
@@ -154,14 +142,12 @@ class SignupScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 20.0,),
                         defaultFormField(
+                          context: context,
                           controller: confirmPasswordController,
                           type: TextInputType.visiblePassword,
                           validate: (value){},
                           isPassword: ShoppySignupCubit.get(context).isPassword,
                           label: "Confirm Password",
-                          containerRadius: 10.0,
-                          borderColor: Colors.pink,
-                          focusBorderColor: Colors.pinkAccent,
                         ),
                         SizedBox(
                           height: 35.0,
@@ -169,12 +155,11 @@ class SignupScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: defaultButton(
-                              onPressFunction: () {
-                                navigateTo(context, MobileVerificationScreen());
-                              },
-                              text: 'Create Account',
-                              backgroundColor: Colors.pink,
-                              radius: 15.0
+                            context: context,
+                            onPressFunction: () {
+                              navigateTo(context, MobileVerificationScreen());
+                            },
+                            text: 'Create Account',
                           ),
                         ),
                         SizedBox(
@@ -185,8 +170,7 @@ class SignupScreen extends StatelessWidget {
                           children: [
                             Text(
                               'already have account!',
-                              style: TextStyle(color: Colors.white),
-
+                              style: Theme.of(context).textTheme.subtitle1,
                             ),
                             TextButton(onPressed: (){
                               navigateAndFinish(context,LoginScreen());

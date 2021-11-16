@@ -12,7 +12,6 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
         child: Column(
@@ -20,22 +19,14 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
           children: [
             Text(
               'Verification',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: Theme.of(context).textTheme.subtitle2,
             ),
             SizedBox(
               height: 10,
             ),
             Text(
               "Enter your Verification code number",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white70,
-              ),
+              style: Theme.of(context).textTheme.headline1,
               textAlign: TextAlign.center,
             ),
             SizedBox(
@@ -46,6 +37,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.black12)
               ),
               child: Column(
                 children: [
@@ -99,11 +91,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
             ),
             Text(
               "Didn't you receive any code?",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white70,
-              ),
+              style: Theme.of(context).textTheme.headline1,
               textAlign: TextAlign.center,
             ),
             TextButton(
@@ -149,7 +137,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
           decoration: InputDecoration(
             counter: Offstage(),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: Colors.black12),
+                borderSide: BorderSide(width: 1, color:Colors.black12),
                 borderRadius: BorderRadius.circular(12)),
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 1, color: Colors.purple),

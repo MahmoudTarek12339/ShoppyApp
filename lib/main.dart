@@ -3,18 +3,23 @@ import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/module/onboarding.dart';
 import 'package:flutter/services.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
+import 'package:shoppy/shared/styles/themes.dart';
 
 late bool onBoarding;
 late Widget startWidget;
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  //cache initializing
   await CacheHelper.init();
+  //check if on boarding is done
   onBoarding=CacheHelper.getData(key: 'onBoarding')??false;
   if(onBoarding)
     startWidget=ShoppyLayout();
   else
     startWidget=OnBoardingScreen();
+
+  //get mobile device mode
   runApp(MyApp());
 }
 
@@ -29,6 +34,8 @@ class MyApp extends StatelessWidget {
         ]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home:startWidget,
     );
   }

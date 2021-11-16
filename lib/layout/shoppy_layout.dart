@@ -8,7 +8,7 @@ class ShoppyLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.black,
+        color: Theme.of(context).primaryColor,
         child: Column(
           children: [
             Padding(

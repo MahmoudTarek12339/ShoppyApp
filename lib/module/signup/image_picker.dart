@@ -7,15 +7,13 @@ class ImagePickingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
         actions: [
           TextButton(onPressed: (){
             navigateAndFinish(context, ShoppyLayout());
           }, child: Text(
               'Skip',
-              style:TextStyle(color: Colors.pink)
+              style:Theme.of(context).textTheme.subtitle1,
           ))
         ],
       ),
@@ -30,7 +28,7 @@ class ImagePickingScreen extends StatelessWidget {
                       CircleAvatar(
                         minRadius: 95.0,
                         maxRadius: 155.0,
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                        backgroundColor: Theme.of(context).canvasColor,
                         child: CircleAvatar(
                           minRadius: 90.0,
                           maxRadius: 150.0,
@@ -56,11 +54,10 @@ class ImagePickingScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: defaultButton(
+                context: context,
                 onPressFunction: (){
                 },
                 text: 'Set Profile Picture',
-                backgroundColor: Colors.pink,
-                radius: 15.0
               ),
             )
           ],

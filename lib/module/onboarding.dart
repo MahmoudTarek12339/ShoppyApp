@@ -96,6 +96,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Center(
                         child: defaultButton(
+                          context: context,
                           onPressFunction: () {
                             CacheHelper.saveData(key: 'onBoarding', value: true).then((value){
                               if(value==true)

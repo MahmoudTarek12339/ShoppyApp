@@ -14,7 +14,6 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -23,12 +22,12 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen> {
           children: [
             Text(
               'Mobile Number',
-              style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 30.0,color: Colors.white),
+              style: Theme.of(context).textTheme.bodyText1,
             ),
             SizedBox(height: 50.0,),
             Text(
               'Please enter your Mobile phone Number',
-              style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey)
+              style: Theme.of(context).textTheme.bodyText2
             ),
             SizedBox(height: 15.0,),
             Container(
@@ -64,12 +63,11 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen> {
 
                         },
                         keyboardType: TextInputType.phone,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                           hintText:'0123456789',
                           hintStyle: TextStyle(color: Colors.grey),
                           border: InputBorder.none,
-
                         ),
                       ),
                     ),
@@ -79,12 +77,11 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen> {
             ),
             SizedBox(height: 45.0,),
             defaultButton(
+              context: context,
               onPressFunction: (){
                 navigateTo(context,CodeVerificationScreen());
               },
               text: 'Send Code',
-              backgroundColor: Colors.pink,
-              radius: 10.0
             ),
           ],
         ),

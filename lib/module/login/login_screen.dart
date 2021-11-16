@@ -20,14 +20,11 @@ class LoginScreen extends StatelessWidget {
           },
           builder: (context,state){
             return Scaffold(
-              backgroundColor: Colors.black,
               appBar: AppBar(
-                backgroundColor: Colors.black,
+
                 title: Text(
                   'Login',
-                  style: TextStyle(
-                      color: Colors.white
-                  ),
+                  style: Theme.of(context).textTheme.subtitle1,
                 ),
               ),
               body: Center(
@@ -40,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Login with one of The following Options',
-                          style: Theme.of(context).textTheme.caption!.copyWith(color: Colors.grey),
+                          style: Theme.of(context).textTheme.caption,
                         ),
                         SizedBox(height: 15.0,),
                         Padding(
@@ -84,7 +81,6 @@ class LoginScreen extends StatelessWidget {
                                       style:TextStyle(
                                         color: Colors.blue,
                                         fontSize: 25.0,
-
                                       ),
                                     ),
                                   ),
@@ -96,33 +92,29 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(height: 20.0,),
                         Text(
                           'Email',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 20.0),
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
                         SizedBox(height: 15.0,),
                         defaultFormField(
+                          context: context,
                           controller: emailController,
                           type: TextInputType.emailAddress,
                           validate: (value){},
                           label: "Email",
-                          containerRadius: 10.0,
-                          borderColor: Colors.pink,
-                          focusBorderColor: Colors.pinkAccent,
                         ),
                         SizedBox(height: 20.0,),
                         Text(
                           'Password',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white,fontSize: 20.0),
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
                         SizedBox(height: 15.0,),
                         defaultFormField(
+                          context: context,
                           controller: passwordController,
                           type: TextInputType.visiblePassword,
                           validate: (value){},
                           isPassword: ShoppyLoginCubit.get(context).isPassword,
                           label: "Password",
-                          containerRadius: 10.0,
-                          borderColor: Colors.pink,
-                          focusBorderColor: Colors.pinkAccent,
                           suffix: ShoppyLoginCubit.get(context).icon,
                           suffixPressed: () {
                             ShoppyLoginCubit.get(context).changePasswordVisibility();
@@ -134,10 +126,9 @@ class LoginScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: defaultButton(
+                            context: context,
                             onPressFunction: () {  },
                             text: 'LOGIN',
-                            backgroundColor: Colors.pink,
-                            radius: 15.0
                           ),
                         ),
                         SizedBox(
@@ -148,7 +139,7 @@ class LoginScreen extends StatelessWidget {
                           children: [
                             Text(
                               'Don\'t have an account?',
-                              style: TextStyle(color: Colors.white),
+                              style: Theme.of(context).textTheme.subtitle1,
 
                             ),
                             TextButton(onPressed: (){
