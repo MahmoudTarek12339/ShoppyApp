@@ -38,6 +38,7 @@ ThemeData darkTheme=ThemeData(
   buttonColor: Colors.pink,
   backgroundColor: Colors.pink,
   focusColor: Colors.pinkAccent,
+  errorColor: Colors.deepOrange,
   iconTheme: IconThemeData(
     color: Colors.white,
   ),
@@ -87,6 +88,7 @@ ThemeData lightTheme=ThemeData(
   buttonColor: Colors.blueAccent,
   backgroundColor: Colors.black,
   focusColor: Colors.blue,
+  errorColor: Colors.red,
   iconTheme: IconThemeData(
       color: Colors.black,
     ),

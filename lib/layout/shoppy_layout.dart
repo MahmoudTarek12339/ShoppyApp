@@ -47,8 +47,7 @@ class ShoppyLayout extends StatelessWidget {
                       child: InkWell(
                         child: CircleAvatar(
                           radius: 20.0,
-                          backgroundImage: NetworkImage(
-                              'https://avatars.githubusercontent.com/u/34492145?v=4'),
+                          backgroundImage: AssetImage('assets/images/default_login2.jpg'),
                         ),
                         onTap: (){
                           navigateTo(context, LoginScreen());

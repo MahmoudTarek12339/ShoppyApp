@@ -63,10 +63,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                         navigateAndFinish(context, ImagePickingScreen());
                       },
                       style: ButtonStyle(
-                        foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.purple),
+                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).buttonColor),
                         shape:
                         MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
