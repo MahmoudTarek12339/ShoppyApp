@@ -122,7 +122,6 @@ void showToast({
     textColor: Colors.white,
     fontSize: 16.0,
   );
-  print(chooseToastColor(state));
 }
 
 enum ToastState { SUCCESS, ERROR, WARNING }

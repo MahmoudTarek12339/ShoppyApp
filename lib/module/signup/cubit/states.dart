@@ -7,7 +7,16 @@ class ShoppySignupErrorState extends ShoppySignupStates{
   ShoppySignupErrorState(this.error);
 }
 
+class ShoppyPhoneVerificationLoadingState extends ShoppySignupStates{}
+class ShoppyPhoneVerificationSuccessState extends ShoppySignupStates{}
+class ShoppyPhoneVerificationErrorState extends ShoppySignupStates{
+  final String error;
+  ShoppyPhoneVerificationErrorState(this.error);
+}
+
 class ShoppyCreateSuccessState extends ShoppySignupStates{
+  final String uId;
+  ShoppyCreateSuccessState(this.uId);
 }
 class ShoppyCreateErrorState extends ShoppySignupStates{
   final String error;

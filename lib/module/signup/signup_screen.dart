@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoppy/model/user_model.dart';
 import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 
@@ -174,7 +175,7 @@ class SignupScreen extends StatelessWidget {
                                 return 'this not match';
                               }
                             },
-                            isPassword: ShoppySignupCubit.get(context).isPassword,
+                            isPassword: true,
                             label: "Confirm Password",
                           ),
                           SizedBox(
@@ -186,7 +187,12 @@ class SignupScreen extends StatelessWidget {
                               context: context,
                               onPressFunction: () {
                                 if(formKey.currentState!.validate()){
-                                  navigateTo(context, MobileVerificationScreen());
+                                  UserModel user=UserModel(
+                                    name:firstNameController.text+' '+lastNameController.text,
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                                  navigateTo(context, MobileVerificationScreen(user));
                                 }
                               },
                               text: 'Create Account',

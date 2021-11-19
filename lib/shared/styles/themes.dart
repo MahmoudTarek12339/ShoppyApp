@@ -28,12 +28,12 @@ ThemeData darkTheme=ThemeData(
       fontWeight: FontWeight.bold,
       color: Colors.white70,
     ) ,
-
     caption: TextStyle(
       color: Colors.grey,
       fontSize: 12.0,
       fontWeight: FontWeight.normal,
     ),
+
   ),
   buttonColor: Colors.pink,
   backgroundColor: Colors.pink,
