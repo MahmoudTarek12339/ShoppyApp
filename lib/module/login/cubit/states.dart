@@ -11,4 +11,22 @@ class ShoppyLoginErrorState extends ShoppyLoginStates{
   ShoppyLoginErrorState(this.error);
 }
 
+class ShoppyGoogleLoginLoadingState extends ShoppyLoginStates{}
+class ShoppyGoogleLoginSuccessState extends ShoppyLoginStates{
+  final String uId;
+  ShoppyGoogleLoginSuccessState(this.uId);
+}
+class ShoppyGoogleLoginErrorState extends ShoppyLoginStates{
+  final String error;
+  ShoppyGoogleLoginErrorState(this.error);
+}
+class ShoppyFaceBookLoginLoadingState extends ShoppyLoginStates{}
+class ShoppyFaceBookLoginSuccessState extends ShoppyLoginStates{
+  final String uId;
+  ShoppyFaceBookLoginSuccessState(this.uId);
+}
+class ShoppyFaceBookLoginErrorState extends ShoppyLoginStates{
+  final String error;
+  ShoppyFaceBookLoginErrorState(this.error);
+}
 

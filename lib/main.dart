@@ -21,6 +21,7 @@ void main() async{
   await Firebase.initializeApp();
   //get user uId
   uId = CacheHelper.getData(key: 'uId');
+  print("user id is:$uId");
 
   //enable bloc observer
   Bloc.observer = MyBlocObserver();

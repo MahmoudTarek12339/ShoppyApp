@@ -68,12 +68,25 @@ class ImagePickingScreen extends StatelessWidget {
                   SizedBox(height: 30,),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: defaultButton(
-                      context: context,
-                      onPressFunction: (){
-
-                      },
-                      text: 'Set Profile Picture',
+                    child: Column(
+                      children: [
+                        defaultButton(
+                          context: context,
+                          onPressFunction: (){
+                            if(ShoppyCubit.get(context).profileImage!=null){
+                              ShoppyCubit.get(context).uploadProfileImage();
+                            }
+                            if(state is SocialUploadProfileImageSuccessState){
+                              navigateAndFinish(context,ShoppyLayout());
+                            }
+                          },
+                          text: 'Set Profile Picture',
+                        ),
+                        if(state is SocialUploadProfileImageLoadingState)
+                          SizedBox(height: 5.0,),
+                        if(state is SocialUploadProfileImageLoadingState)
+                          LinearProgressIndicator(),
+                      ],
                     ),
                   )
                 ],

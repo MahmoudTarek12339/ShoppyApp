@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/module/search_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 
+
 class ShoppyLayout extends StatelessWidget {
+  final User? user=FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +50,7 @@ class ShoppyLayout extends StatelessWidget {
                       child: InkWell(
                         child: CircleAvatar(
                           radius: 20.0,
-                          backgroundImage: AssetImage('assets/images/default_login2.jpg'),
+                          backgroundImage:user!=null&&user!.photoURL!=null?NetworkImage(user!.photoURL.toString()) as ImageProvider: AssetImage('assets/images/default_login2.jpg'),
                         ),
                         onTap: (){
                           navigateTo(context, LoginScreen());
@@ -57,7 +60,7 @@ class ShoppyLayout extends StatelessWidget {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/model/user_model.dart';
 import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:shoppy/shared/network/local/cache_helper.dart';
 
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
@@ -23,6 +27,43 @@ class SignupScreen extends StatelessWidget {
       create: (BuildContext context)=>ShoppySignupCubit(),
       child: BlocConsumer<ShoppySignupCubit,ShoppySignupStates>(
           listener: (context,state){
+            if(state is ShoppyGoogleLoginSuccessState){
+              GoogleSignInAccount? myGoogleUser=ShoppySignupCubit.get(context).myGoogleUser;
+              showToast(
+                  message: 'Welcome ${myGoogleUser!.displayName}',
+                  state: ToastState.SUCCESS
+              );
+              CacheHelper.saveData(
+                  key: 'uId',
+                  value: state.uId).then((value) {
+                navigateAndFinish(context,ShoppyLayout());
+              });
+            }
+            if(state is ShoppyFaceBookLoginSuccessState){
+              var userData=ShoppySignupCubit.get(context).faceBookUserData;
+              showToast(
+                  message: 'Welcome ${userData['name']}',
+                  state: ToastState.SUCCESS
+              );
+              CacheHelper.saveData(
+                  key: 'uId',
+                  value: state.uId).then((value) {
+                navigateAndFinish(context,ShoppyLayout());
+              });
+            }
+
+            if(state is ShoppyGoogleLoginErrorState){
+              showToast(
+                  message: state.error,
+                  state: ToastState.ERROR
+              );
+            }
+            if(state is ShoppyFaceBookLoginErrorState){
+              showToast(
+                  message: state.error,
+                  state: ToastState.ERROR
+              );
+            }
 
           },
           builder: (context,state){
@@ -59,15 +100,10 @@ class SignupScreen extends StatelessWidget {
                                         border: Border.all(color: Colors.blueGrey)
                                     ),
                                     child: MaterialButton(
-                                      onPressed: (){},
-                                      child:
-                                      Text(
-                                        'G',
-                                        style:TextStyle(
-                                          color: Colors.grey[500],
-                                          fontSize: 25.0,
-                                        ),
-                                      ),
+                                      onPressed: (){
+                                        ShoppySignupCubit.get(context).signInWithGoogle();
+                                      },
+                                      child: FaIcon(FontAwesomeIcons.google,color: Colors.red,size: 25,),
                                     ),
                                   ),
                                 ),
@@ -82,16 +118,11 @@ class SignupScreen extends StatelessWidget {
                                         border: Border.all(color: Colors.blueGrey)
                                     ),
                                     child: MaterialButton(
-                                      onPressed: (){},
+                                      onPressed: (){
+                                        ShoppySignupCubit.get(context).signInWithFacebook();
+                                      },
                                       child:
-                                      Text(
-                                        'f',
-                                        style:TextStyle(
-                                          color: Colors.blue,
-                                          fontSize: 25.0,
-
-                                        ),
-                                      ),
+                                      FaIcon(FontAwesomeIcons.facebookF,color: Colors.blue,size: 25,),
                                     ),
                                   ),
                                 ),

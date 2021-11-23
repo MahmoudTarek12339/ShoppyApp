@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/module/login/cubit/states.dart';
 import 'package:shoppy/module/signup/signup_screen.dart';
@@ -20,11 +22,7 @@ class LoginScreen extends StatelessWidget {
       create: (BuildContext context)=>ShoppyLoginCubit(),
       child: BlocConsumer<ShoppyLoginCubit,ShoppyLoginStates>(
           listener: (context,state){
-            if(state is ShoppyLoginErrorState){
-              showToast(
-                  message: state.error,
-                  state: ToastState.ERROR);
-            }
+
             if(state is ShoppyLoginSuccessState){
               CacheHelper.saveData(
                   key: 'uId',
@@ -32,6 +30,49 @@ class LoginScreen extends StatelessWidget {
                 navigateAndFinish(context,ShoppyLayout());
               });
             }
+            if(state is ShoppyGoogleLoginSuccessState){
+              GoogleSignInAccount? myGoogleUser=ShoppyLoginCubit.get(context).myGoogleUser;
+              showToast(
+                  message: 'Welcome ${myGoogleUser!.displayName}',
+                  state: ToastState.SUCCESS
+              );
+              CacheHelper.saveData(
+                  key: 'uId',
+                  value: state.uId).then((value) {
+                navigateAndFinish(context,ShoppyLayout());
+              });
+            }
+            if(state is ShoppyFaceBookLoginSuccessState){
+              var userData=ShoppyLoginCubit.get(context).faceBookUserData;
+              showToast(
+                  message: 'Welcome ${userData['name']}',
+                  state: ToastState.SUCCESS
+              );
+              CacheHelper.saveData(
+                  key: 'uId',
+                  value: state.uId).then((value) {
+                navigateAndFinish(context,ShoppyLayout());
+              });
+            }
+
+            if(state is ShoppyLoginErrorState){
+              showToast(
+                  message: state.error,
+                  state: ToastState.ERROR);
+            }
+            if(state is ShoppyGoogleLoginErrorState){
+              showToast(
+                message: state.error,
+                state: ToastState.ERROR
+              );
+            }
+            if(state is ShoppyFaceBookLoginErrorState){
+              showToast(
+                  message: state.error,
+                  state: ToastState.ERROR
+              );
+            }
+
           },
           builder: (context,state){
             return Scaffold(
@@ -68,15 +109,10 @@ class LoginScreen extends StatelessWidget {
                                         border: Border.all(color: Colors.blueGrey)
                                     ),
                                     child: MaterialButton(
-                                      onPressed: (){},
-                                      child:
-                                      Text(
-                                        'G',
-                                        style:TextStyle(
-                                          color: Colors.grey[500],
-                                          fontSize: 25.0,
-                                        ),
-                                      ),
+                                      onPressed: (){
+                                        ShoppyLoginCubit.get(context).signInWithGoogle();
+                                      },
+                                      child:FaIcon(FontAwesomeIcons.google,color: Colors.red,size: 25,),
                                     ),
                                   ),
                                 ),
@@ -85,21 +121,15 @@ class LoginScreen extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Container(
-
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15.0),
                                         border: Border.all(color: Colors.blueGrey)
                                     ),
                                     child: MaterialButton(
-                                      onPressed: (){},
-                                      child:
-                                      Text(
-                                        'f',
-                                        style:TextStyle(
-                                          color: Colors.blue,
-                                          fontSize: 25.0,
-                                        ),
-                                      ),
+                                      onPressed: (){
+                                        ShoppyLoginCubit.get(context).signInWithFacebook();
+                                      },
+                                      child:FaIcon(FontAwesomeIcons.facebookF,color: Colors.blue,size: 25,),
                                     ),
                                   ),
                                 ),

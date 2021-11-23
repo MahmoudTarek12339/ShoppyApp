@@ -22,7 +22,7 @@ class CodeVerificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) =>ShoppySignupCubit(),
+    create: (BuildContext context) =>ShoppySignupCubit()..verifyPhone(myUser.phone!),
       child: BlocConsumer<ShoppySignupCubit,ShoppySignupStates>(
         listener: (context,state){
           if(state is ShoppyCreateSuccessState){
@@ -40,7 +40,7 @@ class CodeVerificationScreen extends StatelessWidget {
         },
         builder: (context,state){
           return Scaffold(
-            body: Padding(
+            body:Padding(
               padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -146,34 +146,13 @@ class CodeVerificationScreen extends StatelessWidget {
                                   forthDigitController.text+
                                   fifthDigitController.text +
                                   sixthDigitController.text;
-
-                              try {
-                                await ShoppySignupCubit.get(context).verifyPhone(myUser.phone!);
-                                await FirebaseAuth.instance
-                                    .signInWithCredential(PhoneAuthProvider.credential(
-                                    verificationId: ShoppySignupCubit.get(context).verificationCode,
-                                    smsCode: verificationCode
-                                ))
-                                    .then((value) async {
-                                  if (value.user != null) {
-                                    FirebaseAuth.instance.currentUser!.delete()
-                                      .then((value){
-                                      ShoppySignupCubit.get(context).userRegister(
-                                        name: myUser.name??'123',
-                                        email: myUser.email??'123',
-                                        password: myUser.password??'123',
-                                        phone: myUser.phone??'123',
-                                      );
-                                    }
-                                    ).catchError((error){
-                                      print('error');
-                                    });
-                                  }
-                                });
-                              } catch (e) {
-                                print(e.toString());
-                                showToast(message: 'invalid OTP', state: ToastState.ERROR);
-                              }
+                              ShoppySignupCubit.get(context).userRegister(
+                                  name: myUser.name??'123',
+                                  email: myUser.email??'123',
+                                  password: myUser.password??'123',
+                                  phone: myUser.phone??'123',
+                                  sms: verificationCode
+                              );
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(Theme
@@ -249,33 +228,13 @@ class CodeVerificationScreen extends StatelessWidget {
                   secondDigitController.text + thirdDigitController.text +
                   forthDigitController.text + fifthDigitController.text +
                   sixthDigitController.text;
-              try {
-                await ShoppySignupCubit.get(context).verifyPhone(myUser.phone!);
-                await FirebaseAuth.instance
-                    .signInWithCredential(PhoneAuthProvider.credential(
-                    verificationId: ShoppySignupCubit.get(context).verificationCode,
-                    smsCode: verificationCode
-                ))
-                    .then((value) async {
-                  if (value.user != null) {
-                    FirebaseAuth.instance.currentUser!.delete()
-                        .then((value){
-                      ShoppySignupCubit.get(context).userRegister(
-                        name: myUser.name??'123',
-                        email: myUser.email??'123',
-                        password: myUser.password??'123',
-                        phone: myUser.phone??'123',
-                      );
-                    }
-                    ).catchError((error){
-                      print('error');
-                    });
-                  }
-                });
-              } catch (e) {
-                print(e.toString());
-                showToast(message: 'invalid OTP', state: ToastState.ERROR);
-              }
+              ShoppySignupCubit.get(context).userRegister(
+                name: myUser.name??'123',
+                email: myUser.email??'123',
+                password: myUser.password??'123',
+                phone: myUser.phone??'123',
+                sms: verificationCode
+              );
             }
           },
           showCursor: false,
