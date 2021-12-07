@@ -27,15 +27,16 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     emit(SocialUploadProfileImageLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('customers${Uri.file(profileImage!.path).pathSegments.last}')
+        .child('customers').child('customers${Uri.file(profileImage!.path).pathSegments.last}')
         .putFile(profileImage!).then((value){
       value.ref.getDownloadURL().then((value) {
         print(value);
-        FirebaseAuth.instance.currentUser!.updatePhotoURL(value);
+        FirebaseAuth.instance.currentUser!.updatePhotoURL(value).then((value){
+          emit(SocialUploadProfileImageSuccessState());
+        });
       }).catchError((error){
         emit(SocialUploadProfileImageErrorState(error.toString()));
         print(error.toString());
-
       });
     }).catchError((error){
       emit(SocialUploadProfileImageErrorState(error.toString()));

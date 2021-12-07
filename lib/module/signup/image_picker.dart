@@ -14,7 +14,18 @@ class ImagePickingScreen extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) =>ShoppyCubit(),
       child: BlocConsumer<ShoppyCubit,ShoppyStates>(
-        listener: (context,state){},
+        listener: (context,state){
+          if(state is SocialUploadProfileImageSuccessState){
+            showToast(
+                message: 'Picture set successfully',
+                state: ToastState.SUCCESS
+            );
+            navigateAndFinish(context,ShoppyLayout());
+          }
+          else if(state is SocialUploadProfileImageErrorState){
+            showToast(message: state.error, state: ToastState.ERROR);
+          }
+        },
         builder:(context,state){
           final File? profileImage=ShoppyCubit.get(context).profileImage;
           return Scaffold(
@@ -76,8 +87,8 @@ class ImagePickingScreen extends StatelessWidget {
                             if(ShoppyCubit.get(context).profileImage!=null){
                               ShoppyCubit.get(context).uploadProfileImage();
                             }
-                            if(state is SocialUploadProfileImageSuccessState){
-                              navigateAndFinish(context,ShoppyLayout());
+                            else {
+                              navigateAndFinish(context, ShoppyLayout());
                             }
                           },
                           text: 'Set Profile Picture',
