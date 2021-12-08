@@ -9,6 +9,7 @@ class SearchScreen extends StatelessWidget {
         title: TextFormField(
           cursorColor: Colors.grey,
           style: TextStyle(color: Colors.white),
+          autofocus: true,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: "Search for Brand",

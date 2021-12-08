@@ -35,6 +35,13 @@ ThemeData darkTheme=ThemeData(
     ),
 
   ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    type: BottomNavigationBarType.fixed,
+    selectedItemColor: Colors.deepOrange,
+    unselectedItemColor: Colors.grey,
+    elevation: 20.0,
+    backgroundColor: Colors.white,
+  ),
   buttonColor: Colors.pink,
   backgroundColor: Colors.pink,
   focusColor: Colors.pinkAccent,
@@ -84,6 +91,13 @@ ThemeData lightTheme=ThemeData(
       fontSize: 12.0,
       fontWeight: FontWeight.normal,
     )
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    type: BottomNavigationBarType.fixed,
+    selectedItemColor: Colors.deepOrange,
+    unselectedItemColor: Colors.grey,
+    elevation: 20.0,
+    backgroundColor: Colors.black,
   ),
   buttonColor: Colors.blueAccent,
   backgroundColor: Colors.black,
