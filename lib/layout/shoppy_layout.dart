@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/module/home/cart_screen.dart';
-import 'package:shoppy/module/home/profile_screen.dart';
+import 'package:shoppy/module/home/profile/profile_screen.dart';
 import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/module/home/search_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
@@ -29,24 +29,47 @@ class ShoppyLayout extends StatelessWidget {
               titleSpacing: 10.0,
               title: Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
+                    borderRadius: BorderRadius.circular(25.0),
                     color: Theme.of(context).iconTheme.color
                 ),
-                child: InkWell(
-                  onTap: () {
-                    navigateTo(context, SearchScreen());
-                  },
-                  child: TextFormField(
-                    enabled: false,
-                    decoration: InputDecoration(
-                      hintText: "Search for Brand",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.grey,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                      onTap: () {
+                        navigateTo(context, SearchScreen());
+                      },
+                      child: TextFormField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          hintText: "Search for Brand",
+                          hintStyle: TextStyle(color: Colors.grey),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
                       ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: InkWell(
+                        child: CircleAvatar(
+                          radius: 20.0,
+                          backgroundImage: user != null && user!.photoURL != null
+                              ? NetworkImage(user!.photoURL.toString()) as ImageProvider
+                              : AssetImage('assets/images/default_login2.jpg'),
+                        ),
+                        onTap: () {
+                          if (user == null)
+                            navigateTo(context, LoginScreen());
+                          else
+                            navigateTo(context, ProfileScreen());
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
               actions: [
@@ -59,23 +82,6 @@ class ShoppyLayout extends StatelessWidget {
                       color: Theme.of(context).iconTheme.color,
                       size: 25,
                     )),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: InkWell(
-                    child: CircleAvatar(
-                      radius: 20.0,
-                      backgroundImage: user != null && user!.photoURL != null
-                          ? NetworkImage(user!.photoURL.toString()) as ImageProvider
-                          : AssetImage('assets/images/default_login2.jpg'),
-                    ),
-                    onTap: () {
-                      if (user == null)
-                        navigateTo(context, LoginScreen());
-                      else
-                        navigateTo(context, ProfileScreen());
-                    },
-                  ),
-                ),
               ],
             ),
             body: cubit.screens[cubit.currentIndex],

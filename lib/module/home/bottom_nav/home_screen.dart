@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
@@ -20,45 +21,43 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //offers
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Container(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(55.0),
-                      border: Border.fromBorderSide(BorderSide(color: Theme.of(context).iconTheme.color??Colors.black)),
-                    ),
-                    child: CarouselSlider(
-                      items:[
-                        Image(image:NetworkImage('https://i.pinimg.com/564x/e6/74/8c/e6748c9d19f12257c8b6fa2b2a480dce.jpg'),width: double.infinity,
-                            fit: BoxFit.cover),
-                        Image(image:NetworkImage('https://i.pinimg.com/564x/ae/29/14/ae29149d86039e2c1b536a515bca1eb2.jpg'),width: double.infinity,
-                            fit: BoxFit.cover),
-                        Image(image:NetworkImage('https://i.pinimg.com/564x/b8/af/6b/b8af6b66d8d1aaa3251d5b1ff7cc62c4.jpg'),width: double.infinity,
-                            fit: BoxFit.cover),
-                        Image(image:NetworkImage('https://i.pinimg.com/736x/71/9a/a0/719aa07defbe8a2958ee74602bc19557.jpg'),width: double.infinity,
-                            fit: BoxFit.cover),
-                      ],
-                      options: CarouselOptions(
-                        height: 250.0,
-                        initialPage: 0,
-                        enableInfiniteScroll: true,
-                        reverse: false,
-                        autoPlay: true,
-                        autoPlayInterval: Duration(seconds: 3) ,
-                        autoPlayAnimationDuration:Duration(seconds: 1),
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        scrollDirection: Axis.horizontal,
-                        viewportFraction: 1.0,
-                        enlargeCenterPage: false,
-                      ),
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: CarouselSlider(
+                    items:[
+                      Image(image:NetworkImage('https://i.pinimg.com/564x/e6/74/8c/e6748c9d19f12257c8b6fa2b2a480dce.jpg'),width: double.infinity,
+                          fit: BoxFit.cover),
+                      Image(image:NetworkImage('https://i.pinimg.com/564x/ae/29/14/ae29149d86039e2c1b536a515bca1eb2.jpg'),width: double.infinity,
+                          fit: BoxFit.cover),
+                      Image(image:NetworkImage('https://i.pinimg.com/564x/b8/af/6b/b8af6b66d8d1aaa3251d5b1ff7cc62c4.jpg'),width: double.infinity,
+                          fit: BoxFit.cover),
+                      Image(image:NetworkImage('https://i.pinimg.com/736x/71/9a/a0/719aa07defbe8a2958ee74602bc19557.jpg'),width: double.infinity,
+                          fit: BoxFit.cover),
+                    ],
+                    options: CarouselOptions(
+                      height: 150.0,
+                      initialPage: 0,
+                      enableInfiniteScroll: true,
+                      reverse: false,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3) ,
+                      autoPlayAnimationDuration:Duration(seconds: 1),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      scrollDirection: Axis.horizontal,
+                      viewportFraction: 1.0,
+                      enlargeCenterPage: false,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 10.0,
+                  height: 5,
                 ),
-                //for you
                 Text(
                   ' For you',
                   style: Theme.of(context).textTheme.bodyText1,
@@ -74,15 +73,6 @@ class HomeScreen extends StatelessWidget {
                     itemBuilder: (context,index)=>buildProductItem(),
                     separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
                     itemCount: 5),
-                ),
-                //divider
-                SizedBox(
-                  height: 5.0,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 1.0,
-                  color: Colors.grey[300],
                 ),
                 SizedBox(
                   height: 15.0,
@@ -104,15 +94,6 @@ class HomeScreen extends StatelessWidget {
                       separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
                       itemCount: 5),
                 ),
-                //divider
-                SizedBox(
-                  height: 5.0,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 1.0,
-                  color: Colors.grey[300],
-                ),
                 SizedBox(
                   height: 15.0,
                 ),
@@ -132,15 +113,6 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context,index)=>buildProductItem(),
                       separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
                       itemCount: 5),
-                ),
-                //divider
-                SizedBox(
-                  height: 5.0,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 1.0,
-                  color: Colors.grey[300],
                 ),
                 //random images
                 SizedBox(
@@ -167,7 +139,7 @@ class HomeScreen extends StatelessWidget {
   Widget buildProductItem() =>Card(
     clipBehavior: Clip.antiAliasWithSaveLayer,
     elevation: 10.0,
-    shadowColor: Colors.white,
+    //margin:,
     child: Image(
       image: NetworkImage('https://i.pinimg.com/564x/e8/be/6e/e8be6e703137738190f71be515088fa0.jpg'),
       fit:BoxFit.cover,

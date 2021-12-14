@@ -63,19 +63,22 @@ Widget defaultFormField({
   Color hintColor=Colors.grey,
   Color? prefixColor,
   Color? suffixColor,
+  Color? inputColor,
 
   VoidCallback? suffixPressed,
+  VoidCallback? onTap,
 
   double containerRadius=10.0,
 
   InputBorder borderForm=InputBorder.none,
 }) =>
     TextFormField(
+      onTap: onTap,
       controller: controller,
       keyboardType: type,
       obscureText: isPassword,
       validator: validate,
-      style: TextStyle(color: Theme.of(context).iconTheme.color),
+      style: TextStyle(color: inputColor!=null?inputColor:Theme.of(context).iconTheme.color),
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(color: hintColor),

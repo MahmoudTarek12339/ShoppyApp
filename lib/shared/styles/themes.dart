@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 ThemeData darkTheme=ThemeData(
-  scaffoldBackgroundColor: Colors.black,
+  scaffoldBackgroundColor: Colors.grey[850],
   appBarTheme: AppBarTheme(
-    backgroundColor: Colors.black
+    backgroundColor: Colors.grey[900]
   ),
   textTheme: TextTheme(
     bodyText1: TextStyle(
@@ -40,7 +40,7 @@ ThemeData darkTheme=ThemeData(
     selectedItemColor: Colors.deepOrange,
     unselectedItemColor: Colors.grey,
     elevation: 20.0,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.grey[300],
   ),
   buttonColor: Colors.pink,
   backgroundColor: Colors.pink,

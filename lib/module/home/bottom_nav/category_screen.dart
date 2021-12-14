@@ -17,36 +17,42 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       selectedColor: Colors.blue,
       textColor: Colors.white,
       label: 'All',
+      img: AssetImage('assets/icones/clothes.png')
     ),
     ChoiceChipData(
       isSelected: false,
       selectedColor: Colors.blue,
       textColor: Colors.white,
-      label: 't-Shirts'
+      label: 't-Shirts',
+      img: AssetImage('assets/icones/tshirt.png')
     ),
     ChoiceChipData(
       isSelected: false,
       selectedColor: Colors.blue,
       textColor: Colors.white,
-      label: 'Shirts'
+      label: 'Shirts',
+      img: AssetImage('assets/icones/shirt.png')
     ),
     ChoiceChipData(
       isSelected: false,
       selectedColor: Colors.blue,
       textColor: Colors.white,
-      label: 'pants'
+      label: 'pants',
+      img: AssetImage('assets/icones/pants.png')
     ),
     ChoiceChipData(
       isSelected: false,
       selectedColor: Colors.blue,
       textColor: Colors.white,
       label: 'shorts',
+      img: AssetImage('assets/icones/denim-shorts.png')
     ),
     ChoiceChipData(
       isSelected: false,
       selectedColor: Colors.blue,
       textColor: Colors.white,
       label: 'accessories',
+      img: AssetImage('assets/icones/accessories.png')
     ),
   ];
   @override
@@ -129,7 +135,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         physics: NeverScrollableScrollPhysics(),
                         children: List.generate(2,(index)=>buildProductItem()),
                       ),
-                    )
+                    ),
               ],
             ),
           ),
@@ -156,6 +162,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       children: choiceChips
           .map((choiceChip) => ChoiceChip(
         label: Text(choiceChip.label),
+        avatar: Image(image: choiceChip.img,),
         labelStyle: TextStyle(color: Colors.white),
         onSelected: (isSelected) => setState(() {
           choiceChips = choiceChips.map((otherChip) {
@@ -167,7 +174,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         }),
         selected: choiceChip.isSelected,
         selectedColor: Colors.deepOrange,
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.grey[800],
 
       )).toList(),
     ),
