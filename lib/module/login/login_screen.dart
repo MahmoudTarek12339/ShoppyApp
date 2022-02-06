@@ -9,7 +9,9 @@ import 'package:shoppy/module/signup/signup_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
 
+import '../../shared/components/constants.dart';
 import 'cubit/cubit.dart';
+import 'forgot_password.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController=TextEditingController();
@@ -76,12 +78,9 @@ class LoginScreen extends StatelessWidget {
           },
           builder: (context,state){
             return Scaffold(
+              backgroundColor:Theme.of(context).scaffoldBackgroundColor ,
               appBar: AppBar(
-
-                title: Text(
-                  'Login',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
+                backgroundColor:Theme.of(context).scaffoldBackgroundColor ,
               ),
               body: Center(
                 child: SingleChildScrollView(
@@ -93,6 +92,25 @@ class LoginScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Row(
+                            children: [
+                              textUtils(
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.w500,
+                                text: 'Log',
+                                color:Theme.of(context).focusColor ,
+                              ),
+                              textUtils(
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.w500,
+                                text: ' In',
+                                color:Theme.of(context).textTheme.bodyText1!.color ,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
                           Text(
                             'Login with one of The following Options',
                             style: Theme.of(context).textTheme.caption,
@@ -147,8 +165,8 @@ class LoginScreen extends StatelessWidget {
                             controller: emailController,
                             type: TextInputType.emailAddress,
                             validate: (value){
-                              if(value!.isEmpty){
-                                return 'Please enter Your email';
+                              if(value!.isEmpty||!RegExp(validationEmail).hasMatch(value)){
+                                return 'Please enter Valid email';
                               }
                             },
                             label: "Email",
@@ -164,8 +182,8 @@ class LoginScreen extends StatelessWidget {
                             controller: passwordController,
                             type: TextInputType.visiblePassword,
                             validate: (value){
-                              if(value!.isEmpty){
-                                return 'Please enter your password';
+                              if(value.toString().length<8){
+                                return 'Password Must be at least 8 characters';
                               }
                             },
                             isPassword: ShoppyLoginCubit.get(context).isPassword,
@@ -174,6 +192,23 @@ class LoginScreen extends StatelessWidget {
                             suffixPressed: () {
                               ShoppyLoginCubit.get(context).changePasswordVisibility();
                             },
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                                onPressed: (){
+                                  navigateTo(context,ForgetPasswordScreen());
+                                },
+                                child: textUtils(
+                                  text: 'Forgot Password?',
+                                  color: Theme.of(context).textTheme.bodyText1!.color,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14.0,
+                                )
+                            ),
                           ),
                           SizedBox(
                             height: 25.0,

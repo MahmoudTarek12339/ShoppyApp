@@ -14,8 +14,6 @@ class MobileVerificationScreen extends StatefulWidget {
 
 class _MobileVerificationScreenState extends State<MobileVerificationScreen> {
   final TextEditingController numberController=TextEditingController();
-  List<String> dropDownList=['+1','+2','+3','+4','+20'];
-  String dropdownValue='+20';
   GlobalKey<FormState> formKey=GlobalKey<FormState>();
   late UserModel myUser;
   _MobileVerificationScreenState(UserModel user){
@@ -24,6 +22,10 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
@@ -45,23 +47,13 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: TextFormField(
-                  controller: numberController,
-                  validator: (value){
-                    if(value!.isEmpty){
-                      return 'please enter your phone number';
-                    }
-                    else if(value.length<11){
-                      return 'this phone number is invalid';
-                    }
-                  },
-                  keyboardType: TextInputType.phone,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color),
                   decoration: InputDecoration(
-                    fillColor: Colors.white,
+                    fillColor: Theme.of(context).primaryColor,
                     hintText:'0123456789',
                     hintStyle: TextStyle(color: Colors.grey),
                     enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0),borderSide: BorderSide(
-                      color: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).focusColor,
                     )),
                     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0),borderSide: BorderSide(
                       color: Theme.of(context).focusColor,
@@ -72,32 +64,13 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen> {
                     focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0),borderSide: BorderSide(
                       color: Theme.of(context).errorColor,
                     )),
-                    prefixIcon:Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: Icon(Icons.arrow_drop_down),
-                        style: TextStyle(color: Colors.grey, fontSize: 18),
-                        onChanged: (String? data){
-                          setState(() {
-                            dropdownValue = data.toString();
-                          });
-                        },
-                        items: dropDownList.map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
                   ),
                 ),
               ),
               SizedBox(height: 45.0,),
               defaultButton(
                 context: context,
-                onPressFunction: (){
+                onPressFunction: ()async{
                   if(formKey.currentState!.validate()){
                     myUser.phone=numberController.text;
                     navigateTo(context,CodeVerificationScreen(myUser));

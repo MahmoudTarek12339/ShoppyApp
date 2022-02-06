@@ -1,78 +1,96 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shoppy/layout/cubit/cubit.dart';
-import 'package:shoppy/layout/cubit/states.dart';
 
 class WishListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ShoppyCubit,ShoppyStates>(
-      listener: (context,state){},
-      builder: (context,state){
-        return Padding(
-          padding: const EdgeInsets.all(10.0),
+    return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body:Padding(
+          padding: const EdgeInsets.only(top: 5.0),
           child: ListView.separated(
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context,index)=>buildWishListItem(context),
-              separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
-              itemCount: 5),
-        );
-      },
+            itemBuilder: (context,index)=>buildFavItem(
+              image: 'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',
+              price: 55.23,
+              productId: 1,
+              title: 'Men\'s T-shirt',
+              context:context,
+            ),
+            separatorBuilder: (context,index)=>Divider(color: Colors.grey,),
+            itemCount: 6,),
+        )
     );
   }
-  Widget buildWishListItem(context)=>Container(
-    height: 150,
-    width: double.infinity,
-    child: Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Card(
+  buildFavItem({
+    required String image,
+    required String title,
+    required double price,
+    required int productId,
+    required context,
+  }){
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: SizedBox(
+        width: double.infinity,
+        height: 100,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image(
-              image: NetworkImage('https://i.pinimg.com/564x/e8/be/6e/e8be6e703137738190f71be515088fa0.jpg'),
-              height: 100,
-              width: 100,
+            SizedBox(
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Image.network(
+                    image,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0),
+            SizedBox(
+              width: 15,
+            ),
+            Expanded(
+              flex: 10,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Danger tShirt',
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.black,fontWeight: FontWeight.normal),
+                    title,
+                    style: TextStyle(
+                      color:Theme.of(context).textTheme.bodyText1!.color,
+                      fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 20,
+                    ),
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    '10\$',
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.black),
+                    '\$ $price',
+                    style: TextStyle(
+                      color:Theme.of(context).textTheme.bodyText1!.color,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 16,
+                    ),
                   ),
-                  Spacer(),
-                  MaterialButton(
-                    onPressed: (){},
-                    child: Text('Add to cart'),
-                    textColor: Colors.black,
-                    color: Colors.white,
-                  )
                 ],
               ),
             ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: FaIcon(FontAwesomeIcons.solidHeart,color: Colors.red,)
-              ),
-            )
+            IconButton(
+              onPressed: (){
+                //controller.manageFavorites(productId);
+              },
+              icon: Icon(Icons.favorite,color: Colors.red,size: 30,),
+            ),
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
 }

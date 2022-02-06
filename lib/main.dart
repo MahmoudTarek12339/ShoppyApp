@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/module/onboarding.dart';
-import 'package:flutter/services.dart';
 import 'package:shoppy/shared/bloc_observer.dart';
 import 'package:shoppy/shared/components/constants.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
@@ -41,11 +40,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //hide status bar
-    SystemChrome.setEnabledSystemUIOverlays(
-        [
-          SystemUiOverlay.bottom, //This line is used for showing the bottom bar
-        ]);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
@@ -54,5 +49,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-//
-

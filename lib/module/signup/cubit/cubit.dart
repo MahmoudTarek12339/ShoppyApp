@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shoppy/module/signup/cubit/states.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
+import 'states.dart';
 
 class ShoppySignupCubit extends Cubit<ShoppySignupStates>{
   ShoppySignupCubit() : super(ShoppySignupInitialState());
@@ -153,6 +155,40 @@ class ShoppySignupCubit extends Cubit<ShoppySignupStates>{
     );
 
   }
+  void resetPassword({
+    required String email
+  })async{
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: email,
+      );
+    } on FirebaseAuthException catch (e) {
+      String title=e.code.replaceAll(RegExp('-'), ' ').capitalize!;
+      String message='';
+      if (e.code == 'user-not-found') {
+        message='No user found for that email.';
+      } else{
+        message=e.message.toString();
+      }
+      Get.snackbar(
+          title,
+          message,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white
+      );
+    }
+    catch (e) {
+      Get.snackbar(
+          'Error!',
+          e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white
+      );
+    }
+  }
+
   bool isPassword=true;
   IconData icon=Icons.visibility_outlined;
   void changePasswordVisibility(){

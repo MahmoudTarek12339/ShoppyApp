@@ -14,6 +14,7 @@ class ShoppyPhoneVerificationErrorState extends ShoppySignupStates{
   ShoppyPhoneVerificationErrorState(this.error);
 }
 
+
 class ShoppyCreateSuccessState extends ShoppySignupStates{
   final String uId;
   ShoppyCreateSuccessState(this.uId);

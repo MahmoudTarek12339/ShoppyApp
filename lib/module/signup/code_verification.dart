@@ -21,7 +21,7 @@ class CodeVerificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-    create: (BuildContext context) =>ShoppySignupCubit()..verifyPhone(myUser.phone!),
+    create: (BuildContext context) =>ShoppySignupCubit(),
       child: BlocConsumer<ShoppySignupCubit,ShoppySignupStates>(
         listener: (context,state){
           if(state is ShoppyCreateSuccessState){
@@ -39,6 +39,10 @@ class CodeVerificationScreen extends StatelessWidget {
         },
         builder: (context,state){
           return Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            ),
             body:Padding(
               padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
               child: Column(
@@ -139,6 +143,7 @@ class CodeVerificationScreen extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () async{
+                              await ShoppySignupCubit.get(context).verifyPhone(myUser.phone!);
                               String verificationCode = firstDigitController.text +
                                   secondDigitController.text +
                                   thirdDigitController.text +
@@ -156,7 +161,7 @@ class CodeVerificationScreen extends StatelessWidget {
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(Theme
                                   .of(context)
-                                  .buttonColor),
+                                  .focusColor),
                               shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
@@ -243,7 +248,7 @@ class CodeVerificationScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: Theme
                 .of(context)
-                .primaryColor,
+                .textTheme.bodyText1!.color,
           ),
           keyboardType: TextInputType.number,
           maxLength: 1,

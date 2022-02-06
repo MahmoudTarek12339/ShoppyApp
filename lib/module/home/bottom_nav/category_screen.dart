@@ -1,182 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shoppy/layout/cubit/cubit.dart';
-import 'package:shoppy/layout/cubit/states.dart';
-import 'package:shoppy/model/chip_data.dart';
 
-class CategoriesScreen extends StatefulWidget {
-  @override
-  _CategoriesScreenState createState() => _CategoriesScreenState();
-}
+import '../../../shared/components/components.dart';
 
-class _CategoriesScreenState extends State<CategoriesScreen> {
-  final double spacing = 8;
-  List<ChoiceChipData> choiceChips=[
-    ChoiceChipData(
-      isSelected: true,
-      selectedColor: Colors.blue,
-      textColor: Colors.white,
-      label: 'All',
-      img: AssetImage('assets/icones/clothes.png')
-    ),
-    ChoiceChipData(
-      isSelected: false,
-      selectedColor: Colors.blue,
-      textColor: Colors.white,
-      label: 't-Shirts',
-      img: AssetImage('assets/icones/tshirt.png')
-    ),
-    ChoiceChipData(
-      isSelected: false,
-      selectedColor: Colors.blue,
-      textColor: Colors.white,
-      label: 'Shirts',
-      img: AssetImage('assets/icones/shirt.png')
-    ),
-    ChoiceChipData(
-      isSelected: false,
-      selectedColor: Colors.blue,
-      textColor: Colors.white,
-      label: 'pants',
-      img: AssetImage('assets/icones/pants.png')
-    ),
-    ChoiceChipData(
-      isSelected: false,
-      selectedColor: Colors.blue,
-      textColor: Colors.white,
-      label: 'shorts',
-      img: AssetImage('assets/icones/denim-shorts.png')
-    ),
-    ChoiceChipData(
-      isSelected: false,
-      selectedColor: Colors.blue,
-      textColor: Colors.white,
-      label: 'accessories',
-      img: AssetImage('assets/icones/accessories.png')
-    ),
+class CategoriesScreen extends StatelessWidget {
+
+  final List<String> imageCategory = [
+    'assets/categories/shirt2.jpg',
+    'assets/categories/t-shirt.jpg',
+    'assets/categories/dresses.jpg',
+    'assets/categories/pants.jpg',
+    'assets/categories/shorts.jpg',
+    'assets/categories/jacket.jpg',
+    'assets/categories/skirt.jpg',
+    'assets/categories/children.jpg',
+    'assets/categories/shoes.jpg',
+    'assets/categories/accessories.jpg',
   ];
+  final List<String> categoriesNameList=[
+    'Shirts',
+    'T-shirts',
+    'Dresses',
+    'Pants',
+    'Shorts',
+    'Jackets',
+    'Skirts',
+    'Children',
+    'Shoes',
+    'Accessories',
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ShoppyCubit,ShoppyStates>(
-      listener: (context,state){},
-      builder: (context,state){
-        return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                buildChoiceChips(),
-                SizedBox(
-                  height: 25.0
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Padding(
+        padding: EdgeInsets.only(left: 15,top: 15,right: 10),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: EdgeInsets.only(left: 15,top: 15),
+                child: textUtils(
+                  text: 'Category',
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                  color:Theme.of(context).textTheme.bodyText1!.color,
                 ),
-                if(choiceChips[0].isSelected)
-                  Container(
-                  child: GridView.count(crossAxisCount: 2,
-                    shrinkWrap: true,
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                    childAspectRatio: 1/1.5,
-                    physics: NeverScrollableScrollPhysics(),
-                    children: List.generate(20,(index)=>buildProductItem()),
-                  ),
-                )
-                else if(choiceChips[1].isSelected)
-                  Container(
-                    child: GridView.count(crossAxisCount: 2,
-                      shrinkWrap: true,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
-                      childAspectRatio: 1/1.5,
-                      physics: NeverScrollableScrollPhysics(),
-                      children: List.generate(8,(index)=>buildProductItem()),
-                    ),
-                  )
-                else if(choiceChips[2].isSelected)
-                  Container(
-                      child: GridView.count(crossAxisCount: 2,
-                        shrinkWrap: true,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                        childAspectRatio: 1/1.5,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: List.generate(4,(index)=>buildProductItem()),
-                      ),
-                    )
-                else if(choiceChips[3].isSelected)
-                  Container(
-                      child: GridView.count(crossAxisCount: 2,
-                        shrinkWrap: true,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                        childAspectRatio: 1/1.5,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: List.generate(2,(index)=>buildProductItem()),
-                      ),
-                    )
-                else if(choiceChips[4].isSelected)
-                  Container(
-                      child: GridView.count(crossAxisCount: 2,
-                        shrinkWrap: true,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                        childAspectRatio: 1/1.5,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: List.generate(2,(index)=>buildProductItem()),
-                      ),
-                    )
-                else if(choiceChips[5].isSelected)
-                    Container(
-                      child: GridView.count(crossAxisCount: 2,
-                        shrinkWrap: true,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                        childAspectRatio: 1/1.5,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: List.generate(2,(index)=>buildProductItem()),
-                      ),
-                    ),
-              ],
+              ),
             ),
-          ),
-        );
-      },
+            SizedBox(
+              height: 20,
+            ),
+            categoryWidget(),
+          ],
+        ),
+      ),
     );
   }
-
-  Widget buildProductItem() =>Card(
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    elevation: 10.0,
-    shadowColor: Colors.white,
-    child: Image(
-      image: NetworkImage('https://i.pinimg.com/564x/e8/be/6e/e8be6e703137738190f71be515088fa0.jpg'),
-      fit:BoxFit.cover,
-    ),
-  );
-
-  Widget buildChoiceChips() => SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Wrap(
-      runSpacing: spacing,
-      spacing: spacing,
-      children: choiceChips
-          .map((choiceChip) => ChoiceChip(
-        label: Text(choiceChip.label),
-        avatar: Image(image: choiceChip.img,),
-        labelStyle: TextStyle(color: Colors.white),
-        onSelected: (isSelected) => setState(() {
-          choiceChips = choiceChips.map((otherChip) {
-            final newChip = otherChip.copy(isSelected: false);
-            return choiceChip == newChip
-                ? newChip.copy(isSelected: isSelected)
-                : newChip;
-          }).toList();
-        }),
-        selected: choiceChip.isSelected,
-        selectedColor: Colors.deepOrange,
-        backgroundColor: Colors.grey[800],
-
-      )).toList(),
+  Widget categoryWidget()=>Expanded(
+    child: ListView.separated(
+      itemBuilder: (context,index)=>InkWell(
+        onTap: (){
+        },
+        child: Container(
+          height: 150,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.8),
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AssetImage(
+                imageCategory[index],
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(left: 10,bottom: 5),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                categoriesNameList[index],
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      separatorBuilder: (context,index)=>SizedBox(height: 20,),
+      itemCount: 10
     ),
   );
 }

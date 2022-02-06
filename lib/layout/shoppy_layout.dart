@@ -1,6 +1,5 @@
-
+import 'package:badges/badges.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,6 +25,7 @@ class ShoppyLayout extends StatelessWidget {
           var cubit=ShoppyCubit.get(context);
           return Scaffold(
             appBar: AppBar(
+
               titleSpacing: 10.0,
               title: Container(
                 decoration: BoxDecoration(
@@ -73,15 +73,23 @@ class ShoppyLayout extends StatelessWidget {
                 ),
               ),
               actions: [
-                IconButton(
-                    onPressed: () {
-                      navigateTo(context, CartScreen());
-                    },
-                    icon: FaIcon(
-                      FontAwesomeIcons.shoppingCart,
-                      color: Theme.of(context).iconTheme.color,
-                      size: 25,
-                    )),
+                Badge(
+                  position: BadgePosition.topEnd(top: 0, end: 3),
+                  animationType:BadgeAnimationType.slide,
+                  badgeContent: Text(
+                    '0',
+                    style: TextStyle(color: Colors.white,fontSize: 15),
+                  ),
+                  child: IconButton(
+                      onPressed: () {
+                        navigateTo(context, CartScreen());
+                      },
+                      icon: FaIcon(
+                        FontAwesomeIcons.shoppingCart,
+                        color: Theme.of(context).iconTheme.color,
+                        size: 25,
+                      )),
+                ),
               ],
             ),
             body: cubit.screens[cubit.currentIndex],

@@ -9,6 +9,7 @@ import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
 
+import '../../shared/components/constants.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
 import 'mobile_verification.dart';
@@ -68,11 +69,9 @@ class SignupScreen extends StatelessWidget {
           },
           builder: (context,state){
             return Scaffold(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               appBar: AppBar(
-                title: Text(
-                  'Sign up',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               ),
               body: Center(
                 child: SingleChildScrollView(
@@ -84,6 +83,26 @@ class SignupScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Row(
+                            children: [
+                              textUtils(
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.w500,
+                                text: 'Sign',
+                                color:Theme.of(context).focusColor ,
+                              ),
+                              textUtils(
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.w500,
+                                text: ' Up',
+                                color:Theme.of(context).textTheme.bodyText1!.color ,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
+
                           Text(
                             'Sign up with one of The following Options',
                             style: Theme.of(context).textTheme.caption,
@@ -138,7 +157,7 @@ class SignupScreen extends StatelessWidget {
                                   controller: firstNameController,
                                   type: TextInputType.name,
                                   validate: (value){
-                                    if(value!.isEmpty){
+                                    if(value.toString().length<=2||!RegExp(validationName).hasMatch(value!)){
                                       return 'please enter your name';
                                     }
                                   },
@@ -152,7 +171,7 @@ class SignupScreen extends StatelessWidget {
                                   controller: lastNameController,
                                   type: TextInputType.name,
                                   validate: (value){
-                                    if(value!.isEmpty){
+                                    if(value.toString().length<=2||!RegExp(validationName).hasMatch(value!)){
                                       return 'please enter your name';
                                     }
                                   },
@@ -167,7 +186,7 @@ class SignupScreen extends StatelessWidget {
                             controller: emailController,
                             type: TextInputType.emailAddress,
                             validate: (value){
-                              if(value!.isEmpty){
+                              if(!RegExp(validationEmail).hasMatch(value!)){
                                 return 'please enter your email';
                               }
                             },
@@ -179,11 +198,8 @@ class SignupScreen extends StatelessWidget {
                             controller: passwordController,
                             type: TextInputType.visiblePassword,
                             validate: (value){
-                              if(value!.isEmpty){
-                                return 'password mustn\'t be empty';
-                              }
-                              else if(value.length<8){
-                                return 'password is too short';
+                              if(value.toString().length<8){
+                                return 'Password Must be at least 8 characters';
                               }
                             },
                             isPassword: ShoppySignupCubit.get(context).isPassword,

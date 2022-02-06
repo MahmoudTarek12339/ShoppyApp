@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 //default button style
 Widget defaultButton({
@@ -20,7 +21,7 @@ Widget defaultButton({
         child: Text(
           isUpperCase ? text.toUpperCase() : text,
           style: TextStyle(
-            color: Theme.of(context).iconTheme.color,
+            color: Theme.of(context).primaryColor,
           ),
         ),
         clipBehavior: Clip.antiAlias, // Add This
@@ -29,7 +30,7 @@ Widget defaultButton({
         borderRadius: BorderRadius.circular(
           radius,
         ),
-        color: backgroundColor!=null?backgroundColor:Theme.of(context).buttonColor,
+        color: backgroundColor!=null?backgroundColor:Theme.of(context).focusColor,
       ),
     );
 
@@ -98,7 +99,7 @@ Widget defaultFormField({
         )
             : null,
         enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(containerRadius),borderSide: BorderSide(
-            color: borderColor!=null?borderColor:Theme.of(context).backgroundColor,
+            color: borderColor!=null?borderColor:Theme.of(context).focusColor,
         )),
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(containerRadius),borderSide: BorderSide(
             color: focusBorderColor!=null?focusBorderColor:Theme.of(context).focusColor,
@@ -144,3 +145,13 @@ Color chooseToastColor(ToastState state) {
   }
   return color;
 }
+Widget textUtils({required text,required fontSize,required fontWeight,required color})=>Text(
+  text,
+  style: GoogleFonts.lato(
+      textStyle:TextStyle(
+        fontWeight: fontWeight,
+        color: color,
+        fontSize: fontSize,
+      )
+  ),
+);

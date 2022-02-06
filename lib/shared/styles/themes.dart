@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 ThemeData darkTheme=ThemeData(
-  scaffoldBackgroundColor: Colors.grey[850],
+  scaffoldBackgroundColor: Color(0xFF121212),
   appBarTheme: AppBarTheme(
-    backgroundColor: Colors.grey[900]
+    backgroundColor: Colors.grey[900],
+    elevation: 0.0,
   ),
   textTheme: TextTheme(
     bodyText1: TextStyle(
@@ -37,20 +38,20 @@ ThemeData darkTheme=ThemeData(
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
-    selectedItemColor: Colors.deepOrange,
-    unselectedItemColor: Colors.grey,
-    elevation: 20.0,
-    backgroundColor: Colors.grey[300],
+    selectedItemColor: Color(0xFFff4667),
+    unselectedItemColor: Colors.white,
+    elevation: 10.0,
+    backgroundColor: Colors.black,
   ),
-  buttonColor: Colors.pink,
   backgroundColor: Colors.pink,
-  focusColor: Colors.pinkAccent,
+  focusColor: Color(0xFFff4667),
   errorColor: Colors.deepOrange,
   iconTheme: IconThemeData(
     color: Colors.white,
   ),
   primaryColor: Colors.black,
   canvasColor: Colors.white,
+  cardColor: Colors.black54,
 );
 
 ThemeData lightTheme=ThemeData(
@@ -60,7 +61,8 @@ ThemeData lightTheme=ThemeData(
     elevation: 0.0,
     iconTheme: IconThemeData(
       color: Colors.black
-    )
+    ),
+    centerTitle: true,
   ),
   textTheme: TextTheme(
     bodyText1: TextStyle(
@@ -71,7 +73,6 @@ ThemeData lightTheme=ThemeData(
     bodyText2: TextStyle(
       fontSize: 20.0,
       color: Colors.grey,
-
     ),
     subtitle1: TextStyle(
       color: Colors.black,
@@ -94,18 +95,21 @@ ThemeData lightTheme=ThemeData(
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
-    selectedItemColor: Colors.deepOrange,
-    unselectedItemColor: Colors.grey,
-    elevation: 20.0,
-    backgroundColor: Colors.black,
+    selectedItemColor: Color(0xff00BE84),
+    unselectedItemColor: Colors.black,
+    elevation: 10.0,
+    backgroundColor: Colors.white,
   ),
-  buttonColor: Colors.blueAccent,
   backgroundColor: Colors.black,
-  focusColor: Colors.blue,
+  focusColor: Color(0xff00BE84),
   errorColor: Colors.red,
   iconTheme: IconThemeData(
       color: Colors.black,
     ),
   primaryColor: Colors.white,
   canvasColor: Colors.grey,
+  cardColor: Colors.grey[200],
 );
+/*const Color mainColor = Color(0xff00BE84);
+const Color darkGreyClr = Color(0xFF121212);
+const Color pinkClr = Color(0xFFff4667);*/
