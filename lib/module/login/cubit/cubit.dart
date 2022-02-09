@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shoppy/module/login/cubit/states.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:shoppy/module/login/cubit/states.dart';
+
 
 class ShoppyLoginCubit extends Cubit<ShoppyLoginStates>{
   ShoppyLoginCubit() : super(ShoppyLoginInitialState());
@@ -12,16 +13,31 @@ class ShoppyLoginCubit extends Cubit<ShoppyLoginStates>{
   void userLogin({
     required String email,
     required String password,
-  }){
-    emit(ShoppyLoginLoadingState());
-    FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password).then((value) {
-      emit(ShoppyLoginSuccessState(value.user!.uid));
-    }).catchError((error){
-      print(error.toString());
-      emit(ShoppyLoginErrorState(error.toString()));
-    });
+  })async{
+    try {
+      emit(ShoppyLoginLoadingState());
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password).then((value) {
+        emit(ShoppyLoginSuccessState(value.user!.uid));
+      });
+    }
+    on FirebaseAuthException catch (e) {
+      String message='';
+      if (e.code == 'user-not-found') {
+        message='No user found for that email.';
+      }
+      else if (e.code == 'wrong-password') {
+        message='Wrong password provided for that user.';
+      }
+      else{
+        message=e.message.toString();
+      }
+      emit(ShoppyLoginErrorState(message));
+    }
+    catch (e) {
+      emit(ShoppyLoginErrorState(e.toString()));
+    }
   }
 
   GoogleSignInAccount? myGoogleUser;
@@ -50,7 +66,6 @@ class ShoppyLoginCubit extends Cubit<ShoppyLoginStates>{
         emit(ShoppyGoogleLoginSuccessState(value.user!.uid));
       }
     ).catchError((onError){
-      print(onError.toString());
       emit(ShoppyGoogleLoginErrorState(onError.toString()));
     });
   }
@@ -74,9 +89,32 @@ class ShoppyLoginCubit extends Cubit<ShoppyLoginStates>{
       });
     } on Exception catch (e) {
       emit(ShoppyFaceBookLoginErrorState(e.toString()));
-      print(e.toString());
     }
   }
+
+  void resetPassword({
+    required String email
+  })async{
+    try {
+
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: email,
+      ).then((value) => emit(ShoppyResetPasswordSuccessState()));
+    } on FirebaseAuthException catch (e) {
+      String message='';
+      if (e.code == 'user-not-found') {
+        message='No user found for that email.';
+      } else{
+        message=e.message.toString();
+      }
+      emit(ShoppyResetPasswordErrorState(message));
+
+    }
+    catch (e) {
+      emit(ShoppyResetPasswordErrorState(e.toString()));
+    }
+  }
+
 
   bool isPassword=true;
   IconData icon=Icons.visibility_outlined;

@@ -2,6 +2,7 @@
     package="com.example.shoppy">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="shoppy"
         android:icon="@mipmap/ic_launcher">

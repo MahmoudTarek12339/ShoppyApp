@@ -7,15 +7,20 @@ import 'package:readmore/readmore.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../model/product_model.dart';
+
 
 class ProductScreen extends StatefulWidget {
+  ProductModel productModel;
+  ProductScreen(this.productModel);
+
   @override
   State<ProductScreen> createState() => _ProductScreenState();
 }
 
 class _ProductScreenState extends State<ProductScreen> {
   //final ProductScreen productModel;
-  final List<String> sizesList=['S','M','L','XL','XXL'];
+  //final List<String> sizesList= as List<String> ;
   int currentSelected=0;
   CarouselController carouselController=CarouselController();
   int currentPage=0;
@@ -41,9 +46,9 @@ class _ProductScreenState extends State<ProductScreen> {
               imageSlider(),
               clothesInfo(
                 context: context,
-                title: 'Men\'s shirt',
-                description: 'This is discretion This is discretion This is discretion This is discretion This is discretion This is discretion This is discretion This is discretion',
-                rate: 3.8,
+                title: widget.productModel.productName,
+                description: widget.productModel.description,
+                rate: widget.productModel.rate,
               ),
               sizeList(),
               addCart(myContext: context),
@@ -256,7 +261,7 @@ class _ProductScreenState extends State<ProductScreen> {
               width: 8,
             ),
             RatingBarIndicator(
-              rating: rate,
+              rating: widget.productModel.rate,
               itemBuilder: (context, index) => Icon(
                 Icons.star,
                 size: 20,
@@ -317,7 +322,7 @@ class _ProductScreenState extends State<ProductScreen> {
               ),
             ),
             child: Text(
-              sizesList[index],
+              widget.productModel.sizes[index],
               style: TextStyle(
                 color:Theme.of(context).textTheme.bodyText1!.color,
                 fontWeight: FontWeight.bold,
@@ -326,7 +331,7 @@ class _ProductScreenState extends State<ProductScreen> {
           ),
         ),
         separatorBuilder: (context,index)=>SizedBox(width: 10,),
-        itemCount: sizesList.length
+        itemCount: widget.productModel.sizes.length
     ),
   );
 

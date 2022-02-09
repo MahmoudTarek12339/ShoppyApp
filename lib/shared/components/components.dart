@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 //default button style
@@ -113,38 +112,49 @@ Widget defaultFormField({
       ),
     );
 
-void showToast({
-  required String message,
-  required ToastState state,
-}) {
-  Fluttertoast.showToast(
-    msg: message,
-    toastLength: Toast.LENGTH_LONG,
-    gravity: ToastGravity.BOTTOM,
-    timeInSecForIosWeb: 5,
-    backgroundColor: chooseToastColor(state),
-    textColor: Colors.white,
-    fontSize: 16.0,
+
+defaultSnackBar({
+  required context,
+  required String title,
+  required Color color,
+}){
+  final snackBar = SnackBar(
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    content: Container(
+      height: 50,
+      decoration: BoxDecoration(
+        color:color,
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x19000000),
+            spreadRadius: 2.0,
+            blurRadius: 8.0,
+            offset: Offset(2, 4),
+          )
+        ],
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Align(
+          alignment:Alignment.centerLeft,
+          child: Text(
+              '  '+title,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold
+              )
+          ),
+        ),
+      ),
+    ),
+    duration: Duration(seconds: 5),
   );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
 }
 
-enum ToastState { SUCCESS, ERROR, WARNING }
-
-Color chooseToastColor(ToastState state) {
-  Color color;
-  switch (state) {
-    case ToastState.SUCCESS:
-      color = Colors.green;
-      break;
-    case ToastState.ERROR:
-      color = Colors.red;
-      break;
-    case ToastState.WARNING:
-      color = Colors.amber;
-      break;
-  }
-  return color;
-}
 Widget textUtils({required text,required fontSize,required fontWeight,required color})=>Text(
   text,
   style: GoogleFonts.lato(

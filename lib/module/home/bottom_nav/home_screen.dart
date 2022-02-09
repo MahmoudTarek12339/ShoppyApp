@@ -1,8 +1,10 @@
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
+import '../../../model/product_model.dart';
 import '../../../shared/components/components.dart';
 import '../product_screen.dart';
 
@@ -13,7 +15,7 @@ class HomeScreen extends StatelessWidget {
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
       listener: (context,state){},
       builder: (context,state){
-        //var cubit=ShoppyCubit.get(context);
+        var cubit=ShoppyCubit.get(context);
         return Padding(
           padding: const EdgeInsets.all(10.0),
           child: SingleChildScrollView(
@@ -81,20 +83,24 @@ class HomeScreen extends StatelessWidget {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     physics: BouncingScrollPhysics(),
-                    itemBuilder: (context,index)=>index==4?
+                    itemBuilder: (context,index)=>index==cubit.products.length?
                         buildMoreItem(context: context)
                         :buildCardItem(
-                          image: 'https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg',
-                          price: 55.23,
-                          rate: 3.9,
+                          onFavoriteTab:(){
+                            cubit.updateWishList(productUid: 'productUid');
+                          },
+                          isFavorite: cubit.favorites.contains('productUid'),
+                          image: cubit.products[index].photos[0],
+                          price: cubit.products[index].price,
+                          rate: cubit.products[index].rate,
                           productId: 1,
                           onTap: (){
-                            navigateTo(context, ProductScreen());
+                            navigateTo(context, ProductScreen(cubit.products[index]as ProductModel));
                           },
                           context: context
                         ),
                     separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
-                    itemCount: 5,
+                    itemCount: cubit.products.length+1,
                   ),
                 ),
                 SizedBox(
@@ -118,12 +124,16 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context,index)=>index==4?
                           buildMoreItem(context: context)
                           :buildCardItem(
+                          onFavoriteTab:()async{
+                            cubit.getAllProducts();
+                          },
+                          isFavorite: true,
                           image: 'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',
                           price: 55.23,
                           rate: 3.9,
                           productId: 1,
                           onTap: (){
-                            navigateTo(context, ProductScreen());
+                            navigateTo(context, ProductScreen(cubit.products[index]as ProductModel));
                           },
                           context: context),
                       separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
@@ -149,15 +159,17 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context,index)=>index==5?
                           buildMoreItem(context: context)
                           :buildCardItem(
+                            onFavoriteTab:(){},
+                            isFavorite: true,
                             image: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
                             price: 55.23,
                             rate: 3.9,
                             productId: 1,
                             onTap: (){
-                              navigateTo(context, ProductScreen());
+                              navigateTo(context, ProductScreen(cubit.products[index]as ProductModel));
                             },
                             context: context
-                          ),
+                      ),
                       separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
                       itemCount: 6
                   ),
@@ -183,12 +195,14 @@ class HomeScreen extends StatelessWidget {
                     childAspectRatio: 1/1.45,
                     physics: NeverScrollableScrollPhysics(),
                     children: List.generate(12,(index)=>buildCardItem(
+                        onFavoriteTab:(){},
                         image: 'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',
                         price: 55.23,
                         rate: 3.9,
                         productId: 1,
+                        isFavorite: true,
                         onTap: (){
-                          navigateTo(context, ProductScreen());
+                          navigateTo(context, ProductScreen(cubit.products[index]as ProductModel));
                         },
                         context: context)
                     ),
@@ -207,8 +221,11 @@ class HomeScreen extends StatelessWidget {
     required double price,
     required double rate,
     required int productId,
+    required bool isFavorite,
     required Function() onTap,
+    required Function() onFavoriteTab,
     required context,
+
   }){
     return InkWell(
       onTap: onTap,
@@ -231,11 +248,15 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: (){
-                  },
-                  icon:Icon(
+                  onPressed: onFavoriteTab,
+                  icon:isFavorite?
+                        Icon(
                     Icons.favorite,
                     color: Colors.red,
+                  )
+                        :Icon(
+                    Icons.favorite_outlined,
+                    color: Colors.black,
                   )
                 ),
                 IconButton(

@@ -17,13 +17,18 @@ class ResetPasswordScreen extends StatelessWidget {
       child: BlocConsumer<ShoppyCubit,ShoppyStates>(
         listener: (context,state){
           if(state is ShoppyChangePasswordSuccessState){
-            showToast(message: 'Password Chaged Successfully', state: ToastState.SUCCESS);
+            defaultSnackBar(
+              context: context,
+              color: Colors.green,
+              title: 'Password Changed Successfully',
+            );
             Navigator.pop(context);
           }
           else if(state is ShoppyChangePasswordErrorState){
-            showToast(
-                message: state.error.toString(),
-                state: ToastState.ERROR
+            defaultSnackBar(
+              context: context,
+              color: Colors.red,
+              title: state.error.toString(),
             );
             Navigator.pop(context);
           }
@@ -32,9 +37,10 @@ class ResetPasswordScreen extends StatelessWidget {
             formKey.currentState!.validate();
           }
           else if(state is ShoppyVerifyPasswordErrorState){
-            showToast(
-                message: state.error.toString(),
-                state: ToastState.ERROR
+            defaultSnackBar(
+              context: context,
+              color: Colors.red,
+              title: state.error.toString(),
             );
             validPass=false;
             formKey.currentState!.validate();
@@ -50,6 +56,7 @@ class ResetPasswordScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       child: defaultFormField(
@@ -69,6 +76,7 @@ class ResetPasswordScreen extends StatelessWidget {
                           else if(value.length<8){
                             return 'password is too short';
                           }
+                          return null;
                         },
                         isPassword: ShoppyCubit.get(context).isPassword,
                         label: "Current Password",
@@ -94,6 +102,7 @@ class ResetPasswordScreen extends StatelessWidget {
                           else if(value.length<8){
                             return 'password is too short';
                           }
+                          return null;
                         },
                         isPassword: ShoppyCubit.get(context).isPassword2,
                         label: "Password",
@@ -119,6 +128,8 @@ class ResetPasswordScreen extends StatelessWidget {
                           else if(value.length<8){
                             return 'password is too short';
                           }
+                          return null;
+
                         },
                         isPassword: ShoppyCubit.get(context).isPassword3,
                         label: "Confirm new Password",
@@ -134,7 +145,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
-                        color: Theme.of(context).buttonColor,
+                        color: Theme.of(context).focusColor,
                       ),
 
                       child: MaterialButton(

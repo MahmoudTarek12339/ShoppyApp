@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
-import 'package:shoppy/model/user_model.dart';
 import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
@@ -12,10 +10,11 @@ import 'package:shoppy/shared/network/local/cache_helper.dart';
 import '../../shared/components/constants.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
-import 'mobile_verification.dart';
+import 'image_picker.dart';
 
 class SignupScreen extends StatelessWidget {
   final TextEditingController emailController=TextEditingController();
+  final TextEditingController phoneController=TextEditingController();
   final TextEditingController passwordController=TextEditingController();
   final TextEditingController confirmPasswordController=TextEditingController();
   final TextEditingController numberController=TextEditingController();
@@ -30,9 +29,10 @@ class SignupScreen extends StatelessWidget {
           listener: (context,state){
             if(state is ShoppyGoogleLoginSuccessState){
               GoogleSignInAccount? myGoogleUser=ShoppySignupCubit.get(context).myGoogleUser;
-              showToast(
-                  message: 'Welcome ${myGoogleUser!.displayName}',
-                  state: ToastState.SUCCESS
+              defaultSnackBar(
+                context: context,
+                color: Colors.green,
+                title: 'Welcome ${myGoogleUser!.displayName}',
               );
               CacheHelper.saveData(
                   key: 'uId',
@@ -40,11 +40,12 @@ class SignupScreen extends StatelessWidget {
                 navigateAndFinish(context,ShoppyLayout());
               });
             }
-            if(state is ShoppyFaceBookLoginSuccessState){
+            else if(state is ShoppyFaceBookLoginSuccessState){
               var userData=ShoppySignupCubit.get(context).faceBookUserData;
-              showToast(
-                  message: 'Welcome ${userData['name']}',
-                  state: ToastState.SUCCESS
+              defaultSnackBar(
+                context: context,
+                color: Colors.green,
+                title: 'Welcome ${userData['name']}',
               );
               CacheHelper.saveData(
                   key: 'uId',
@@ -52,20 +53,20 @@ class SignupScreen extends StatelessWidget {
                 navigateAndFinish(context,ShoppyLayout());
               });
             }
-
-            if(state is ShoppyGoogleLoginErrorState){
-              showToast(
-                  message: state.error,
-                  state: ToastState.ERROR
+            else if(state is ShoppyGoogleLoginErrorState){
+              defaultSnackBar(
+                context: context,
+                color: Colors.red,
+                title: state.error,
               );
             }
-            if(state is ShoppyFaceBookLoginErrorState){
-              showToast(
-                  message: state.error,
-                  state: ToastState.ERROR
+            else if(state is ShoppyFaceBookLoginErrorState){
+              defaultSnackBar(
+                context: context,
+                color: Colors.red,
+                title: state.error,
               );
             }
-
           },
           builder: (context,state){
             return Scaffold(
@@ -160,6 +161,7 @@ class SignupScreen extends StatelessWidget {
                                     if(value.toString().length<=2||!RegExp(validationName).hasMatch(value!)){
                                       return 'please enter your name';
                                     }
+                                    return null;
                                   },
                                   label: "First Name",
                                 ),
@@ -174,11 +176,25 @@ class SignupScreen extends StatelessWidget {
                                     if(value.toString().length<=2||!RegExp(validationName).hasMatch(value!)){
                                       return 'please enter your name';
                                     }
+                                    return null;
                                   },
                                   label: "Last Name",
                                 ),
                               ),
                             ],
+                          ),
+                          SizedBox(height: 20.0,),
+                          defaultFormField(
+                            context: context,
+                            controller: phoneController,
+                            type: TextInputType.phone,
+                            validate: (value){
+                              if(value.toString().length!=11){
+                                return 'please enter Valid Number';
+                              }
+                              return null;
+                            },
+                            label: "Phone Number",
                           ),
                           SizedBox(height: 20.0,),
                           defaultFormField(
@@ -189,6 +205,7 @@ class SignupScreen extends StatelessWidget {
                               if(!RegExp(validationEmail).hasMatch(value!)){
                                 return 'please enter your email';
                               }
+                              return null;
                             },
                             label: "Email",
                           ),
@@ -201,6 +218,7 @@ class SignupScreen extends StatelessWidget {
                               if(value.toString().length<8){
                                 return 'Password Must be at least 8 characters';
                               }
+                              return null;
                             },
                             isPassword: ShoppySignupCubit.get(context).isPassword,
                             label: "Password",
@@ -221,6 +239,7 @@ class SignupScreen extends StatelessWidget {
                               else if(value!=passwordController.text.toString()){
                                 return 'this not match';
                               }
+                              return null;
                             },
                             isPassword: true,
                             label: "Confirm Password",
@@ -234,12 +253,14 @@ class SignupScreen extends StatelessWidget {
                               context: context,
                               onPressFunction: () {
                                 if(formKey.currentState!.validate()){
-                                  UserModel user=UserModel(
-                                    name:firstNameController.text+' '+lastNameController.text,
+
+                                  ShoppySignupCubit.get(context).userRegister(
+                                    name: firstNameController.text+' '+lastNameController.text,
                                     email: emailController.text,
-                                    password: passwordController.text,
+                                    password: emailController.text,
+                                    phone: phoneController.text
                                   );
-                                  navigateTo(context, MobileVerificationScreen(user));
+                                  navigateTo(context, ImagePickingScreen());
                                 }
                               },
                               text: 'Create Account',

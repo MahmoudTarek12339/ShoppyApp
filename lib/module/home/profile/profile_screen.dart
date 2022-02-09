@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
@@ -20,9 +19,10 @@ class ProfileScreen extends StatelessWidget {
         listener: (context,state){
           if(state is UserLoggedOutSuccessState){
             navigateAndFinish(context,ShoppyLayout());
-            showToast(
-                message: 'Logged out successfully',
-                state: ToastState.SUCCESS
+            defaultSnackBar(
+              context: context,
+              color: Colors.green,
+              title: 'Logged out successfully',
             );
           }
           else if(state is ShoppyChangeNameSuccessState){
@@ -152,11 +152,19 @@ class ProfileScreen extends StatelessWidget {
 
               listener: (context,state){
                 if(state is ShoppyChangeNameSuccessState){
-                  showToast(message: 'Name Changed Successfully', state: ToastState.SUCCESS);
+                  defaultSnackBar(
+                    context: context,
+                    color: Colors.green,
+                    title: 'Name Changed Successfully',
+                  );
                   Navigator.pop(context);
                 }
                 else if(state is ShoppyChangeNameErrorState){
-                  showToast(message: state.error.toString(), state: ToastState.ERROR);
+                  defaultSnackBar(
+                    context: context,
+                    color: Colors.red,
+                    title: state.error.toString(),
+                  );
                 }
               },
               builder: (context,state){
@@ -181,6 +189,7 @@ class ProfileScreen extends StatelessWidget {
                                 if (value!.isEmpty) {
                                   return 'please enter your name';
                                 }
+                                return null;
                               },
                               label: 'Enter your Name',
                               context: context),

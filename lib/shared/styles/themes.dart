@@ -45,7 +45,7 @@ ThemeData darkTheme=ThemeData(
   ),
   backgroundColor: Colors.pink,
   focusColor: Color(0xFFff4667),
-  errorColor: Colors.deepOrange,
+  errorColor: Colors.red,
   iconTheme: IconThemeData(
     color: Colors.white,
   ),

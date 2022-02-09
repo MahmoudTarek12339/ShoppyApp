@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,11 +31,12 @@ class LoginScreen extends StatelessWidget {
                 navigateAndFinish(context,ShoppyLayout());
               });
             }
-            if(state is ShoppyGoogleLoginSuccessState){
+            else if(state is ShoppyGoogleLoginSuccessState){
               GoogleSignInAccount? myGoogleUser=ShoppyLoginCubit.get(context).myGoogleUser;
-              showToast(
-                  message: 'Welcome ${myGoogleUser!.displayName}',
-                  state: ToastState.SUCCESS
+              defaultSnackBar(
+                context: context,
+                color: Colors.green,
+                title: 'Welcome ${myGoogleUser!.displayName}',
               );
               CacheHelper.saveData(
                   key: 'uId',
@@ -44,11 +44,12 @@ class LoginScreen extends StatelessWidget {
                 navigateAndFinish(context,ShoppyLayout());
               });
             }
-            if(state is ShoppyFaceBookLoginSuccessState){
+            else if(state is ShoppyFaceBookLoginSuccessState){
               var userData=ShoppyLoginCubit.get(context).faceBookUserData;
-              showToast(
-                  message: 'Welcome ${userData['name']}',
-                  state: ToastState.SUCCESS
+              defaultSnackBar(
+                context: context,
+                color: Colors.green,
+                title: 'Welcome ${userData['name']}',
               );
               CacheHelper.saveData(
                   key: 'uId',
@@ -57,21 +58,25 @@ class LoginScreen extends StatelessWidget {
               });
             }
 
-            if(state is ShoppyLoginErrorState){
-              showToast(
-                  message: state.error,
-                  state: ToastState.ERROR);
-            }
-            if(state is ShoppyGoogleLoginErrorState){
-              showToast(
-                message: state.error,
-                state: ToastState.ERROR
+            else if(state is ShoppyLoginErrorState){
+              defaultSnackBar(
+                context: context,
+                color: Colors.red,
+                title: state.error,
               );
             }
-            if(state is ShoppyFaceBookLoginErrorState){
-              showToast(
-                  message: state.error,
-                  state: ToastState.ERROR
+            else if(state is ShoppyGoogleLoginErrorState){
+              defaultSnackBar(
+                context: context,
+                color: Colors.red,
+                title: state.error,
+              );
+            }
+            else if(state is ShoppyFaceBookLoginErrorState){
+              defaultSnackBar(
+                context: context,
+                color: Colors.red,
+                title: state.error,
               );
             }
 
@@ -168,6 +173,7 @@ class LoginScreen extends StatelessWidget {
                               if(value!.isEmpty||!RegExp(validationEmail).hasMatch(value)){
                                 return 'Please enter Valid email';
                               }
+                              return null;
                             },
                             label: "Email",
                           ),
@@ -185,6 +191,7 @@ class LoginScreen extends StatelessWidget {
                               if(value.toString().length<8){
                                 return 'Password Must be at least 8 characters';
                               }
+                              return null;
                             },
                             isPassword: ShoppyLoginCubit.get(context).isPassword,
                             label: "Password",

@@ -24,8 +24,9 @@ class ShoppyLayout extends StatelessWidget {
         builder:(context,state){
           var cubit=ShoppyCubit.get(context);
           return Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: AppBar(
-
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               titleSpacing: 10.0,
               title: Container(
                 decoration: BoxDecoration(

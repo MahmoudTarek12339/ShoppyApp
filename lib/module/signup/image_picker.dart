@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
@@ -16,14 +15,19 @@ class ImagePickingScreen extends StatelessWidget {
       child: BlocConsumer<ShoppyCubit,ShoppyStates>(
         listener: (context,state){
           if(state is SocialUploadProfileImageSuccessState){
-            showToast(
-                message: 'Picture set successfully',
-                state: ToastState.SUCCESS
+            defaultSnackBar(
+              context: context,
+              color: Colors.green,
+              title: 'Picture set successfully',
             );
             navigateAndFinish(context,ShoppyLayout());
           }
           else if(state is SocialUploadProfileImageErrorState){
-            showToast(message: state.error, state: ToastState.ERROR);
+            defaultSnackBar(
+              context: context,
+              color: Colors.red,
+              title: state.error.toString(),
+            );
           }
         },
         builder:(context,state){

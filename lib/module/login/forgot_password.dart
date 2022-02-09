@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoppy/module/login/cubit/cubit.dart';
+import 'package:shoppy/module/login/cubit/states.dart';
 import 'package:shoppy/shared/components/components.dart';
 
 import '../../shared/components/constants.dart';
-import '../signup/cubit/cubit.dart';
-import '../signup/cubit/states.dart';
+
+
 class ForgetPasswordScreen extends StatelessWidget {
   final formKey=GlobalKey<FormState>();
   final TextEditingController emailController=TextEditingController();
@@ -12,8 +14,8 @@ class ForgetPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context)=>ShoppySignupCubit(),
-      child: BlocConsumer<ShoppySignupCubit,ShoppySignupStates>(
+      create: (BuildContext context)=>ShoppyLoginCubit(),
+      child: BlocConsumer<ShoppyLoginCubit,ShoppyLoginStates>(
           listener: (context,state){},
           builder:(context,state){
             return SafeArea(child: Scaffold(
@@ -98,7 +100,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                           onPressFunction: (){
                             if(formKey.currentState!.validate()){
                               String email=emailController.text.toString().trim();
-                              ShoppySignupCubit.get(context).resetPassword( email: email);
+                              ShoppyLoginCubit.get(context).resetPassword( email: email);
                             }
                           },
                           context: context,

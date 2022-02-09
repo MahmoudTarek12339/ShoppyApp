@@ -34,3 +34,31 @@ class SocialUploadProfileImageErrorState extends ShoppyStates{
   final String error;
   SocialUploadProfileImageErrorState(this.error);
 }
+
+class ShoppyUpdateFavoriteState extends ShoppyStates{}
+
+class ShoppyGetFavoriteSuccessState extends ShoppyStates{}
+class ShoppyGetFavoriteErrorState extends ShoppyStates{
+  final String error;
+  ShoppyGetFavoriteErrorState(this.error);
+}
+
+class ShoppyAddToFavoriteSuccessState extends ShoppyStates{}
+class ShoppyAddToFavoriteErrorState extends ShoppyStates{
+  final String error;
+  ShoppyAddToFavoriteErrorState(this.error);
+}
+
+class ShoppyRemoveFromFavoriteSuccessState extends ShoppyStates{}
+class ShoppyRemoveFromFavoriteErrorState extends ShoppyStates{
+  final String error;
+  ShoppyRemoveFromFavoriteErrorState(this.error);
+}
+
+
+
+class ShoppyGetAllProductsSuccessState extends ShoppyStates{}
+class ShoppyGetAllProductsErrorState extends ShoppyStates{
+  final String error;
+  ShoppyGetAllProductsErrorState(this.error);
+}

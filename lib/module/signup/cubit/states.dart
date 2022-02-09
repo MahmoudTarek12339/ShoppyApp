@@ -23,6 +23,7 @@ class ShoppyCreateErrorState extends ShoppySignupStates{
   final String error;
   ShoppyCreateErrorState(this.error);
 }
+
 class ShoppyChangePasswordVisibilityState extends ShoppySignupStates{}
 
 class ShoppyGoogleLoginLoadingState extends ShoppySignupStates{}

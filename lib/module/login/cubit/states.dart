@@ -1,6 +1,7 @@
 abstract class ShoppyLoginStates{}
 class ShoppyLoginInitialState extends ShoppyLoginStates{}
 class ShoppyChangePasswordVisibilityState extends ShoppyLoginStates{}
+
 class ShoppyLoginLoadingState extends ShoppyLoginStates{}
 class ShoppyLoginSuccessState extends ShoppyLoginStates{
   final String uId;
@@ -20,6 +21,7 @@ class ShoppyGoogleLoginErrorState extends ShoppyLoginStates{
   final String error;
   ShoppyGoogleLoginErrorState(this.error);
 }
+
 class ShoppyFaceBookLoginLoadingState extends ShoppyLoginStates{}
 class ShoppyFaceBookLoginSuccessState extends ShoppyLoginStates{
   final String uId;
@@ -30,3 +32,8 @@ class ShoppyFaceBookLoginErrorState extends ShoppyLoginStates{
   ShoppyFaceBookLoginErrorState(this.error);
 }
 
+class ShoppyResetPasswordSuccessState extends ShoppyLoginStates{}
+class ShoppyResetPasswordErrorState extends ShoppyLoginStates{
+  final String error;
+  ShoppyResetPasswordErrorState(this.error);
+}

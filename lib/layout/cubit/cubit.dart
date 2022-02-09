@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,10 +13,11 @@ import 'package:shoppy/module/home/bottom_nav/home_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/wish_list_screen.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
 
+import '../../model/product_model.dart';
+
 class ShoppyCubit extends Cubit<ShoppyStates> {
   ShoppyCubit() : super(ShoppyInitialState());
   static ShoppyCubit get(context) => BlocProvider.of(context);
-
 
   List<Widget> screens=[
     HomeScreen(),
@@ -24,6 +25,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     WishListScreen(),
     HelpScreen()
   ];
+
   List<String> titles=[
     'Home',
     'Categories',
@@ -35,8 +37,10 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     currentIndex=index;
     emit(SocialChangeBottomNavState());
   }
+
   File? profileImage;
   final picker = ImagePicker();
+
   Future getProfileImage()async{
     final pickedFile= await picker.getImage(source: ImageSource.gallery);
     if(pickedFile!=null){
@@ -80,6 +84,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       }
     );
   }
+
   bool isPassword=true;
   bool isPassword2=true;
   bool isPassword3=true;
@@ -102,8 +107,9 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     emit(ShoppyChangePasswordVisibilityState());
   }
 
+  //reset password
   Future<bool> validatePassword({required String currentPassword})async{
-    var fireBaseUser=await FirebaseAuth.instance.currentUser;
+    var fireBaseUser= FirebaseAuth.instance.currentUser;
     var authCredentials=EmailAuthProvider.credential(
         email: fireBaseUser!.email.toString(),
         password: currentPassword);
@@ -112,9 +118,10 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       emit(ShoppyVerifyPasswordSuccessState());
       return authResult.user!= null;
     } on Exception catch (e) {
-        emit(ShoppyVerifyPasswordErrorState(e.toString()));
-        print(e);
-        return false;
+
+      emit(ShoppyVerifyPasswordErrorState(e.toString()));
+      print(e);
+      return false;
     }
   }
   void changePassword({required String password}){
@@ -136,6 +143,76 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       }).catchError((error) {
         emit(ShoppyChangeNameErrorState(error.toString()));
         print(error.toString());
+      });
+    }
+  }
+
+
+  //Wish List
+  List<String> favorites=[''];
+  void updateWishList({required String productUid})async{
+    final snapShot = await FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites').doc(productUid).get();
+    if(snapShot.exists){
+      favorites.remove(productUid);
+      emit(ShoppyUpdateFavoriteState());
+      FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites')..doc(productUid).delete().then((value) {
+        emit(ShoppyRemoveFromFavoriteSuccessState());
+      }).catchError((error){
+        print(error.toString());
+        emit(ShoppyRemoveFromFavoriteErrorState(error.toString()));
+      });
+    }
+    else {
+      favorites.add(productUid);
+      emit(ShoppyUpdateFavoriteState());
+      FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites').doc(productUid).set({'isFavorite':true}).then((value) {
+        emit(ShoppyAddToFavoriteSuccessState());
+      }).catchError((error){
+        print(error.toString());
+        emit(ShoppyAddToFavoriteErrorState(error.toString()));
+      });
+    }
+    getFavorites();
+  }
+
+  //Map<String,List<String>> randValue={'numbers':['1','2','3']};
+  void getFavorites(){
+    FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites').get().then((value) {
+      favorites.clear();
+      value.docs.forEach((element) {
+        favorites.add(element.id);
+        emit(ShoppyGetFavoriteSuccessState());
+      });
+    }).catchError((onError){
+      emit(ShoppyGetFavoriteErrorState(onError.toString()));
+    });
+  }
+
+  List<ProductModel> products=[];
+  void getAllProducts()async{
+
+    if (products.isEmpty) {
+      await FirebaseFirestore.instance
+          .collection('admins')
+          .get()
+          .then((value) {
+            value.docs.forEach((element) {
+              FirebaseFirestore.instance
+                  .collection('admins')
+                  .doc(element.id)
+                  .collection('products')
+                  .get().then((value) {
+                value.docs.forEach((element2) {
+                  if(element2.data().isNotEmpty)
+                    products.add(ProductModel.fromJson(element2.data(), element2.id));
+                });
+              });
+            });
+            print('This is products:');
+            print(products.length);
+            emit(ShoppyGetAllProductsSuccessState());
+      }).catchError((onError){
+        emit(ShoppyGetAllProductsErrorState(onError.toString()));
       });
     }
   }
