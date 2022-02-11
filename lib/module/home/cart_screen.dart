@@ -1,52 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoppy/layout/cubit/cubit.dart';
+import 'package:shoppy/layout/cubit/states.dart';
+import 'package:shoppy/shared/components/components.dart';
 
-import '../../shared/components/components.dart';
 class CartScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
-          title: Text('Cart Items'),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Theme.of(context).focusColor,
-          actions: [
-            IconButton(
-              onPressed: (){
-                //controller.clearAllProducts();
-              },
-              icon: Icon(Icons.backspace),
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: 600,
-                child: ListView.separated(
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) => cartProductCard(
-                      index: index,
-                      quantity:3,
-                      context:context
-                    ),
-                    separatorBuilder: (context, index) => SizedBox(
-                      height: 5,
-                    ),
-                    itemCount: 5),
+    return BlocConsumer<ShoppyCubit,ShoppyStates>(
+      listener: (context,state){},
+      builder: (context,state){
+        var cubit=ShoppyCubit.get(context);
+        return SafeArea(
+            child: Scaffold(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              appBar: AppBar(
+                title: Text('Cart Items'),
+                centerTitle: true,
+                elevation: 0,
+                backgroundColor: Theme.of(context).focusColor,
+                actions: [
+                  IconButton(
+                    onPressed: (){
+                      cubit.clearCart();
+                    },
+                    icon: Icon(Icons.backspace),
+                  ),
+                ],
               ),
-            ),
-            cardTotal(context:context),
-          ],
-        ),
-      )
+              body: cubit.cart.isEmpty?
+                  emptyCart(context: context)
+                  :Column(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 600,
+                      child: ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) => cartProductCard(
+                              cubit: cubit,
+                              orderModel: cubit.cart[index],
+                              context:context
+                          ),
+                          separatorBuilder: (context, index) => SizedBox(
+                            height: 5,
+                          ),
+                          itemCount: cubit.cart.length),
+                    ),
+                  ),
+                  cardTotal(context:context,cubit: cubit),
+                ],
+              ),
+            )
+        );
+      },
     );
   }
 
-  Widget cardTotal({required context})=>Container(
+  Widget cardTotal({
+    required context,
+    required cubit,
+  })=>Container(
     child: Padding(
       padding: const EdgeInsets.all(25.0),
       child: Row(
@@ -55,13 +70,13 @@ class CartScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textUtils(
-                  text: 'Total',
+                  text: 'total',
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey
               ),
               Text(
-                '\$ 150.20',
+                '\$ ${cubit.cartTotal.toStringAsFixed(2)}',
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1!.color,
                   fontWeight: FontWeight.bold,
@@ -108,7 +123,12 @@ class CartScreen extends StatelessWidget {
       ),
     ),
   );
-  Widget cartProductCard({required index,required quantity,required context})=>Container(
+
+  Widget cartProductCard({
+    required cubit,
+    required orderModel,
+    required context,
+  })=>Container(
     margin: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
     height: 130,
     width: 100,
@@ -126,7 +146,7 @@ class CartScreen extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
-                image: NetworkImage('https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg'),
+                image:NetworkImage(orderModel.photo),
                 fit: BoxFit.cover,
               )
           ),
@@ -139,7 +159,7 @@ class CartScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'black shirt',
+                orderModel.productName,
                 style: TextStyle(
                   overflow: TextOverflow.ellipsis,
                   color: Theme.of(context).textTheme.bodyText1!.color,
@@ -151,7 +171,7 @@ class CartScreen extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                '\$ 22.02',
+                '\$ ${orderModel.price*orderModel.quantity}',
                 style: TextStyle(
                   overflow: TextOverflow.ellipsis,
                   color:Theme.of(context).textTheme.bodyText1!.color,
@@ -169,7 +189,7 @@ class CartScreen extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: (){
-                    //controller.removeProductFromCart(productModel);
+                    cubit.removeProductFromCart(orderModel);
                   },
                   icon: Icon(
                     Icons.remove_circle,
@@ -177,7 +197,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '$quantity',
+                  '${orderModel.quantity}',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -185,7 +205,7 @@ class CartScreen extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: (){
-                    //controller.addProductToCart(productModel);
+                    cubit.addProductToCart(orderModel);
                   },
                   icon: Icon(
                     Icons.add_circle,
@@ -201,7 +221,7 @@ class CartScreen extends StatelessWidget {
                 color: Colors.red,
               ),
               onPressed: () {
-                //controller.removeOneProduct(productModel);
+                cubit.clearCart();
               },
             )
           ],
@@ -210,3 +230,76 @@ class CartScreen extends StatelessWidget {
     ),
   );
 }
+
+Widget emptyCart({required context})=>Center(
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Icon(
+        Icons.shopping_cart,
+        size: 150,
+        color: Theme.of(context).textTheme.bodyText1!.color,
+      ),
+      SizedBox(
+        height: 40,
+      ),
+      RichText(
+        text: TextSpan(
+            children:[
+              TextSpan(
+                text: 'Your Cart is ',
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: 'Empty',
+                style: TextStyle(
+                  color: Theme.of(context).focusColor,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ]
+        ),
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Text(
+        'Add Item To Get Started',
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1!.color,
+          fontSize: 15,
+        ),
+
+      ),
+      SizedBox(
+        height: 30,
+      ),
+      SizedBox(
+        height: 50,
+        child: ElevatedButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          child: Text(
+            'Go to Home',
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              elevation: 0,
+              primary:Theme.of(context).focusColor
+        ),
+        ),
+      ),
+    ],
+  ),
+);

@@ -7,13 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:shoppy/model/order_model.dart';
+import 'package:shoppy/model/product_model.dart';
 import 'package:shoppy/module/home/bottom_nav/category_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/help_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/home_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/wish_list_screen.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
 
-import '../../model/product_model.dart';
 
 class ShoppyCubit extends Cubit<ShoppyStates> {
   ShoppyCubit() : super(ShoppyInitialState());
@@ -148,7 +149,51 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
   }
 
 
-  //Wish List
+  //Add Product To Cart
+  List<OrderModel> cart=[];
+  double cartTotal=0;
+
+  void addProductToCart(OrderModel orderModel){
+    if(cart.where((element) => element.productUid==orderModel.productUid&& element.color==orderModel.color&& element.size==orderModel.size).isNotEmpty) {
+      cart[cart.indexWhere((element) => element.productUid==orderModel.productUid&& element.color==orderModel.color&& element.size==orderModel.size)].quantity+=1;
+      cartTotal+=orderModel.price;
+      print('increased');
+      print(cart[cart.indexWhere((element) => element.productUid==orderModel.productUid&& element.color==orderModel.color&& element.size==orderModel.size)].quantity);
+    }
+    else{
+      cart.add(orderModel);
+      cartTotal+=orderModel.price;
+      print('added');
+    }
+    emit(ShoppyUpdateCartState());
+  }
+
+  void removeProductFromCart(OrderModel orderModel){
+    int quantity=cart[cart.indexWhere((element) => element.productUid==orderModel.productUid&& element.color==orderModel.color&& element.size==orderModel.size)].quantity;
+    if(quantity>1){
+      cart[cart.indexWhere((element) => element.productUid==orderModel.productUid&& element.color==orderModel.color&& element.size==orderModel.size)].quantity-=1;
+      print('decreased');
+    }
+    else{
+      cart.removeWhere((element) => element.productUid==orderModel.productUid&& element.color==orderModel.color&& element.size==orderModel.size);
+      print('removed');
+    }
+    cartTotal-=orderModel.price;
+    emit(ShoppyUpdateCartState());
+  }
+
+  void removeOneProductFromCart(OrderModel orderModel){
+    cartTotal-=orderModel.price*orderModel.quantity;
+    cart.removeWhere((element) => element.productUid==orderModel.productUid&& element.color==orderModel.color&& element.size==orderModel.size);
+    print('removed');
+    emit(ShoppyUpdateCartState());
+  }
+  void clearCart(){
+    cartTotal=0;
+    cart.clear();
+    emit(ShoppyUpdateCartState());
+  }
+  //Add Product To Wish List
   List<String> favorites=[''];
   void updateWishList({required String productUid})async{
     final snapShot = await FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites').doc(productUid).get();
@@ -188,6 +233,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     });
   }
 
+  //get All products From fire Base
   List<ProductModel> products=[];
   void getAllProducts()async{
 

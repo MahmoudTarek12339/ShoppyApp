@@ -1,6 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoppy/layout/cubit/cubit.dart';
+import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/module/onboarding.dart';
 import 'package:shoppy/shared/bloc_observer.dart';
@@ -41,11 +43,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      home:startWidget,
+    return BlocProvider(
+      create: (context)=>ShoppyCubit()..getAllProducts(),
+      child:BlocConsumer<ShoppyCubit,ShoppyStates>(
+        listener:(context,state){},
+        builder:(context,state){
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            home:startWidget,
+          );
+        }
+      )
     );
   }
 }

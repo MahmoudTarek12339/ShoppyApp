@@ -1,13 +1,18 @@
-
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:readmore/readmore.dart';
+import 'package:shoppy/layout/cubit/cubit.dart';
+import 'package:shoppy/layout/cubit/states.dart';
+import 'package:shoppy/model/order_model.dart';
+import 'package:shoppy/model/product_model.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../model/product_model.dart';
+
+import 'cart_screen.dart';
 
 
 class ProductScreen extends StatefulWidget {
@@ -19,7 +24,6 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  //final ProductScreen productModel;
   //final List<String> sizesList= as List<String> ;
   int currentSelected=0;
   CarouselController carouselController=CarouselController();
@@ -36,26 +40,31 @@ class _ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body:SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              imageSlider(),
-              clothesInfo(
-                context: context,
-                title: widget.productModel.productName,
-                description: widget.productModel.description,
-                rate: widget.productModel.rate,
+    return BlocConsumer<ShoppyCubit,ShoppyStates>(
+      listener:(context,state){} ,
+      builder:(context,state){
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            body:SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  imageSlider(),
+                  clothesInfo(
+                    context: context,
+                    title: widget.productModel.productName,
+                    description: widget.productModel.description,
+                    rate: widget.productModel.rate,
+                  ),
+                  sizeList(),
+                  addCart(myContext: context,cubit: ShoppyCubit.get(context)),
+                ],
               ),
-              sizeList(),
-              addCart(myContext: context),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      } ,
     );
   }
 
@@ -63,7 +72,7 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget imageSlider()=>Stack(
     children: [
       CarouselSlider.builder(
-        itemCount: 3,
+        itemCount: widget.productModel.photos.length,
         carouselController: carouselController,
         options:CarouselOptions(
             height: 400,
@@ -85,7 +94,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 borderRadius: BorderRadius.circular(25),
                 image: DecorationImage(
                   image: NetworkImage(
-                    'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',
+                    widget.productModel.photos[index],
                   ),
                   fit: BoxFit.fill,
                 )
@@ -98,7 +107,7 @@ class _ProductScreenState extends State<ProductScreen> {
           left: 180,
           child:AnimatedSmoothIndicator(
             activeIndex: currentPage,
-            count: 3,
+            count: widget.productModel.photos.length,
             effect: ExpandingDotsEffect(
               dotHeight: 10,
               dotWidth: 10,
@@ -163,12 +172,12 @@ class _ProductScreenState extends State<ProductScreen> {
                 position: BadgePosition.topEnd(top: -7, end: -2),
                 animationType:BadgeAnimationType.slide,
                 badgeContent: Text(
-                  '0',
+                  '${ShoppyCubit.get(context).cart.length}',
                   style: TextStyle(color: Colors.white),
                 ),
                 child: InkWell(
                   onTap: (){
-                    //Get.toNamed(Routes.cartScreen);
+                    navigateTo(context, CartScreen());
                   },
                   child: Container(
                     padding: EdgeInsets.all(8),
@@ -225,10 +234,25 @@ class _ProductScreenState extends State<ProductScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text(
-                title,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyText1,
+              child: Column(
+                children: [
+                  Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 3.0),
+                    child: Text(
+                      'Adidas',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ),
+                ],
+                crossAxisAlignment: CrossAxisAlignment.start,
               ),
             ),
             Container(
@@ -237,13 +261,18 @@ class _ProductScreenState extends State<ProductScreen> {
                 color: Colors.grey.withOpacity(.4),
                 shape: BoxShape.circle,
               ),
-              child: InkWell(
-                  onTap: (){
-                    //controller.manageFavorites(productId);
+              child: IconButton(
+                  onPressed: (){
+                    ShoppyCubit.get(context).updateWishList(productUid: widget.productModel.productUid);
                   },
-                  child:Icon(
+                  icon:ShoppyCubit.get(context).favorites.contains(widget.productModel.productUid)?
+                  Icon(
                     Icons.favorite,
                     color: Colors.red,
+                  )
+                      :Icon(
+                    Icons.favorite_outlined,
+                    color: Colors.black,
                   )
               ),
             ),
@@ -301,42 +330,66 @@ class _ProductScreenState extends State<ProductScreen> {
     ),
   );
 
-  Widget sizeList()=>Container(
-    padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
-    height: 65,
-    child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context,index)=>GestureDetector(
-          onTap: (){
-            setState(() {
-              currentSelected=index;
-            });
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-            decoration: BoxDecoration(
-              color: currentSelected==index? Theme.of(context).focusColor.withOpacity(0.4):Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                  color: Colors.grey.withOpacity(0.4)
-              ),
+  Widget sizeList()=>Column(
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 25.0,right: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Choose your Size',
+              style: Theme.of(context).textTheme.caption,
             ),
-            child: Text(
-              widget.productModel.sizes[index],
-              style: TextStyle(
-                color:Theme.of(context).textTheme.bodyText1!.color,
-                fontWeight: FontWeight.bold,
+            TextButton(
+              child: Text(
+                'Size Guide',
+                style: Theme.of(context).textTheme.subtitle1,
               ),
+              onPressed: (){},
             ),
-          ),
+          ],
         ),
-        separatorBuilder: (context,index)=>SizedBox(width: 10,),
-        itemCount: widget.productModel.sizes.length
-    ),
+      ),
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
+        height: 65,
+        child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context,index)=>GestureDetector(
+              onTap: (){
+                setState(() {
+                  currentSelected=index;
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                decoration: BoxDecoration(
+                  color: currentSelected==index? Theme.of(context).focusColor.withOpacity(0.4):Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                      color: Colors.grey.withOpacity(0.4)
+                  ),
+                ),
+                child: Text(
+                  widget.productModel.sizes[index],
+                  style: TextStyle(
+                    color:Theme.of(context).textTheme.bodyText1!.color,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            separatorBuilder: (context,index)=>SizedBox(width: 10,),
+            itemCount: widget.productModel.sizes.length
+        ),
+      ),
+    ],
   );
 
   Widget addCart({
-    required myContext
+    required myContext,
+    required cubit,
   })=>Container(
     padding: EdgeInsets.all(25),
     child: Row(
@@ -351,7 +404,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 color: Colors.grey
             ),
             Text(
-              '\$ 20.35',
+              '\$ ${widget.productModel.price}',
               style: TextStyle(
                 color: Theme.of(myContext).textTheme.bodyText1!.color,
                 fontSize: 20,
@@ -367,7 +420,18 @@ class _ProductScreenState extends State<ProductScreen> {
             height: 60,
             child: ElevatedButton(
               onPressed: (){
-                //controller.addProductToCart(productModel);
+                cubit.addProductToCart(
+                    OrderModel(
+                      photo:widget.productModel.photos[0],
+                      description:widget.productModel.description,
+                      productName: widget.productModel.productName,
+                      productUid: widget.productModel.productUid,
+                      quantity: 1,
+                      price: widget.productModel.price,
+                      size: widget.productModel.sizes[currentSelected],
+                      color: widget.productModel.colors[currentColor],
+                    )
+                );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

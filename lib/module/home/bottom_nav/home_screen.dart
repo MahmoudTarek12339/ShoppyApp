@@ -1,10 +1,11 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
-import '../../../model/product_model.dart';
+import 'package:shoppy/model/order_model.dart';
+import 'package:shoppy/model/product_model.dart';
+
 import '../../../shared/components/components.dart';
 import '../product_screen.dart';
 
@@ -86,18 +87,9 @@ class HomeScreen extends StatelessWidget {
                     itemBuilder: (context,index)=>index==cubit.products.length?
                         buildMoreItem(context: context)
                         :buildCardItem(
-                          onFavoriteTab:(){
-                            cubit.updateWishList(productUid: 'productUid');
-                          },
-                          isFavorite: cubit.favorites.contains('productUid'),
-                          image: cubit.products[index].photos[0],
-                          price: cubit.products[index].price,
-                          rate: cubit.products[index].rate,
-                          productId: 1,
-                          onTap: (){
-                            navigateTo(context, ProductScreen(cubit.products[index]as ProductModel));
-                          },
-                          context: context
+                          cubit: cubit,
+                          context: context,
+                          productModel: cubit.products[index],
                         ),
                     separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
                     itemCount: cubit.products.length+1,
@@ -106,7 +98,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   height: 15.0,
                 ),
-
+                /*
                 //newest
                 Text(
                   ' Newest',
@@ -124,6 +116,20 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context,index)=>index==4?
                           buildMoreItem(context: context)
                           :buildCardItem(
+                          onCartTab:(){
+                            cubit.removeProductFromCart(
+                                OrderModel(
+                                  productName: cubit.products[index].productName,
+                                  description: cubit.products[index].description,
+                                  productUid: cubit.products[index].productUid,
+                                  quantity: cubit.cart[0].quantity,
+                                  price: cubit.products[index].price,
+                                  photo: cubit.products[index].photos[0],
+                                  size: cubit.products[index].sizes[0],
+                                  color: cubit.products[index].colors[0],
+                                )
+                            );
+                          },
                           onFavoriteTab:()async{
                             cubit.getAllProducts();
                           },
@@ -159,6 +165,7 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context,index)=>index==5?
                           buildMoreItem(context: context)
                           :buildCardItem(
+                          onCartTab:(){},
                             onFavoriteTab:(){},
                             isFavorite: true,
                             image: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
@@ -195,6 +202,7 @@ class HomeScreen extends StatelessWidget {
                     childAspectRatio: 1/1.45,
                     physics: NeverScrollableScrollPhysics(),
                     children: List.generate(12,(index)=>buildCardItem(
+                        onCartTab:(){},
                         onFavoriteTab:(){},
                         image: 'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',
                         price: 55.23,
@@ -207,7 +215,7 @@ class HomeScreen extends StatelessWidget {
                         context: context)
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
@@ -217,18 +225,14 @@ class HomeScreen extends StatelessWidget {
   }
   //product code
   Widget buildCardItem({
-    required String image,
-    required double price,
-    required double rate,
-    required int productId,
-    required bool isFavorite,
-    required Function() onTap,
-    required Function() onFavoriteTab,
+    required ProductModel productModel,
+    required cubit,
     required context,
-
   }){
     return InkWell(
-      onTap: onTap,
+      onTap: (){
+        navigateTo(context, ProductScreen(productModel));
+      },
       child: Container(
         width: 155.0,
         decoration: BoxDecoration(
@@ -248,8 +252,10 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: onFavoriteTab,
-                  icon:isFavorite?
+                  onPressed: (){
+                    cubit.updateWishList(productUid: productModel.productUid);
+                  },
+                  icon:cubit.favorites.contains(productModel.productUid)?
                         Icon(
                     Icons.favorite,
                     color: Colors.red,
@@ -261,7 +267,18 @@ class HomeScreen extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: (){
-                    //cartController.addProductToCart(productModel);
+                    cubit.addProductToCart(
+                        OrderModel(
+                          productName: productModel.productName,
+                          description: productModel.description,
+                          productUid: productModel.productUid,
+                          quantity: 1,
+                          price: productModel.price,
+                          photo: productModel.photos[0],
+                          size: productModel.sizes[0],
+                          color: productModel.colors[0],
+                        )
+                    );
                   },
                   icon: Icon(
                     Icons.shopping_cart,
@@ -277,7 +294,7 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Image.network(
-                image,
+                productModel.photos[0],
                 fit: BoxFit.fitHeight,
               ),
             ),
@@ -287,7 +304,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '\$ $price',
+                    '\$ ${productModel.price}',
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -307,7 +324,7 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           textUtils(
-                            text: '$rate',
+                            text: '${productModel.rate}',
                             fontSize: 13.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,

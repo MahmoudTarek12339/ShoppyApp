@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/model/onboard_model.dart';
 import 'package:shoppy/shared/components/components.dart';
@@ -14,25 +15,26 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   var onBoardController = PageController();
   int currentIndex=0;
+
   List<OnBoard> list = [
     OnBoard(
-        imageUrl: 'assets/images/onboard5.jpg',
-        title: 'this is on Board screen Title 1',
-        description: 'description 1'),
+        imageUrl: 'assets/images/easyShopping.json',
+        title: 'Easy Shopping',
+        description: 'Find your inspiration with a huge collection of products and exclusive brands'),
     OnBoard(
-        imageUrl: 'assets/images/onboard5.jpg',
-        title: 'on Board Title 2',
-        description: 'description 2'),
+        imageUrl: 'assets/images/speedDelivery.json',
+        title: 'Quick Delivery',
+        description: 'delivery whenever you order wherever you are your order wil be there on time'),
     OnBoard(
-        imageUrl: 'assets/images/onboard4.jpg',
-        title: 'on Board Title 3',
-        description: 'description 3'),
+        imageUrl: 'assets/images/easePayment.json',
+        title: 'Secure Payment',
+        description: 'your data is safe with us'),
   ];
   @override
   void initState(){
     super.initState();
-    Timer.periodic(Duration(seconds: 5), (timer) {
-      currentIndex=((currentIndex+1)%3);
+    Timer.periodic(Duration(seconds: 8), (timer) {
+      currentIndex=(currentIndex+1);
       onBoardController.animateToPage(currentIndex,duration: Duration(milliseconds: 750), curve: Curves.fastLinearToSlowEaseIn);
     }
     );
@@ -40,104 +42,115 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Column(
-            children: [
-              Expanded(
-                flex: 5,
-                child: Stack(
-                  alignment: Alignment.bottomLeft,
-                  children: [
-                    PageView.builder(
-                        itemBuilder: (BuildContext context, int index) =>
-                            buildBoardingItem(list[index]),
-                        controller: onBoardController,
-                        itemCount: list.length,
-                        physics: BouncingScrollPhysics(),
-                        onPageChanged: (int index) {
-                          setState(() {
-                            currentIndex=index;
-                          });
-                        }
-                        ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 70.0,left: 20),
-                      child: SmoothPageIndicator(
-                          controller: onBoardController,
-                          count: list.length,
-                          effect: ScrollingDotsEffect(
-                            dotColor: Colors.grey,
-                            dotHeight: 7.0,
-                            dotWidth: 7.0,
-                            activeDotColor: Colors.white,
-                            spacing: 5,
-                          )),
-                    ),
-                  ],
-                ),
-              ),
-              Spacer(),
-            ],
-          ),
-          Column(
-            children: [
-              Spacer(flex: 3,),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(70.0)),
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black, width: 1),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Center(
-                        child: defaultButton(
-                          context: context,
-                          onPressFunction: () {
-                            CacheHelper.saveData(key: 'onBoarding', value: true).then((value){
-                              if(value==true)
-                                navigateAndFinish(context, ShoppyLayout());
-                            });
-                          },
-                          text: 'Get Started',
-                          backgroundColor: Colors.blueGrey,
-                          radius: 5.0
-                        )),
-                  ),
-                ),
-              ),
-            ],
-          ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        actions: [
+          TextButton(
+            child: Text(
+              'skip',
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(color:Theme.of(context).focusColor),
+            ),
+            onPressed: (){
+              CacheHelper.saveData(key: 'onBoarding', value: true).then((value){
+                if(value==true)
+                  navigateAndFinish(context, ShoppyLayout());
+              });
+            },
+          )
         ],
       ),
-    );
-  }
-  Widget buildBoardingItem(OnBoard model) => Stack(
-        alignment: Alignment.centerLeft,
+      body: Column(
         children: [
-          Image(
-            image: AssetImage('${model.imageUrl}'),
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 25.0),
-            child: Container(
-              width: 200,
-              child: Text(
-                '${model.title}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25.0,
-                ),
-              ),
+          Expanded(
+            child: PageView.builder(
+              itemBuilder: (context,index)=>onBoard(index),
+              controller: onBoardController,
+              itemCount: list.length,
+                onPageChanged: (int index) {
+                  setState(() {
+                    if(index<2)
+                      currentIndex=index;
+                    else {
+                      CacheHelper.saveData(key: 'onBoarding', value: true).then((value){
+                        if(value==true)
+                          navigateAndFinish(context, ShoppyLayout());
+                      });
+                    }
+                  });
+                }
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5.0,right: 5,left: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0,left: 10),
+                  child: SmoothPageIndicator(
+                      controller: onBoardController,
+                      count: list.length,
+                      effect: ScrollingDotsEffect(
+                        dotColor: Colors.grey,
+                        dotHeight: 7.5,
+                        dotWidth: 7.5,
+                        activeDotColor: Theme.of(context).focusColor,
+                        spacing: 5,
+                      )
+                  ),
+                ),
+                Spacer(),
+                TextButton(
+                  child: Text(
+                    currentIndex<2?'Next':'Start',
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color:Theme.of(context).focusColor),
+                  ),
+                  onPressed: (){
+                    setState(() {
+                      if(currentIndex<2){
+                        currentIndex=(currentIndex+1);
+                        onBoardController.animateToPage(currentIndex,duration: Duration(milliseconds: 750), curve: Curves.fastLinearToSlowEaseIn);
+                      }
+                      else {
+                        CacheHelper.saveData(key: 'onBoarding', value: true).then((value){
+                        if(value==true)
+                          navigateAndFinish(context, ShoppyLayout());
+                      });
+                      }
+                    },);
+                  },
+                )
+              ],
+            ),
+          )
         ],
-      );
+      )
+    );
+  }
+  Widget onBoard(int index)=>Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Lottie.asset(
+        list[index].imageUrl,
+      ),
+      SizedBox(
+        height: 15,
+      ),
+      Text(
+        list[index].title,
+        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 25,color: Theme.of(context).focusColor.withOpacity(0.85)),
+      ),
+      SizedBox(
+        height: 5,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        child: Text(
+          list[index].description,
+          style: Theme.of(context).textTheme.caption,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ],
+  );
 }
