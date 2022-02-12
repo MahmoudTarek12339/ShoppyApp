@@ -233,6 +233,20 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     });
   }
 
+  List<ProductModel> searchList=[];
+  void addSearchToList(String searchName){
+    searchName=searchName.toLowerCase();
+    searchList=products.where((value) {
+      String searchTitle=value.productName.toLowerCase();
+      return searchTitle.contains(searchName);
+    }).toList();
+    emit(ShoppyUpdateSearchState());
+  }
+
+  void clearSearch(){
+    searchList.clear();
+    emit(ShoppyUpdateSearchState());
+  }
   //get All products From fire Base
   List<ProductModel> products=[];
   void getAllProducts()async{

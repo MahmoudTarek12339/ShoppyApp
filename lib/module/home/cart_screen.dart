@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
+import 'package:shoppy/module/home/payment_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 
 class CartScreen extends StatelessWidget {
@@ -92,7 +93,7 @@ class CartScreen extends StatelessWidget {
               height: 60,
               child: ElevatedButton(
                 onPressed: (){
-                  //Get.toNamed(Routes.paymentScreen);
+                  navigateTo(context, PaymentScreen(cubit.cartTotal));
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

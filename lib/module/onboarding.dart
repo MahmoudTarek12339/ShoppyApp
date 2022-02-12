@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
@@ -33,11 +32,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState(){
     super.initState();
-    Timer.periodic(Duration(seconds: 8), (timer) {
-      currentIndex=(currentIndex+1);
-      onBoardController.animateToPage(currentIndex,duration: Duration(milliseconds: 750), curve: Curves.fastLinearToSlowEaseIn);
-    }
-    );
   }
   @override
   Widget build(BuildContext context) {
@@ -68,7 +62,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               itemCount: list.length,
                 onPageChanged: (int index) {
                   setState(() {
-                    if(index<2)
+                    if(index<3)
                       currentIndex=index;
                     else {
                       CacheHelper.saveData(key: 'onBoarding', value: true).then((value){

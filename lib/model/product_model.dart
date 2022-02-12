@@ -2,6 +2,7 @@ class ProductModel{
   late String productName;
   late String description;
   late String productUid;
+  late String category;
   late int quantity;
   late double price;
   late double rate;
@@ -14,6 +15,7 @@ class ProductModel{
    required this.productName,
    required this.description,
    required this.productUid,
+   required this.category,
    required this.quantity,
    required this.price,
    required this.rate,
@@ -27,6 +29,7 @@ class ProductModel{
     productName=json!['name'];
     description=json['description'];
     productUid=uid;
+    category=json['category'];
     quantity=json['quantity'];
     price=json['price'];
     rate=json['rate'];
@@ -41,6 +44,7 @@ class ProductModel{
         'description':description,
         'productUid':productUid,
         'quantity':quantity,
+        'category':category,
         'price':price,
         'rate':rate,
         'offer':offer,

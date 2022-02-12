@@ -16,7 +16,7 @@ import 'cart_screen.dart';
 
 
 class ProductScreen extends StatefulWidget {
-  ProductModel productModel;
+  final ProductModel productModel;
   ProductScreen(this.productModel);
 
   @override

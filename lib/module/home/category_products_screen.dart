@@ -6,60 +6,26 @@ import 'package:shoppy/model/order_model.dart';
 import 'package:shoppy/model/product_model.dart';
 import 'package:shoppy/module/home/product_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
-
-class SearchScreen extends StatelessWidget {
-  final TextEditingController searchController= TextEditingController();
+class CategoryProductsScreen extends StatelessWidget {
+  final List<ProductModel> myProducts;
+  final String title;
+  CategoryProductsScreen(this.myProducts,this.title);
 
   @override
   Widget build(BuildContext context) {
+    var cubit=ShoppyCubit.get(context);
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
-      listener: (context, state) {
-
-      },
-      builder: (context, state) {
-        var cubit=ShoppyCubit.get(context);
+      listener: (context, state) {},
+      builder: (context,state){
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            backgroundColor: Colors.black,
-            title: TextFormField(
-              controller: searchController,
-              cursorColor: Colors.grey,
-              style: TextStyle(color: Colors.white),
-              autofocus: true,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Search for Brand",
-                hintStyle: TextStyle(color: Colors.grey),
-                suffixIcon: searchController.text.isNotEmpty?IconButton(
-                  onPressed: (){
-                    searchController.clear();
-                    cubit.clearSearch();
-                  },
-                  icon: Icon(
-                    Icons.close,
-                    color: Colors.white,
-                  ),
-                ):null,
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: Colors.grey,
-                ),
-              ),
-              onChanged: (value){
-                if(value.isEmpty){
-                  cubit.clearSearch();
-                }
-                else{
-                  cubit.addSearchToList(value);
-                }
-              },
-            ),
-            titleSpacing: 0,
+            backgroundColor: Theme.of(context).focusColor,
+            title: Text(title),
+            elevation: 0,
+            centerTitle: true,
           ),
-          body: cubit.searchList.isEmpty?
-              Image.asset('assets/images/search_empry_light.png')
-              :Padding(
+          body: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
               child: GridView.count(
@@ -70,12 +36,12 @@ class SearchScreen extends StatelessWidget {
                 childAspectRatio: 1/1.45,
                 physics: NeverScrollableScrollPhysics(),
                 children: List.generate(
-                    cubit.searchList.length,
-                        (index)=>buildCardItem(
-                      cubit: cubit,
-                      context: context,
-                      productModel: cubit.searchList[index],
-                    )),
+                  myProducts.length,
+                  (index)=>buildCardItem(
+                  cubit: cubit,
+                  context: context,
+                  productModel: myProducts[index],
+                )),
               ),
             ),
           ),
@@ -204,9 +170,7 @@ class SearchScreen extends StatelessWidget {
 
   //more Arrow Icon Code
   Widget buildMoreItem({required context})=> InkWell(
-    onTap: (){
-
-    },
+    onTap: (){},
     child: Center(
       child:Icon(
         Icons.arrow_forward,

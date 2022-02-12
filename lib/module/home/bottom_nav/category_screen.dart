@@ -1,67 +1,71 @@
 import 'package:flutter/material.dart';
-
-import '../../../shared/components/components.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoppy/layout/cubit/cubit.dart';
+import 'package:shoppy/layout/cubit/states.dart';
+import 'package:shoppy/module/home/category_products_screen.dart';
+import 'package:shoppy/shared/components/components.dart';
 
 class CategoriesScreen extends StatelessWidget {
 
   final List<String> imageCategory = [
     'assets/categories/shirt2.jpg',
     'assets/categories/t-shirt.jpg',
-    'assets/categories/dresses.jpg',
     'assets/categories/pants.jpg',
     'assets/categories/shorts.jpg',
     'assets/categories/jacket.jpg',
-    'assets/categories/skirt.jpg',
-    'assets/categories/children.jpg',
-    'assets/categories/shoes.jpg',
     'assets/categories/accessories.jpg',
   ];
   final List<String> categoriesNameList=[
     'Shirts',
     'T-shirts',
-    'Dresses',
     'Pants',
     'Shorts',
     'Jackets',
-    'Skirts',
-    'Children',
-    'Shoes',
     'Accessories',
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Padding(
-        padding: EdgeInsets.only(left: 15,top: 15,right: 10),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: EdgeInsets.only(left: 15,top: 15),
-                child: textUtils(
-                  text: 'Category',
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                  color:Theme.of(context).textTheme.bodyText1!.color,
+    return BlocConsumer<ShoppyCubit,ShoppyStates>(
+      listener: (context,state){},
+      builder: (context,state){
+        return Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: Padding(
+            padding: EdgeInsets.only(left: 15,top: 15,right: 10),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 15,top: 15),
+                    child: textUtils(
+                      text: 'Category',
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                      color:Theme.of(context).textTheme.bodyText1!.color,
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(
+                  height: 20,
+                ),
+                categoryWidget(cubit: ShoppyCubit.get(context)),
+              ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            categoryWidget(),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
-  Widget categoryWidget()=>Expanded(
+  Widget categoryWidget({
+  required cubit,
+})=>Expanded(
     child: ListView.separated(
       itemBuilder: (context,index)=>InkWell(
         onTap: (){
+
+          navigateTo(context, CategoryProductsScreen(cubit.products.where((element) => element.category==categoriesNameList[index]).toList(),categoriesNameList[index]));
         },
         child: Container(
           height: 150,
@@ -93,7 +97,7 @@ class CategoriesScreen extends StatelessWidget {
         ),
       ),
       separatorBuilder: (context,index)=>SizedBox(height: 20,),
-      itemCount: 10
+      itemCount: imageCategory.length,
     ),
   );
 }

@@ -17,7 +17,9 @@ class HomeScreen extends StatelessWidget {
       listener: (context,state){},
       builder: (context,state){
         var cubit=ShoppyCubit.get(context);
-        return Padding(
+        return cubit.products.isEmpty?
+             Center(child: CircularProgressIndicator())
+            :Padding(
           padding: const EdgeInsets.all(10.0),
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
@@ -98,7 +100,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   height: 15.0,
                 ),
-                /*
+
                 //newest
                 Text(
                   ' Newest',
@@ -113,37 +115,15 @@ class HomeScreen extends StatelessWidget {
                   child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       physics: BouncingScrollPhysics(),
-                      itemBuilder: (context,index)=>index==4?
+                      itemBuilder: (context,index)=>index==cubit.products.length?
                           buildMoreItem(context: context)
                           :buildCardItem(
-                          onCartTab:(){
-                            cubit.removeProductFromCart(
-                                OrderModel(
-                                  productName: cubit.products[index].productName,
-                                  description: cubit.products[index].description,
-                                  productUid: cubit.products[index].productUid,
-                                  quantity: cubit.cart[0].quantity,
-                                  price: cubit.products[index].price,
-                                  photo: cubit.products[index].photos[0],
-                                  size: cubit.products[index].sizes[0],
-                                  color: cubit.products[index].colors[0],
-                                )
-                            );
-                          },
-                          onFavoriteTab:()async{
-                            cubit.getAllProducts();
-                          },
-                          isFavorite: true,
-                          image: 'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',
-                          price: 55.23,
-                          rate: 3.9,
-                          productId: 1,
-                          onTap: (){
-                            navigateTo(context, ProductScreen(cubit.products[index]as ProductModel));
-                          },
-                          context: context),
+                        cubit: cubit,
+                        context: context,
+                        productModel: cubit.products[index],
+                      ),
                       separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
-                      itemCount: 5),
+                      itemCount: cubit.products.length+1),
                 ),
                 SizedBox(
                   height: 15.0,
@@ -162,23 +142,15 @@ class HomeScreen extends StatelessWidget {
                   child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       physics: BouncingScrollPhysics(),
-                      itemBuilder: (context,index)=>index==5?
+                      itemBuilder: (context,index)=>index==cubit.products.length?
                           buildMoreItem(context: context)
                           :buildCardItem(
-                          onCartTab:(){},
-                            onFavoriteTab:(){},
-                            isFavorite: true,
-                            image: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
-                            price: 55.23,
-                            rate: 3.9,
-                            productId: 1,
-                            onTap: (){
-                              navigateTo(context, ProductScreen(cubit.products[index]as ProductModel));
-                            },
-                            context: context
+                        cubit: cubit,
+                        context: context,
+                        productModel: cubit.products[index],
                       ),
                       separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
-                      itemCount: 6
+                      itemCount: cubit.products.length+1
                   ),
                 ),
 
@@ -201,21 +173,16 @@ class HomeScreen extends StatelessWidget {
                     crossAxisSpacing: 10.0,
                     childAspectRatio: 1/1.45,
                     physics: NeverScrollableScrollPhysics(),
-                    children: List.generate(12,(index)=>buildCardItem(
-                        onCartTab:(){},
-                        onFavoriteTab:(){},
-                        image: 'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg',
-                        price: 55.23,
-                        rate: 3.9,
-                        productId: 1,
-                        isFavorite: true,
-                        onTap: (){
-                          navigateTo(context, ProductScreen(cubit.products[index]as ProductModel));
-                        },
-                        context: context)
+                    children: List.generate(
+                      cubit.products.length,
+                      (index)=>buildCardItem(
+                        cubit: cubit,
+                        context: context,
+                        productModel: cubit.products[index],
+                      ),
                     ),
                   ),
-                ),*/
+                ),
               ],
             ),
           ),
@@ -234,7 +201,7 @@ class HomeScreen extends StatelessWidget {
         navigateTo(context, ProductScreen(productModel));
       },
       child: Container(
-        width: 155.0,
+        width: 160.0,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
@@ -308,7 +275,6 @@ class HomeScreen extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-
                     ),
                   ),
                   Container(

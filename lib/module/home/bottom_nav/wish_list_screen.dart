@@ -1,31 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoppy/layout/cubit/cubit.dart';
+import 'package:shoppy/layout/cubit/states.dart';
+import 'package:shoppy/model/product_model.dart';
 
 class WishListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body:Padding(
-          padding: const EdgeInsets.only(top: 5.0),
-          child: ListView.separated(
-            itemBuilder: (context,index)=>buildFavItem(
-              image: 'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg',
-              price: 55.23,
-              productId: 1,
-              title: 'Men\'s T-shirt',
-              context:context,
-            ),
-            separatorBuilder: (context,index)=>Divider(color: Colors.grey,),
-            itemCount: 6,),
-        )
+    return BlocConsumer<ShoppyCubit,ShoppyStates>(
+      listener: (context,state){},
+      builder: (context,state){
+        var cubit=ShoppyCubit.get(context);
+        return cubit.favorites.isEmpty?
+                       Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: Image.asset('assets/images/heart.png'),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Please, Add your Favorite Products',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: 17.0,
+                        ),
+                      ),
+
+                    ],
+                  ),
+                )
+                      :Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            body:Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: ListView.separated(
+                itemBuilder: (context,index)=>buildFavItem(
+                  productModel: cubit.products.where((element) => element.productUid==cubit.favorites[index]).first,
+                  context:context,
+                ),
+                separatorBuilder: (context,index)=>Divider(color: Colors.grey,),
+                itemCount: cubit.favorites.length,),
+            )
+        );
+      },
     );
   }
   buildFavItem({
-    required String image,
-    required String title,
-    required double price,
-    required int productId,
+    required ProductModel productModel,
     required context,
   }){
     return Padding(
@@ -44,7 +73,7 @@ class WishListScreen extends StatelessWidget {
                 child: AspectRatio(
                   aspectRatio: 1,
                   child: Image.network(
-                    image,
+                    productModel.photos[0],
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -60,7 +89,7 @@ class WishListScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    productModel.productName,
                     style: TextStyle(
                       color:Theme.of(context).textTheme.bodyText1!.color,
                       fontWeight: FontWeight.bold,
@@ -72,7 +101,7 @@ class WishListScreen extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    '\$ $price',
+                    '\$ ${productModel.price}',
                     style: TextStyle(
                       color:Theme.of(context).textTheme.bodyText1!.color,
                       overflow: TextOverflow.ellipsis,
@@ -84,7 +113,7 @@ class WishListScreen extends StatelessWidget {
             ),
             IconButton(
               onPressed: (){
-                //controller.manageFavorites(productId);
+                ShoppyCubit.get(context).updateWishList(productUid: productModel.productUid);
               },
               icon: Icon(Icons.favorite,color: Colors.red,size: 30,),
             ),

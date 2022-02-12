@@ -35,6 +35,8 @@ class SocialUploadProfileImageErrorState extends ShoppyStates{
   SocialUploadProfileImageErrorState(this.error);
 }
 
+class ShoppyUpdateSearchState extends ShoppyStates{}
+
 class ShoppyUpdateFavoriteState extends ShoppyStates{}
 
 class ShoppyGetFavoriteSuccessState extends ShoppyStates{}
