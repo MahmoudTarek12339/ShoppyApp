@@ -13,7 +13,6 @@ class CategoriesScreen extends StatelessWidget {
     'assets/categories/pants.jpg',
     'assets/categories/shorts.jpg',
     'assets/categories/jacket.jpg',
-    'assets/categories/accessories.jpg',
   ];
   final List<String> categoriesNameList=[
     'Shirts',
@@ -21,7 +20,6 @@ class CategoriesScreen extends StatelessWidget {
     'Pants',
     'Shorts',
     'Jackets',
-    'Accessories',
   ];
 
   @override
@@ -49,7 +47,6 @@ class CategoriesScreen extends StatelessWidget {
     child: ListView.separated(
       itemBuilder: (context,index)=>InkWell(
         onTap: (){
-
           navigateTo(context, CategoryProductsScreen(cubit.products.where((element) => element.category==categoriesNameList[index]).toList(),categoriesNameList[index]));
         },
         child: Container(

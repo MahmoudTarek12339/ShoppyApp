@@ -223,17 +223,21 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
   }
 
   void getFavorites(){
-    FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites').get().then((value) {
+    if(FirebaseAuth.instance.currentUser!=null){
       favorites.clear();
-      value.docs.forEach((element) {
-        if(products.where((e) => e.productUid==element.id).isNotEmpty){
+      FirebaseFirestore.instance.collection('customers')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('favorites')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
           favorites.add(element.id);
           emit(ShoppyGetFavoriteSuccessState());
-        }
+        });
+      }).catchError((onError){
+        emit(ShoppyGetFavoriteErrorState(onError.toString()));
       });
-    }).catchError((onError){
-      emit(ShoppyGetFavoriteErrorState(onError.toString()));
-    });
+    }
   }
 
   List<ProductModel> searchList=[];
@@ -282,23 +286,25 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
   //get user orders
   List<UserOrderModel> userOrders=[];
   void getUserOrders(){
-    FirebaseFirestore.instance
-        .collection('customers')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('orders')
-        .get()
-        .then((value) {
-          userOrders.clear();
-          value.docs.forEach((element) {
-            userOrders.add(UserOrderModel.fromJson(element.data(),element.id));
-          });
-          emit(ShoppyGetOrdersSuccessState());
-          print('User Order Length :');
-          print(userOrders.length);
-    }).catchError((error){
-      emit(ShoppyGetOrdersErrorState(error.toString()));
-      print(error.toString());
-    });
+    if(FirebaseAuth.instance.currentUser!=null){
+      FirebaseFirestore.instance
+          .collection('customers')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('orders')
+          .get()
+          .then((value) {
+        userOrders.clear();
+        value.docs.forEach((element) {
+          userOrders.add(UserOrderModel.fromJson(element.data(),element.id));
+        });
+        emit(ShoppyGetOrdersSuccessState());
+        print('User Order Length :');
+        print(userOrders.length);
+      }).catchError((error){
+        emit(ShoppyGetOrdersErrorState(error.toString()));
+        print(error.toString());
+      });
+    }
   }
 
   //send order to firebase
@@ -380,15 +386,17 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
   }
 
   void getUserAddresses(){
-    FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('addresses').get().then((value) {
-      userAddresses.clear();
-      value.docs.forEach((element) {
-        userAddresses.add(AddressModel.fromJson(element.data()));
-        emit(ShoppyGetAddressesSuccessState());
+    if(FirebaseAuth.instance.currentUser!=null){
+      FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('addresses').get().then((value) {
+        userAddresses.clear();
+        value.docs.forEach((element) {
+          userAddresses.add(AddressModel.fromJson(element.data()));
+          emit(ShoppyGetAddressesSuccessState());
+        });
+      }).catchError((onError){
+        emit(ShoppyGetAddressesErrorState(onError.toString()));
       });
-    }).catchError((onError){
-      emit(ShoppyGetAddressesErrorState(onError.toString()));
-    });
+    }
   }
 
   void removeAddress(String uID){
