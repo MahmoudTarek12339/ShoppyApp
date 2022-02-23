@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoppy/shared/styles/colors.dart';
 
 //default button style
 Widget defaultButton({
@@ -20,7 +21,7 @@ Widget defaultButton({
         child: Text(
           isUpperCase ? text.toUpperCase() : text,
           style: TextStyle(
-            color: Theme.of(context).primaryColor,
+            color: Colors.white,
           ),
         ),
         clipBehavior: Clip.antiAlias, // Add This
@@ -165,3 +166,54 @@ Widget textUtils({required text,required fontSize,required fontWeight,required c
       )
   ),
 );
+
+Widget buildLogo(context, screenTitle, height) {
+  return Container(
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        children: [
+          Positioned(
+            child: Text(
+              screenTitle,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            bottom: 10,
+            right: 10,
+          ),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/png1.png',
+                  width: 90,
+                  height: 90,
+                ),
+                Text(
+                  'Shoppy App',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      color: Colors.white),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+    height: MediaQuery.of(context).size.height * height,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(100)),
+      gradient: LinearGradient(colors: [
+        deepOrange,
+        lightOrange,
+        orange,
+      ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+    ),
+  );
+}

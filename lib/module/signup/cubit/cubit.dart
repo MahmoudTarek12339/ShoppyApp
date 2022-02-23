@@ -96,25 +96,6 @@ class ShoppySignupCubit extends Cubit<ShoppySignupStates>{
 
   late String verificationCode;
 
-  /*  verifyPhone(String phoneNumber,)async{
-    emit(ShoppyPhoneVerificationLoadingState());
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: '+20$phoneNumber',
-      verificationCompleted: (PhoneAuthCredential credential)async{
-        emit(ShoppyPhoneVerificationSuccessState());
-      },
-      verificationFailed: (FirebaseAuthException error){
-        print(error.toString());
-        emit(ShoppyPhoneVerificationErrorState(error.toString()));
-      },
-      codeSent: (String verificationId,int? resendToken){
-        verificationCode=verificationId;
-      },
-      codeAutoRetrievalTimeout: (String verificationId){
-        verificationCode=verificationId;
-      },
-    );
-  }*/
 
   bool isPassword=true;
   IconData icon=Icons.visibility_outlined;

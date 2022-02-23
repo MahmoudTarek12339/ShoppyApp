@@ -7,14 +7,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:shoppy/model/address_model.dart';
 import 'package:shoppy/model/order_model.dart';
 import 'package:shoppy/model/product_model.dart';
-import 'package:shoppy/module/home/bottom_nav/category_screen.dart';
+import 'package:shoppy/model/user_orders_model.dart';
+import 'package:shoppy/module/home/bottom_nav/category/category_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/help_screen.dart';
-import 'package:shoppy/module/home/bottom_nav/home_screen.dart';
+import 'package:shoppy/module/home/bottom_nav/home/home_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/wish_list_screen.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
-
 
 class ShoppyCubit extends Cubit<ShoppyStates> {
   ShoppyCubit() : super(ShoppyInitialState());
@@ -31,7 +32,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     'Home',
     'Categories',
     'Wish List',
-    'help',
+    'Info',
   ];
   int currentIndex=0;
   void changeBottomNav(int index){
@@ -75,13 +76,15 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     });
   }
 
-  void signOut(){
-    FirebaseAuth.instance.signOut().then((value) {
+  void signOut()async{
+    await FirebaseAuth.instance.signOut().then((value) {
       CacheHelper.removeData(key: 'token').then((value) {
           if(value){
             emit(UserLoggedOutSuccessState());
           }
-        });
+        }).catchError((onError){
+          emit(UserLoggedOutErrorState(onError.toString()));
+      });
       }
     );
   }
@@ -167,7 +170,6 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     }
     emit(ShoppyUpdateCartState());
   }
-
   void removeProductFromCart(OrderModel orderModel){
     int quantity=cart[cart.indexWhere((element) => element.productUid==orderModel.productUid&& element.color==orderModel.color&& element.size==orderModel.size)].quantity;
     if(quantity>1){
@@ -181,7 +183,6 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     cartTotal-=orderModel.price;
     emit(ShoppyUpdateCartState());
   }
-
   void removeOneProductFromCart(OrderModel orderModel){
     cartTotal-=orderModel.price*orderModel.quantity;
     cart.removeWhere((element) => element.productUid==orderModel.productUid&& element.color==orderModel.color&& element.size==orderModel.size);
@@ -193,6 +194,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     cart.clear();
     emit(ShoppyUpdateCartState());
   }
+
   //Add Product To Wish List
   List<String> favorites=[''];
   void updateWishList({required String productUid})async{
@@ -200,7 +202,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     if(snapShot.exists){
       favorites.remove(productUid);
       emit(ShoppyUpdateFavoriteState());
-      FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites')..doc(productUid).delete().then((value) {
+      FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites').doc(productUid).delete().then((value) {
         emit(ShoppyRemoveFromFavoriteSuccessState());
       }).catchError((error){
         print(error.toString());
@@ -220,13 +222,14 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     getFavorites();
   }
 
-  //Map<String,List<String>> randValue={'numbers':['1','2','3']};
   void getFavorites(){
     FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites').get().then((value) {
       favorites.clear();
       value.docs.forEach((element) {
-        favorites.add(element.id);
-        emit(ShoppyGetFavoriteSuccessState());
+        if(products.where((e) => e.productUid==element.id).isNotEmpty){
+          favorites.add(element.id);
+          emit(ShoppyGetFavoriteSuccessState());
+        }
       });
     }).catchError((onError){
       emit(ShoppyGetFavoriteErrorState(onError.toString()));
@@ -247,33 +250,166 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     searchList.clear();
     emit(ShoppyUpdateSearchState());
   }
+
   //get All products From fire Base
   List<ProductModel> products=[];
   void getAllProducts()async{
+    products.clear();
+    await FirebaseFirestore.instance
+        .collection('admins')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        String brandName =element.data()['brandName'];
+        String brandId = element.id;
+        FirebaseFirestore.instance
+            .collection('admins')
+            .doc(element.id)
+            .collection('products')
+            .get().then((value) {
+          value.docs.forEach((element2) {
+            if(element2.data().isNotEmpty)
+              products.add(ProductModel.fromJson(element2.data(), element2.id,brandName,brandId));
+          });
+        });
+      });
+      emit(ShoppyGetAllProductsSuccessState());
+    }).catchError((onError){
+      emit(ShoppyGetAllProductsErrorState(onError.toString()));
+    });
+  }
 
-    if (products.isEmpty) {
-      await FirebaseFirestore.instance
-          .collection('admins')
-          .get()
-          .then((value) {
-            value.docs.forEach((element) {
+  //get user orders
+  List<UserOrderModel> userOrders=[];
+  void getUserOrders(){
+    FirebaseFirestore.instance
+        .collection('customers')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('orders')
+        .get()
+        .then((value) {
+          userOrders.clear();
+          value.docs.forEach((element) {
+            userOrders.add(UserOrderModel.fromJson(element.data(),element.id));
+          });
+          emit(ShoppyGetOrdersSuccessState());
+          print('User Order Length :');
+          print(userOrders.length);
+    }).catchError((error){
+      emit(ShoppyGetOrdersErrorState(error.toString()));
+      print(error.toString());
+    });
+  }
+
+  //send order to firebase
+  void sendOrder(UserOrderModel userOrderModel){
+    emit(ShoppySendOrderLoadingState());
+    var date=DateTime.now().microsecondsSinceEpoch.toString();
+    userOrderModel.setBrandId(date);
+
+    /*FirebaseFirestore.instance
+        .collection('customers')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('orders')
+        .doc()
+        .set(userOrderModel.toMap()).then((value) {
+          List<OrderModel> modelOrders=userOrderModel.orders;
+          String bId=userOrderModel.orders[0].brandId;
+          List<OrderModel> orders=[];
+          orders.add(userOrderModel.orders[0]);
+          for(int i=1;i<modelOrders.length;i++){
+            if(bId==modelOrders[i].brandId){
+              orders.add(userOrderModel.orders[i]);
+              continue;
+            }
+            else{
+
               FirebaseFirestore.instance
                   .collection('admins')
-                  .doc(element.id)
-                  .collection('products')
-                  .get().then((value) {
-                value.docs.forEach((element2) {
-                  if(element2.data().isNotEmpty)
-                    products.add(ProductModel.fromJson(element2.data(), element2.id));
-                });
+                  .doc(bId)
+                  .collection('orders')
+                  .doc('orders')
+                  .collection('In Progress')
+                  .doc(date)
+                  .set(element.toMap()).then((value){
+                emit(ShoppySendOrderSuccessState());
+              }).catchError((error){
+                emit(ShoppySendOrderErrorState(error.toString()));
+                print(error);
               });
-            });
-            print('This is products:');
-            print(products.length);
-            emit(ShoppyGetAllProductsSuccessState());
-      }).catchError((onError){
-        emit(ShoppyGetAllProductsErrorState(onError.toString()));
-      });
-    }
+            }
+          }
+    }).catchError((error){
+      emit(ShoppySendOrderErrorState(error.toString()));
+      print(error);
+    });*/
+    getUserOrders();
   }
+
+  void cancelOrder(String id){
+    userOrders.removeWhere((element) => element.orderId==id);
+    emit(ShoppyUpdateOrdersState());
+    FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('orders')
+        .doc(id)
+        .delete()
+        .then((value){
+
+      emit(ShoppyRemoveFromOrdersSuccessState());
+    }).catchError((error){
+      emit(ShoppyRemoveFromOrdersErrorState(error.toString()));
+    });
+    getUserOrders();
+  }
+
+  List<AddressModel> userAddresses=[];
+  void addAddress(AddressModel addressModel){
+
+    var doc= FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('addresses').doc();
+    addressModel.setId(doc.id);
+    userAddresses.add(addressModel);
+    emit(ShoppyAddToAddressesLoadingState());
+
+    doc.set(addressModel.toMap()).then((value) {
+      emit(ShoppyAddToAddressesSuccessState());
+    }).catchError((error){
+      print(error.toString());
+      emit(ShoppyAddToAddressesErrorState(error.toString()));
+    });
+    getUserAddresses();
+  }
+
+  void getUserAddresses(){
+    FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid).collection('addresses').get().then((value) {
+      userAddresses.clear();
+      value.docs.forEach((element) {
+        userAddresses.add(AddressModel.fromJson(element.data()));
+        emit(ShoppyGetAddressesSuccessState());
+      });
+    }).catchError((onError){
+      emit(ShoppyGetAddressesErrorState(onError.toString()));
+    });
+  }
+
+  void removeAddress(String uID){
+    userAddresses.removeWhere((element) => element.uId==uID);
+    emit(ShoppyUpdateAddressesState());
+    FirebaseFirestore.instance.collection('customers').doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('addresses')
+        .doc(uID)
+        .delete()
+        .then((value){
+      emit(ShoppyRemoveFromAddressesSuccessState());
+    }).catchError((error){
+      emit(ShoppyRemoveFromAddressesErrorState(error.toString()));
+    });
+    getUserAddresses();
+  }
+
+  int radioIndex=0;
+  void changeIndex(int value){
+    radioIndex=value;
+    emit(ShoppyChangeRadioValueState());
+  }
+
 }

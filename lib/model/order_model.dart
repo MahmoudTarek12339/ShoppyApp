@@ -7,6 +7,7 @@ class OrderModel{
   late String photo;
   late String size;
   late String color;
+  late String brandId;
 
   OrderModel({
     required this.productName,
@@ -17,18 +18,22 @@ class OrderModel{
     required this.photo,
     required this.size,
     required this.color,
+    required this.brandId,
   });
 
-  OrderModel.fromJson(Map<String,dynamic>? json,String uid) {
+  OrderModel.fromJson(Map<String,dynamic>? json) {
     productName=json!['name'];
     description=json['description'];
-    productUid=uid;
+    productUid=json['productUid'];
     quantity=json['quantity'];
     price=json['price'];
     photo=json['photo'];
     size=json['size'];
     color=json['color'];
+    brandId=json['brandId'];
+
   }
+
   Map<String,dynamic> toMap(){
     return
       {'name':productName,
@@ -39,6 +44,7 @@ class OrderModel{
         'photo':photo,
         'size':size,
         'color':color,
+        'brandId':brandId,
       };
   }
 }

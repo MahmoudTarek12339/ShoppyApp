@@ -6,7 +6,13 @@ class SocialReScreenState extends ShoppyStates{}
 
 class ProfileImagePickedSuccessState extends ShoppyStates{}
 class ProfileImagePickedErrorState extends ShoppyStates{}
+
 class UserLoggedOutSuccessState extends ShoppyStates{}
+class UserLoggedOutErrorState extends ShoppyStates{
+  final String error;
+  UserLoggedOutErrorState(this.error);
+}
+
 class ShoppyChangePasswordVisibilityState extends ShoppyStates{}
 class ShoppyChangePasswordLoadingState extends ShoppyStates{}
 class ShoppyChangePasswordSuccessState extends ShoppyStates{}
@@ -67,3 +73,49 @@ class ShoppyGetAllProductsErrorState extends ShoppyStates{
 
 
 class ShoppyUpdateCartState extends ShoppyStates{}
+
+class ShoppyAddToAddressesLoadingState extends ShoppyStates{}
+
+class ShoppyAddToAddressesSuccessState extends ShoppyStates{}
+class ShoppyAddToAddressesErrorState extends ShoppyStates{
+  final String error;
+  ShoppyAddToAddressesErrorState(this.error);
+}
+
+class ShoppyGetAddressesSuccessState extends ShoppyStates{}
+class ShoppyGetAddressesErrorState extends ShoppyStates{
+  final String error;
+  ShoppyGetAddressesErrorState(this.error);
+}
+
+class ShoppyUpdateAddressesState extends ShoppyStates{}
+
+class ShoppyRemoveFromAddressesSuccessState extends ShoppyStates{}
+class ShoppyRemoveFromAddressesErrorState extends ShoppyStates{
+  final String error;
+  ShoppyRemoveFromAddressesErrorState(this.error);
+}
+
+class ShoppyChangeRadioValueState extends ShoppyStates{}
+
+
+class ShoppySendOrderLoadingState extends ShoppyStates{}
+class ShoppySendOrderSuccessState extends ShoppyStates{}
+class ShoppySendOrderErrorState extends ShoppyStates{
+  final String error;
+  ShoppySendOrderErrorState(this.error);
+}
+
+class ShoppyGetOrdersSuccessState extends ShoppyStates{}
+class ShoppyGetOrdersErrorState extends ShoppyStates{
+  final String error;
+  ShoppyGetOrdersErrorState(this.error);
+}
+
+class ShoppyUpdateOrdersState extends ShoppyStates{}
+
+class ShoppyRemoveFromOrdersSuccessState extends ShoppyStates{}
+class ShoppyRemoveFromOrdersErrorState extends ShoppyStates{
+  final String error;
+  ShoppyRemoveFromOrdersErrorState(this.error);
+}

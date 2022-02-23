@@ -4,7 +4,7 @@ import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/model/order_model.dart';
 import 'package:shoppy/model/product_model.dart';
-import 'package:shoppy/module/home/product_screen.dart';
+import 'package:shoppy/module/home/product_screen/product_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -136,6 +136,7 @@ class SearchScreen extends StatelessWidget {
                           photo: productModel.photos[0],
                           size: productModel.sizes[0],
                           color: productModel.colors[0],
+                          brandId: productModel.brandId,
                         )
                     );
                   },

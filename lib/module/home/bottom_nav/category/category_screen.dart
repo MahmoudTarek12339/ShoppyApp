@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
-import 'package:shoppy/module/home/category_products_screen.dart';
+import 'package:shoppy/module/home/bottom_nav/category/category_products_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 
 class CategoriesScreen extends StatelessWidget {
@@ -32,24 +32,9 @@ class CategoriesScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: Padding(
-            padding: EdgeInsets.only(left: 15,top: 15,right: 10),
+            padding: EdgeInsets.only(left: 15,top: 15,right: 15),
             child: Column(
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 15,top: 15),
-                    child: textUtils(
-                      text: 'Category',
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                      color:Theme.of(context).textTheme.bodyText1!.color,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
                 categoryWidget(cubit: ShoppyCubit.get(context)),
               ],
             ),

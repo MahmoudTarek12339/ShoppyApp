@@ -3,6 +3,8 @@ class ProductModel{
   late String description;
   late String productUid;
   late String category;
+  late String brandName;
+  late String brandId;
   late int quantity;
   late double price;
   late double rate;
@@ -16,6 +18,7 @@ class ProductModel{
    required this.description,
    required this.productUid,
    required this.category,
+   required this.brandName,
    required this.quantity,
    required this.price,
    required this.rate,
@@ -25,11 +28,13 @@ class ProductModel{
    required this.colors,
  });
 
-  ProductModel.fromJson(Map<String,dynamic>? json,String uid) {
+  ProductModel.fromJson(Map<String,dynamic>? json,String uid,String _brandName,String _brandId) {
     productName=json!['name'];
     description=json['description'];
     productUid=uid;
     category=json['category'];
+    brandName= _brandName;
+    brandId= _brandId;
     quantity=json['quantity'];
     price=json['price'];
     rate=json['rate'];
@@ -40,7 +45,7 @@ class ProductModel{
   }
   Map<String,dynamic> toMap(){
     return
-      {'name':productName,
+      { 'name':productName,
         'description':description,
         'productUid':productUid,
         'quantity':quantity,

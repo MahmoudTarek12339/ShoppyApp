@@ -9,9 +9,11 @@ class ResetPasswordScreen extends StatelessWidget {
   final TextEditingController newPasswordController=TextEditingController();
   final TextEditingController confirmNewPasswordController=TextEditingController();
   final GlobalKey<FormState> formKey=GlobalKey<FormState>();
-  bool validPass=true;
+
   @override
   Widget build(BuildContext context) {
+    bool validPass=true;
+
     return BlocProvider(
       create: (BuildContext context) =>ShoppyCubit(),
       child: BlocConsumer<ShoppyCubit,ShoppyStates>(
@@ -50,13 +52,15 @@ class ResetPasswordScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text('Reset Password'),
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Theme.of(context).focusColor,
             ),
             body: Form(
               key: formKey,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.symmetric(vertical: 20.0,horizontal: 10),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       child: defaultFormField(
@@ -139,7 +143,7 @@ class ResetPasswordScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(height: 15.0,),
+                    SizedBox(height: 50.0,),
                     Container(
                       height: 40.0,
                       width: double.infinity,

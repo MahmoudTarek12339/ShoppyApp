@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ThemeData darkTheme=ThemeData(
-  scaffoldBackgroundColor: Color(0xFF121212),
+  scaffoldBackgroundColor: Color(0xff0d193e),
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.grey[900],
     elevation: 0.0,
@@ -44,14 +44,14 @@ ThemeData darkTheme=ThemeData(
     backgroundColor: Colors.black,
   ),
   backgroundColor: Colors.pink,
-  focusColor: Color(0xFFff4667),
+  focusColor: Color(0xffec8d2f),
   errorColor: Colors.red,
   iconTheme: IconThemeData(
     color: Colors.white,
   ),
   primaryColor: Colors.black,
   canvasColor: Colors.white,
-  cardColor: Colors.black54,
+  cardColor: Color(0xff1e224c),
 );
 
 ThemeData lightTheme=ThemeData(
@@ -108,8 +108,10 @@ ThemeData lightTheme=ThemeData(
     ),
   primaryColor: Colors.white,
   canvasColor: Colors.grey,
-  cardColor: Colors.grey[200],
+  cardColor: Color(0xff00BE84).withOpacity(0.2),
 );
+
+
 /*const Color mainColor = Color(0xff00BE84);
 const Color darkGreyClr = Color(0xFF121212);
 const Color pinkClr = Color(0xFFff4667);*/

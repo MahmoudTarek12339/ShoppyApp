@@ -12,7 +12,7 @@ import 'package:shoppy/shared/components/components.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 
-import 'cart_screen.dart';
+import '../bottom_nav/home/cart/cart_screen.dart';
 
 
 class ProductScreen extends StatefulWidget {
@@ -247,7 +247,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 3.0),
                     child: Text(
-                      'Adidas',
+                      widget.productModel.brandName,
                       style: Theme.of(context).textTheme.caption,
                     ),
                   ),
@@ -255,27 +255,27 @@ class _ProductScreenState extends State<ProductScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(.4),
-                shape: BoxShape.circle,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.grey.withOpacity(0.1),
+                child: IconButton(
+                    onPressed: (){
+                      ShoppyCubit.get(context).updateWishList(productUid: widget.productModel.productUid);
+                    },
+                    icon:ShoppyCubit.get(context).favorites.contains(widget.productModel.productUid)?
+                    Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
+                        :Icon(
+                      Icons.favorite_outlined,
+                      color: Colors.black,
+                    )
+                ),
               ),
-              child: IconButton(
-                  onPressed: (){
-                    ShoppyCubit.get(context).updateWishList(productUid: widget.productModel.productUid);
-                  },
-                  icon:ShoppyCubit.get(context).favorites.contains(widget.productModel.productUid)?
-                  Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  )
-                      :Icon(
-                    Icons.favorite_outlined,
-                    color: Colors.black,
-                  )
-              ),
-            ),
+            )
           ],
         ),
         Row(
@@ -430,6 +430,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       price: widget.productModel.price,
                       size: widget.productModel.sizes[currentSelected],
                       color: widget.productModel.colors[currentColor],
+                      brandId: widget.productModel.brandId,
                     )
                 );
               },
