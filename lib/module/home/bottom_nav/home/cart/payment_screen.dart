@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,7 +8,6 @@ import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/model/address_model.dart';
 import 'package:shoppy/model/user_orders_model.dart';
-import 'package:shoppy/module/home/bottom_nav/home/home_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -159,12 +159,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: (){
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return alertPayment;
-                          },
-                        );
+                        if(!(state is ShoppySendOrderLoadingState)){
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alertPayment;
+                            },
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -174,7 +176,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         primary: Theme.of(context).focusColor,
                       ),
                       child:state is ShoppySendOrderLoadingState?
-                        Center(child:CircularProgressIndicator())
+                        Center(child:CircularProgressIndicator(color: Colors.white,))
                           : Text(
                         'Pay Now',
                         style: TextStyle(

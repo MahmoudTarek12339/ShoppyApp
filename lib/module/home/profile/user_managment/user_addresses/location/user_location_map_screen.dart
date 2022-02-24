@@ -122,11 +122,44 @@ class MapSampleState extends State<UserLocationMapScreen> {
   }
 
   setCurrentLocation()async{
-    currentPosition= await LocationService().getCurrentLocation();
-    setState(() {
-      selectedLocation=LatLng(currentPosition!.latitude,currentPosition!.longitude);
-    });
+    bool permission=await checkPermission();
+    if(permission){
+      currentPosition = await LocationService().getCurrentLocation();
+      setState(() {
+        selectedLocation =
+            LatLng(currentPosition!.latitude, currentPosition!.longitude);
+      });
+    }
+    else{
+      Navigator.pop(context);
+    }
   }
+
+  Future<bool> checkPermission()async{
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return serviceEnabled;
+  }
+
 
   Future<Placemark> getPosition({
   required userLocation,

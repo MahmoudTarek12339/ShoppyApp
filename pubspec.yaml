@@ -43,6 +43,8 @@ dependencies:
   animated_splash_screen: ^1.1.0
   google_maps_flutter: ^2.1.1
   intl: ^0.17.0
+  webview_flutter: ^3.0.0
+  connectivity_plus: ^2.2.1
 
   #fire base
   firebase_core: ^1.10.0

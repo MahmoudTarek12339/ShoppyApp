@@ -14,34 +14,34 @@ class WishListScreen extends StatelessWidget {
       listener: (context,state){},
       builder: (context,state){
         var cubit=ShoppyCubit.get(context);
-        return cubit.favorites.isEmpty?
-                       Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 100,
-                        width: 100,
-                        child: Image.asset('assets/images/heart.png'),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Please, Add your Favorite Products',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: 17.0,
-                        ),
-                      ),
-
-                    ],
-                  ),
-                )
-                      :Scaffold(
+        return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body:Padding(
+            body:cubit.favorites.isEmpty?
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Image.asset('assets/images/heart.png'),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Please, Add your Favorite Products',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: 17.0,
+                    ),
+                  ),
+
+                ],
+              ),
+            )
+            :Padding(
               padding: const EdgeInsets.only(top: 5.0),
               child: ListView.separated(
                 itemBuilder: (context,index)=>buildFavItem(

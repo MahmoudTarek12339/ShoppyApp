@@ -1,3 +1,4 @@
+
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
@@ -25,8 +26,6 @@ class SplashScreenState extends State<SplashScreen> {
     else{
       startWidget=OnBoardingScreen();
     }
-
-
     return Scaffold(
       body: AnimatedSplashScreen(
         splashIconSize: double.infinity,

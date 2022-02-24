@@ -196,7 +196,8 @@ class CartScreen extends StatelessWidget {
 
     onTap: (){
       ProductModel productModel=cubit.products.where((element) => element.productUid==orderModel.productUid).first;
-      navigateTo(context, ProductScreen(productModel));
+      int index=productModel.sizes.indexWhere((element) => element==orderModel.size);
+      navigateTo(context, ProductScreen(productModel)..customSelect(index));
     },
     child: Container(
         margin: EdgeInsets.symmetric(horizontal: 10,vertical: 5),

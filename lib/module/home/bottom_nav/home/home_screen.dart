@@ -95,7 +95,9 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          body:Padding(
+          body:cubit.products.isEmpty?
+            Center(child: CircularProgressIndicator(color: Theme.of(context).focusColor,),)
+              :Padding(
             padding: const EdgeInsets.all(10.0),
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),

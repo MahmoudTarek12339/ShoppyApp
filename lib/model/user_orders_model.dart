@@ -7,7 +7,7 @@ class UserOrderModel{
   late String orderPhoto;
   late double orderPrice;
   late String orderId;
-  late String brandOrderId;
+  late String userOrderId;
   late AddressModel addressModel;
   late List<OrderModel> orders;
   UserOrderModel({
@@ -19,7 +19,10 @@ class UserOrderModel{
     required this.addressModel,
   });
   void setBrandId(String id){
-    this.brandOrderId=id;
+    this.orderId=id;
+  }
+  void setUserOrderId(String uID){
+    this.userOrderId=uID;
   }
 
   UserOrderModel.fromJson(Map<String,dynamic>? json,String id) {
@@ -27,8 +30,8 @@ class UserOrderModel{
     orderDate=json['orderDate'];
     orderPhoto=json['orderPhoto'];
     orderPrice=json['orderPrice'];
-    brandOrderId=json['brandId'];
-    orderId=id;
+    orderId=json['brandOrderId'];
+    userOrderId=json['userOrderId'];
     orders= json['orders'].map((e) =>OrderModel.fromJson(e)).toList().cast<OrderModel>() ;
     addressModel=AddressModel.fromJson(json['address']);
   }
@@ -39,7 +42,8 @@ class UserOrderModel{
         'orderDate':orderDate,
         'orderPhoto':orderPhoto,
         'orderPrice':orderPrice,
-        'brandId':brandOrderId,
+        'brandOrderId':orderId,
+        'userOrderId':userOrderId,
         'orders':orders.map((e) => e.toMap()).toList(),
         'address':addressModel.toMap(),
       };

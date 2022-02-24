@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context)=>ShoppyCubit()..getAllProducts()..getFavorites()..getUserAddresses()..getUserOrders(),
+      create: (context)=>ShoppyCubit()..appStart(),
       child:BlocConsumer<ShoppyCubit,ShoppyStates>(
         listener:(context,state){},
         builder:(context,state){

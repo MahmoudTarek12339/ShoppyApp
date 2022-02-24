@@ -17,15 +17,17 @@ import '../bottom_nav/home/cart/cart_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   final ProductModel productModel;
+  int currentSelected=0;
   ProductScreen(this.productModel);
-
+  void customSelect(int index){
+    currentSelected=index;
+  }
   @override
   State<ProductScreen> createState() => _ProductScreenState();
 }
 
 class _ProductScreenState extends State<ProductScreen> {
   //final List<String> sizesList= as List<String> ;
-  int currentSelected=0;
   CarouselController carouselController=CarouselController();
   int currentPage=0;
   int currentColor=0;
@@ -359,13 +361,13 @@ class _ProductScreenState extends State<ProductScreen> {
             itemBuilder: (context,index)=>GestureDetector(
               onTap: (){
                 setState(() {
-                  currentSelected=index;
+                  widget.currentSelected=index;
                 });
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                 decoration: BoxDecoration(
-                  color: currentSelected==index? Theme.of(context).focusColor.withOpacity(0.4):Theme.of(context).primaryColor,
+                  color: widget.currentSelected==index? Theme.of(context).focusColor.withOpacity(0.4):Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
                       color: Colors.grey.withOpacity(0.4)
@@ -428,7 +430,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       productUid: widget.productModel.productUid,
                       quantity: 1,
                       price: widget.productModel.price,
-                      size: widget.productModel.sizes[currentSelected],
+                      size: widget.productModel.sizes[widget.currentSelected],
                       color: widget.productModel.colors[currentColor],
                       brandId: widget.productModel.brandId,
                     )

@@ -58,7 +58,7 @@ class SearchScreen extends StatelessWidget {
             titleSpacing: 0,
           ),
           body: cubit.searchList.isEmpty?
-              Image.asset('assets/images/search_empry_light.png')
+              Center(child: Image.asset('assets/images/search_empty_dark.png'))
               :Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shoppy/module/home/bottom_nav/web_view_screen.dart';
+import 'package:shoppy/shared/components/components.dart';
 
 class HelpScreen extends StatelessWidget {
 
@@ -13,7 +15,9 @@ class HelpScreen extends StatelessWidget {
             height: 40,
             color: Theme.of(context).scaffoldBackgroundColor,
             elevation: 1.0,
-            onPressed: (){},
+            onPressed: (){
+              navigateTo(context,WebViewScreen(index: 0,));
+            },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -30,12 +34,14 @@ class HelpScreen extends StatelessWidget {
             height: 40,
             color: Theme.of(context).scaffoldBackgroundColor,
             elevation: 1.0,
-            onPressed: (){},
+            onPressed: (){
+              navigateTo(context,WebViewScreen(index: 1,));
+            },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Whats App',
+                  'Twitter',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 Spacer(),
@@ -47,7 +53,9 @@ class HelpScreen extends StatelessWidget {
             height: 40,
             color: Theme.of(context).scaffoldBackgroundColor,
             elevation: 1.0,
-            onPressed: (){},
+            onPressed: (){
+              navigateTo(context,WebViewScreen(index: 2,));
+            },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

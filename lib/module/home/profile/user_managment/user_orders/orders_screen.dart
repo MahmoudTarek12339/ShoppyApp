@@ -21,7 +21,6 @@ class OrdersScreen extends StatelessWidget {
             color: Colors.green,
             title: 'Order Cancelled Successfully',
           );
-
         }
         else if(state is ShoppyRemoveFromOrdersErrorState){
           defaultSnackBar(
@@ -143,7 +142,8 @@ class OrdersScreen extends StatelessWidget {
                       builder: (BuildContext context) {
                         return makeAlert(
                             context: context,
-                            cubit: cubit, id: userOrderModel.orderId
+                            cubit: cubit,
+                            orderModel: userOrderModel
                         );
                       },
                     );
@@ -254,7 +254,7 @@ class OrdersScreen extends StatelessWidget {
   AlertDialog makeAlert({
     required context,
     required cubit,
-    required String id,
+    required UserOrderModel orderModel,
   })=> AlertDialog(
     title: Text(
       "Confirm Cancel",
@@ -285,7 +285,7 @@ class OrdersScreen extends StatelessWidget {
             )
         ),
         onPressed: () {
-          cubit.cancelOrder(id);
+          cubit.cancelOrder(orderModel);
           Navigator.pop(context);
         },
       ),

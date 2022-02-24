@@ -164,7 +164,8 @@ class OrderDetailsScreen extends StatelessWidget {
                       builder: (BuildContext context) {
                         return makeAlert(
                             context: context,
-                            cubit: cubit, id: userOrderModel.orderId
+                            cubit: cubit,
+                            orderModel: userOrderModel
                         );
                       },
                     );
@@ -212,7 +213,7 @@ class OrderDetailsScreen extends StatelessWidget {
   AlertDialog makeAlert({
     required context,
     required cubit,
-    required String id,
+    required UserOrderModel orderModel,
   })=> AlertDialog(
     title: Text(
       "Confirm Cancel",
@@ -243,7 +244,7 @@ class OrderDetailsScreen extends StatelessWidget {
             )
         ),
         onPressed: () {
-          cubit.cancelOrder(id);
+          cubit.cancelOrder(orderModel);
           Navigator.pop(context);
         },
       ),

@@ -74,6 +74,23 @@ class ShoppyGetAllProductsErrorState extends ShoppyStates{
 
 class ShoppyUpdateCartState extends ShoppyStates{}
 
+class ShoppyAddToCartSuccessState extends ShoppyStates{}
+class ShoppyAddToCartErrorState extends ShoppyStates{
+  final String error;
+  ShoppyAddToCartErrorState(this.error);
+}
+class ShoppyRemoveFromCartSuccessState extends ShoppyStates{}
+class ShoppyRemoveFromCartErrorState extends ShoppyStates{
+  final String error;
+  ShoppyRemoveFromCartErrorState(this.error);
+}
+class ShoppyClearCartSuccessState extends ShoppyStates{}
+class ShoppyClearCartErrorState extends ShoppyStates{
+  final String error;
+  ShoppyClearCartErrorState(this.error);
+}
+
+
 class ShoppyAddToAddressesLoadingState extends ShoppyStates{}
 
 class ShoppyAddToAddressesSuccessState extends ShoppyStates{}
