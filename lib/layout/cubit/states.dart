@@ -136,3 +136,6 @@ class ShoppyRemoveFromOrdersErrorState extends ShoppyStates{
   final String error;
   ShoppyRemoveFromOrdersErrorState(this.error);
 }
+
+class ShoppyInternetConnectedState extends ShoppyStates{}
+class ShoppyInternetNotConnectedState extends ShoppyStates{}

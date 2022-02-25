@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoppy/shared/styles/colors.dart';
@@ -55,7 +57,7 @@ Widget defaultFormField({
   required String label,
   required BuildContext context,
   bool isPassword = false,
-
+  int? maxLength,
   IconData? prefix,
   IconData? suffix,
 
@@ -79,6 +81,7 @@ Widget defaultFormField({
       keyboardType: type,
       obscureText: isPassword,
       validator: validate,
+      maxLength: maxLength,
       style: TextStyle(color: inputColor!=null?inputColor:Theme.of(context).iconTheme.color),
       decoration: InputDecoration(
         labelText: label,
@@ -217,3 +220,42 @@ Widget buildLogo(context, screenTitle, height) {
     ),
   );
 }
+
+
+AlertDialog internetAlert({
+  required context,
+  required cubit,
+})=>AlertDialog(
+  title: Text(
+    "No Internet Connection",
+    style: Theme.of(context)
+        .textTheme
+        .bodyText1!
+        .copyWith(color: Theme.of(context).focusColor),
+  ),
+  content:Text('Please Check you Internet Connection'),
+  backgroundColor: Theme.of(context).cardColor,
+  actions: [
+    TextButton(
+      child: Text(
+        "No",
+        style: TextStyle(
+          color: Theme.of(context).focusColor,
+        ),
+      ),
+      onPressed: () {
+        exit(0);
+      },
+    ),
+    TextButton(
+      child: Text("Try Again",
+          style: TextStyle(
+            color: Theme.of(context).focusColor,
+          )),
+      onPressed: () {
+        Navigator.pop(context);
+        cubit.checkInternetConnection();
+      },
+    ),
+  ],
+);

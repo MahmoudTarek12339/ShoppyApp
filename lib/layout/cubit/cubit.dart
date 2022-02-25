@@ -16,6 +16,7 @@ import 'package:shoppy/module/home/bottom_nav/category/category_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/help_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/home/home_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/wish_list_screen.dart';
+import 'package:shoppy/shared/components/components.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
 
 
@@ -593,8 +594,9 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
   }
 
   //get user data
-  void appStart()async{
-    if(await checkInternetConnection()) {
+  void appStart({required context})async{
+    bool connection =await checkInternetConnection();
+    if(connection) {
       await getAllProducts();
       getFavorites();
       getUserAddresses();
@@ -602,67 +604,24 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       getCart();
     }
     else{
-      /*{
-        AlertDialog alertAddress = AlertDialog(
-          title: Text(
-            "Select Address",
-            style: Theme.of(context)
-                .textTheme
-                .bodyText1!
-                .copyWith(color: Theme.of(context).focusColor),
-          ),
-          content: Container(
-            height: 120,
-            child: ListView.separated(
-              itemBuilder: (context, index) =>
-                  index == cubit.userAddresses.length
-                      ? addAddressItem(context: context)
-                      : addressAlertItem(
-                          cubit: cubit,
-                          context: context,
-                          addressModel: cubit.userAddresses[index],
-                          index: index),
-              separatorBuilder: (context, index) => Divider(
-                height: 3,
-                color: Theme.of(context).focusColor.withOpacity(0.5),
-              ),
-              itemCount: cubit.userAddresses.length + 1,
-            ),
-          ),
-          backgroundColor: Theme.of(context).cardColor,
-          actions: [
-            TextButton(
-              child: Text(
-                "No",
-                style: TextStyle(
-                  color: Theme.of(context).focusColor,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: Text("OK",
-                  style: TextStyle(
-                    color: Theme.of(context).focusColor,
-                  )),
-              onPressed: () {
-                navigateTo(
-                    context,
-                    PaymentScreen(cubit.cartTotal,
-                        cubit.userAddresses[cubit.radioIndex]));
-              },
-            ),
-          ],
-        );
-      }*/
+      /*defaultSnackBar(
+          context: context,
+          title: 'Please Check Your Internet Connection',
+          color: Colors.red,
+      );*/
     }
   }
 
   //check internet connection
   Future<bool> checkInternetConnection() async{
     final ConnectivityResult result = await Connectivity().checkConnectivity();
-    return result == ConnectivityResult.wifi||result ==ConnectivityResult.mobile;
+    bool res=(result == ConnectivityResult.wifi||result ==ConnectivityResult.mobile);
+    if(res){
+      emit(ShoppyInternetConnectedState());
+    }
+    else{
+      emit(ShoppyInternetNotConnectedState());
+    }
+    return res;
   }
 }

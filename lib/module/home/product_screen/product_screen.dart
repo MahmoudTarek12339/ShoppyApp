@@ -13,6 +13,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 
 import '../bottom_nav/home/cart/cart_screen.dart';
+import 'enter_height_screen.dart';
 
 
 class ProductScreen extends StatefulWidget {
@@ -348,7 +349,9 @@ class _ProductScreenState extends State<ProductScreen> {
                 'Size Guide',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
-              onPressed: (){},
+              onPressed: (){
+                navigateTo(context, EnterHeightScreen(category: widget.productModel.category,));
+              },
             ),
           ],
         ),
