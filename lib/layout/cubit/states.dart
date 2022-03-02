@@ -139,3 +139,25 @@ class ShoppyRemoveFromOrdersErrorState extends ShoppyStates{
 
 class ShoppyInternetConnectedState extends ShoppyStates{}
 class ShoppyInternetNotConnectedState extends ShoppyStates{}
+
+class ShoppyAppStartingState extends ShoppyStates{}
+class ShoppyLoginFirstState extends ShoppyStates{}
+
+class ShoppyGetBrandSuccessState extends ShoppyStates{}
+class ShoppyGetBrandErrorState extends ShoppyStates{
+  final String error;
+  ShoppyGetBrandErrorState(this.error);
+}
+
+
+class ShoppyUpdateForYouSuccessState extends ShoppyStates{}
+class ShoppyUpdateForYouErrorState extends ShoppyStates{
+  final String error;
+  ShoppyUpdateForYouErrorState(this.error);
+}
+
+class ShoppyGetForYouSuccessState extends ShoppyStates{}
+class ShoppyGetForYouErrorState extends ShoppyStates{
+  final String error;
+  ShoppyGetForYouErrorState(this.error);
+}

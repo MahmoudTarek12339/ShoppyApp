@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shoppy/layout/cubit/states.dart';
+import 'package:shoppy/shared/components/components.dart';
 import 'cubit/cubit.dart';
 
 class ShoppyLayout extends StatelessWidget {
@@ -9,13 +10,21 @@ class ShoppyLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
-      listener: (context,state){},
+      listener: (context,state){
+        if(state is ShoppyInternetNotConnectedState){
+          defaultSnackBar(
+              context: context,
+              title: 'you are currently offline',
+              color: Colors.black);
+        }
+      },
       builder:(context,state){
         var cubit=ShoppyCubit.get(context);
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          appBar: cubit.currentIndex==0?null:
-          AppBar(
+          appBar: cubit.currentIndex==0?
+            null
+              :AppBar(
             title: Text(cubit.titles[cubit.currentIndex]),
             centerTitle: true,
             backgroundColor: Theme.of(context).focusColor,
@@ -31,6 +40,10 @@ class ShoppyLayout extends StatelessWidget {
               BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.home),
                 label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: FaIcon(FontAwesomeIcons.compass),
+                label: 'Brands',
               ),
               BottomNavigationBarItem(
                   icon: FaIcon(FontAwesomeIcons.listAlt),

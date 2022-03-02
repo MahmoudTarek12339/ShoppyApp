@@ -1,3 +1,4 @@
+
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -44,26 +45,85 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
-      listener:(context,state){} ,
+      listener:(context,state){
+
+      } ,
       builder:(context,state){
         return SafeArea(
           child: Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body:SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  imageSlider(),
-                  clothesInfo(
-                    context: context,
-                    title: widget.productModel.productName,
-                    description: widget.productModel.description,
-                    rate: widget.productModel.rate,
+            body:Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      imageSlider(),
+                      clothesInfo(
+                        context: context,
+                        title: widget.productModel.productName,
+                        description: widget.productModel.description,
+                        rate: widget.productModel.rate,
+                      ),
+                      sizeList(),
+                      addCart(myContext: context,cubit: ShoppyCubit.get(context)),
+                    ],
                   ),
-                  sizeList(),
-                  addCart(myContext: context,cubit: ShoppyCubit.get(context)),
-                ],
-              ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 25,right: 25,top:20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).focusColor.withOpacity(0.8),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: Theme.of(context).primaryColor,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Badge(
+                        position: BadgePosition.topEnd(top: -5, end: -2),
+                        animationType:BadgeAnimationType.slide,
+                        badgeContent: Text(
+                          '${ShoppyCubit.get(context).cart.length}',
+                          style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.bold),
+                        ),
+                        child: InkWell(
+                          onTap: (){
+                            navigateTo(context, CartScreen());
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).focusColor.withOpacity(0.4),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.shopping_cart,
+                              color: Theme.of(context).primaryColor,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         );
@@ -146,59 +206,6 @@ class _ProductScreenState extends State<ProductScreen> {
                 itemCount: colorSelected.length),
           )
       ),
-      Container(
-        padding: EdgeInsets.only(left: 25,right: 25,top:20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(
-              onTap: (){
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).focusColor.withOpacity(0.8),
-                  shape: BoxShape.circle,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Theme.of(context).primaryColor,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ),
-            Badge(
-                position: BadgePosition.topEnd(top: -7, end: -2),
-                animationType:BadgeAnimationType.slide,
-                badgeContent: Text(
-                  '${ShoppyCubit.get(context).cart.length}',
-                  style: TextStyle(color: Colors.white),
-                ),
-                child: InkWell(
-                  onTap: (){
-                    navigateTo(context, CartScreen());
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).focusColor.withOpacity(0.4),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.shopping_cart,
-                      color: Theme.of(context).primaryColor,
-                      size: 20,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      )
     ],
   );
 

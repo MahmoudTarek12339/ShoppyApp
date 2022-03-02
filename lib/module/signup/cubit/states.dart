@@ -46,3 +46,5 @@ class ShoppyFaceBookLoginErrorState extends ShoppySignupStates{
   ShoppyFaceBookLoginErrorState(this.error);
 }
 
+class ShoppyInternetConnectedState extends ShoppySignupStates{}
+class ShoppyInternetNotConnectedState extends ShoppySignupStates{}

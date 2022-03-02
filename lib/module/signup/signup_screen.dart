@@ -27,6 +27,15 @@ class SignupScreen extends StatelessWidget {
       create: (BuildContext context)=>ShoppySignupCubit(),
       child: BlocConsumer<ShoppySignupCubit,ShoppySignupStates>(
           listener: (context,state){
+            //offline handling
+            if(state is ShoppyInternetNotConnectedState){
+              defaultSnackBar(
+                  context: context,
+                  title: 'you are currently offline',
+                  color: Colors.black);
+            }
+
+            //signup Successfully
             if(state is ShoppyGoogleLoginSuccessState){
               GoogleSignInAccount? myGoogleUser=ShoppySignupCubit.get(context).myGoogleUser;
               defaultSnackBar(
@@ -60,6 +69,7 @@ class SignupScreen extends StatelessWidget {
                 title: state.error,
               );
             }
+            //error SignUp
             else if(state is ShoppyFaceBookLoginErrorState){
               defaultSnackBar(
                 context: context,

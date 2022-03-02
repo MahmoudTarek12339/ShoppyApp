@@ -40,10 +40,15 @@ class SavedAddressesScreen extends StatelessWidget {
             backgroundColor: Theme.of(context).focusColor,
             actions: [
               IconButton(
-                onPressed: (){
-                  navigateTo(context, UserLocationMapScreen(
-                    isCart: false,
-                  ));
+                onPressed: ()async{
+                  bool connected=await cubit.checkInternetConnection();
+                  if(connected){
+                    navigateTo(
+                        context,
+                        UserLocationMapScreen(
+                          isCart: false,
+                        ));
+                  }
                 },
                 icon: Icon(Icons.add),
               )
@@ -161,10 +166,15 @@ class SavedAddressesScreen extends StatelessWidget {
         SizedBox(
           height: 50,
           child: ElevatedButton(
-            onPressed: (){
-              navigateTo(context, UserLocationMapScreen(
-                isCart: false,
-              ));
+            onPressed: ()async{
+              bool connected=await ShoppyCubit.get(context).checkInternetConnection();
+              if(connected){
+                navigateTo(
+                    context,
+                    UserLocationMapScreen(
+                      isCart: false,
+                    ));
+              }
             },
             child: Text(
               'Add Address',

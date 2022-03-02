@@ -1,12 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:clippy_flutter/arc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
-import 'package:shoppy/model/order_model.dart';
 import 'package:shoppy/model/product_model.dart';
 import 'package:badges/badges.dart';
+import 'package:shoppy/module/home/bottom_nav/category/category_products_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/home/cart/cart_screen.dart';
 import 'package:shoppy/module/home/profile/profile_screen.dart';
 import 'package:shoppy/module/login/login_screen.dart';
@@ -25,7 +26,6 @@ class HomeScreen extends StatelessWidget {
       builder: (context,state){
         var cubit=ShoppyCubit.get(context);
         User? user = FirebaseAuth.instance.currentUser;
-
         return  Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                       child: TextFormField(
                         enabled: false,
                         decoration: InputDecoration(
-                          hintText: "Search for Brand",
+                          hintText: "Search for Product, Brand",
                           hintStyle: TextStyle(color: Colors.grey),
                           prefixIcon: Icon(
                             Icons.search,
@@ -64,11 +64,14 @@ class HomeScreen extends StatelessWidget {
                             ? NetworkImage(user.photoURL.toString()) as ImageProvider
                             : AssetImage('assets/images/default_login2.jpg'),
                       ),
-                      onTap: () {
-                        if (user == null)
-                          navigateTo(context, LoginScreen());
-                        else
-                          navigateTo(context, ProfileScreen());
+                      onTap: () async{
+                        bool connected=await cubit.checkInternetConnection();
+                        if(connected){
+                          if (user == null)
+                            navigateTo(context, LoginScreen());
+                          else
+                            navigateTo(context, ProfileScreen());
+                        }
                       },
                     ),
                   ),
@@ -96,7 +99,7 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           body:cubit.products.isEmpty?
-            Center(child: CircularProgressIndicator(color: Theme.of(context).focusColor,),)
+          Center(child: CircularProgressIndicator(color: Theme.of(context).focusColor,),)
               :Padding(
             padding: const EdgeInsets.all(10.0),
             child: SingleChildScrollView(
@@ -164,44 +167,20 @@ class HomeScreen extends StatelessWidget {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       physics: BouncingScrollPhysics(),
-                      itemBuilder: (context,index)=>index==cubit.products.length?
-                      buildMoreItem(context: context)
-                          :buildCardItem(
+                      itemBuilder: (context,index)=>index==cubit.forYouProducts.length?
+                      buildMoreItem(
+                        context: context,
+                        products: cubit.forYouProducts,
+                        name: "For You"
+                      )
+                      :buildCardItem(
                         cubit: cubit,
                         context: context,
-                        productModel: cubit.products[index],
+                        productModel: cubit.forYouProducts[index],
                       ),
                       separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
-                      itemCount: cubit.products.length+1,
+                      itemCount: cubit.forYouProducts.length+1,
                     ),
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-
-                  //newest
-                  Text(
-                    ' Newest',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Container(
-                    height: 230,
-                    width: double.infinity,
-                    child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context,index)=>index==cubit.products.length?
-                        buildMoreItem(context: context)
-                            :buildCardItem(
-                          cubit: cubit,
-                          context: context,
-                          productModel: cubit.products[index],
-                        ),
-                        separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
-                        itemCount: cubit.products.length+1),
                   ),
                   SizedBox(
                     height: 15.0,
@@ -221,7 +200,11 @@ class HomeScreen extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         physics: BouncingScrollPhysics(),
                         itemBuilder: (context,index)=>index==cubit.products.length?
-                        buildMoreItem(context: context)
+                        buildMoreItem(
+                          context: context,
+                          products: [],
+                          name: 'Best Sell',
+                        )
                             :buildCardItem(
                           cubit: cubit,
                           context: context,
@@ -277,121 +260,132 @@ class HomeScreen extends StatelessWidget {
   }){
     return InkWell(
       onTap: (){
+        cubit.updateForYouProducts(brandName:productModel.brandName,brandCategory:productModel.category);
         navigateTo(context, ProductScreen(productModel));
       },
-      child: Container(
-        width: 160.0,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 3.0,
-                  blurRadius: 5.0
-              ),
-            ]
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: (){
-                    cubit.updateWishList(productUid: productModel.productUid);
-                  },
-                  icon:cubit.favorites.contains(productModel.productUid)?
-                        Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  )
-                        :Icon(
-                    Icons.favorite_outlined,
-                    color: Colors.black,
-                  )
+      child: SizedBox(
+        height: 200.0,
+        child: Container(
+          width: 160.0,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 3.0,
+                    blurRadius: 5.0
                 ),
-                IconButton(
-                  onPressed: (){
-                    cubit.addProductToCart(
-                        OrderModel(
-                          productName: productModel.productName,
-                          description: productModel.description,
-                          productUid: productModel.productUid,
-                          quantity: 1,
-                          price: productModel.price,
-                          photo: productModel.photos[0],
-                          size: productModel.sizes[0],
-                          color: productModel.colors[0],
-                          brandId: productModel.brandId,
-                        )
-                    );
-                  },
-                  icon: Icon(
-                    Icons.shopping_cart,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              width: double.infinity,
-              height: 140,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Image.network(
-                productModel.photos[0],
-                fit: BoxFit.fitHeight,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal:15,vertical: 5),
-              child: Row(
+              ]
+          ),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    '\$ ${productModel.price}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    height: 20,
-                    width: 39,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).focusColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal:3.0 ),
-                      child: Row(
-                        children: [
-                          textUtils(
-                            text: '${productModel.rate}',
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                  productModel.rate>0?
+                    Padding(
+                    padding: const EdgeInsets.only(left: 9),
+                    child: Arc(
+                      edge: Edge.BOTTOM,
+                      arcType: ArcType.CONVEY,
+                      height: 8.0,
+                      child: Container(
+                        color: Colors.redAccent,
+                        height: 40,
+                        width: 30,
+                        child: Center(
+                          child: Text(
+                            '${productModel.offer*100}%',
+                            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 10),
                           ),
-                          Icon(Icons.star,color: Colors.white,size: 13,),
-                        ],
+                        ),
                       ),
                     ),
+                  )
+                      :SizedBox(),
+                  IconButton(
+                    onPressed: (){
+                      cubit.updateWishList(productUid: productModel.productUid);
+                    },
+                    icon:cubit.favorites.contains(productModel.productUid)?
+                          Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
+                          :Icon(
+                      Icons.favorite_outlined,
+                      color: Colors.black,
+                    )
                   ),
                 ],
               ),
-            ),
-          ],
+              Container(
+                width: double.infinity,
+                height: 140,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Image.network(
+                  productModel.photos[0],
+                  fit: BoxFit.fitHeight,
+                  loadingBuilder: (context, child, loadingProgress) => loadingProgress==null?child:Center(child: CircularProgressIndicator()),
+                  errorBuilder: (context, error, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),
+              ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:15,vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '\$ ${productModel.price}',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(
+                      height: 20,
+                      width: 39,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).focusColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal:3.0 ),
+                        child: Row(
+                          children: [
+                            textUtils(
+                              text: '${productModel.rate}',
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            Icon(Icons.star,color: Colors.white,size: 13,),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   //more Arrow Icon Code
-  Widget buildMoreItem({required context})=> InkWell(
+  Widget buildMoreItem({
+    required context,
+    required List<ProductModel> products,
+    required String name,
+  })=> InkWell(
     onTap: (){
-
+      navigateTo(context, CategoryProductsScreen( products,name));
     },
     child: Center(
           child:Icon(

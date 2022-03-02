@@ -37,3 +37,6 @@ class ShoppyResetPasswordErrorState extends ShoppyLoginStates{
   final String error;
   ShoppyResetPasswordErrorState(this.error);
 }
+
+class ShoppyInternetConnectedState extends ShoppyLoginStates{}
+class ShoppyInternetNotConnectedState extends ShoppyLoginStates{}

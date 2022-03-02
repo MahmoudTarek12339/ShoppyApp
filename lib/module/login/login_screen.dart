@@ -23,7 +23,14 @@ class LoginScreen extends StatelessWidget {
       create: (BuildContext context)=>ShoppyLoginCubit(),
       child: BlocConsumer<ShoppyLoginCubit,ShoppyLoginStates>(
           listener: (context,state){
-
+            //offline handling
+            if(state is ShoppyInternetNotConnectedState){
+              defaultSnackBar(
+                  context: context,
+                  title: 'you are currently offline',
+                  color: Colors.black);
+            }
+            //login successfully
             if(state is ShoppyLoginSuccessState){
               CacheHelper.saveData(
                   key: 'uId',
@@ -57,7 +64,7 @@ class LoginScreen extends StatelessWidget {
                 navigateAndFinish(context,ShoppyLayout());
               });
             }
-
+            //login Error
             else if(state is ShoppyLoginErrorState){
               defaultSnackBar(
                 context: context,

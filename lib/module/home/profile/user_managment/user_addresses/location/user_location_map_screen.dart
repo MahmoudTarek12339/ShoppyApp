@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/module/home/profile/user_managment/user_addresses/location/user_location_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:shoppy/shared/network/remote/location_service.dart';
@@ -85,13 +86,20 @@ class MapSampleState extends State<UserLocationMapScreen> {
               height: 60,
               child: ElevatedButton(
                 onPressed: ()async{
-                  Placemark place=await getPosition(userLocation: selectedLocation,);
-
-                  navigateTo(context, UserLocationScreen(
-                    userPlace: place,
-                    currentPosition: selectedLocation!,
-                    isCart: widget.isCart,
-                  ));
+                  bool connected=await ShoppyCubit.get(context).checkInternetConnection();
+                  if(connected){
+                    Placemark place = await getPosition(
+                      userLocation: selectedLocation,
+                    );
+                    navigateTo(
+                      context,
+                      UserLocationScreen(
+                        userPlace: place,
+                        currentPosition: selectedLocation!,
+                        isCart: widget.isCart,
+                      )
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

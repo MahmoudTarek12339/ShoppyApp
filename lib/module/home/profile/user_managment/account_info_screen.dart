@@ -6,8 +6,6 @@ import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/shared/components/components.dart';
 
-import 'package:shoppy/module/home/bottom_nav/home/home_screen.dart';
-
 class AccountInfoScreen extends StatelessWidget {
   final TextEditingController nameController=TextEditingController();
   final GlobalKey<FormState> formKey=GlobalKey<FormState>();
