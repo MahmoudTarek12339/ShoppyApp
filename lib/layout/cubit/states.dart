@@ -161,3 +161,8 @@ class ShoppyGetForYouErrorState extends ShoppyStates{
   final String error;
   ShoppyGetForYouErrorState(this.error);
 }
+
+
+class ShoppySendImagesLoadingState extends ShoppyStates{}
+class ShoppySendImagesSuccessState extends ShoppyStates{}
+class ShoppySendImagesErrorState extends ShoppyStates{}

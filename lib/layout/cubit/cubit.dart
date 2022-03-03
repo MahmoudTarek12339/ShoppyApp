@@ -20,6 +20,7 @@ import 'package:shoppy/module/home/bottom_nav/help_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/home/home_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/wish_list_screen.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
+import 'package:shoppy/shared/network/remote/size_service.dart';
 
 
 class ShoppyCubit extends Cubit<ShoppyStates> {
@@ -469,7 +470,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
         .collection('admins')
         .get()
         .then((value) {
-      value.docs.forEach((element) {
+       value.docs.forEach((element) {
         String brandName =element.data()['brandName'];
         String brandId = element.id;
         FirebaseFirestore.instance
@@ -478,12 +479,13 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
             .collection('products')
             .get().then((value) {
           value.docs.forEach((element2) {
-            if(element2.data().isNotEmpty)
-              products.add(ProductModel.fromJson(element2.data(), element2.id,brandName,brandId));
+            if(element2.data().isNotEmpty&&element2.data()['name']!=null) {
+              products.add(ProductModel.fromJson(
+                  element2.data(), element2.id, brandName, brandId));
+            }
           });
         });
       });
-      getForYouProducts();
       emit(ShoppyGetAllProductsSuccessState());
     }).catchError((onError){
       emit(ShoppyGetAllProductsErrorState(onError.toString()));
@@ -502,21 +504,23 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get()
           .then((value) {
-        if (value.data()!['for You'] != null) {
+        if (value.data()!.isNotEmpty) {
           forYouAnalysis =value.data()!['for You'].map((e) =>ForYouModel.fromJson(e)).toList().cast<ForYouModel>() ;
           forYouAnalysis.forEach((e) {
             print(e.lastCategory);
             print(e.lastBrand);
             if (e.lastCategory != null && e.lastBrand != null)
             {
-              var p=products.where((element) => element.brandName == e.lastBrand && element.category == e.lastCategory).toList();
+              print(products.length);
+              List<ProductModel> p=products.where((element) => element.brandId==e.lastBrand&&element.category==e.lastCategory).toList();
+              print(p.length);
               forYouProducts.addAll(p);
             }
             else if (e.lastCategory != null) {
               forYouProducts.addAll(products.where((element) => element.category == e.lastCategory).toList());
             }
             else {
-              forYouProducts.addAll(products.where((element) => element.brandName == e.lastBrand).toList());
+              forYouProducts.addAll(products.where((element) => element.brandId == e.lastBrand).toList());
             }
           });
         }
@@ -588,8 +592,6 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
           userOrders.add(UserOrderModel.fromJson(element.data(),element.id));
         });
         emit(ShoppyGetOrdersSuccessState());
-        print('User Order Length :');
-        print(userOrders.length);
       }).catchError((error){
         emit(ShoppyGetOrdersErrorState(error.toString()));
         print(error.toString());
@@ -749,12 +751,33 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     if(connection) {
       emit(ShoppyAppStartingState());
       await getAllProducts();
+      await Future.delayed(const Duration(milliseconds: 100));
+      getForYouProducts();
       getFavorites();
       getAllBrands();
       getUserAddresses();
       getUserOrders();
       getCart();
     }
+  }
+
+  //send image to python
+  Future<List<String>> sendImages(var image,var image2,String category,String height)async{
+    emit(ShoppySendImagesLoadingState());
+    File file=File(image.path);
+    File file2=File(image2.path);
+    List<String> sizes=[];
+    await SizeService().sendDataToPython(
+        selectedImage: file,
+        selectedImage2: file2,
+        category: category,
+        height: height).then((value) {
+        sizes=value;
+        emit(ShoppySendImagesSuccessState());
+    }).catchError((error){
+      emit(ShoppySendImagesErrorState());
+    });
+    return sizes;
   }
 
   //check internet connection

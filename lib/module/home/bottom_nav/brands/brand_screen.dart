@@ -51,7 +51,7 @@ Widget buildBrandItem({
 })=>InkWell(
   onTap: (){
     List<ProductModel> brandProducts=cubit.products.where((element) => element.brandId==brandModel.brandUId).toList();
-    cubit.updateForYouProducts(brandName:brandModel.brandName,brandCategory:null);
+    cubit.updateForYouProducts(brandName:brandModel.brandUId,brandCategory:null);
     navigateTo(context, CategoryProductsScreen( brandProducts,brandModel.brandName,));
   },
   child: Container(

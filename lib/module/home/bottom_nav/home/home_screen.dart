@@ -260,7 +260,7 @@ class HomeScreen extends StatelessWidget {
   }){
     return InkWell(
       onTap: (){
-        cubit.updateForYouProducts(brandName:productModel.brandName,brandCategory:productModel.category);
+        cubit.updateForYouProducts(brandName:productModel.brandId,brandCategory:productModel.category);
         navigateTo(context, ProductScreen(productModel));
       },
       child: SizedBox(

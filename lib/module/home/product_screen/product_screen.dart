@@ -1,4 +1,5 @@
 
+
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +10,13 @@ import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/model/order_model.dart';
 import 'package:shoppy/model/product_model.dart';
+import 'package:shoppy/module/home/bottom_nav/category/category_products_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 
 import '../bottom_nav/home/cart/cart_screen.dart';
-import 'enter_height_screen.dart';
+import 'size_guide/enter_height_screen.dart';
 
 
 class ProductScreen extends StatefulWidget {
@@ -64,6 +66,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         title: widget.productModel.productName,
                         description: widget.productModel.description,
                         rate: widget.productModel.rate,
+                        cubit: ShoppyCubit.get(context),
                       ),
                       sizeList(),
                       addCart(myContext: context,cubit: ShoppyCubit.get(context)),
@@ -234,7 +237,8 @@ class _ProductScreenState extends State<ProductScreen> {
     required context,
     required title,
     required rate,
-    required description
+    required description,
+    required cubit
   })=>Container(
     padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
     child: Column(
@@ -254,11 +258,18 @@ class _ProductScreenState extends State<ProductScreen> {
                   SizedBox(
                     height: 5,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 3.0),
-                    child: Text(
-                      widget.productModel.brandName,
-                      style: Theme.of(context).textTheme.caption,
+                  InkWell(
+                    onTap: (){
+                      List<ProductModel> brandProducts=cubit.products.where((element) => element.brandId==widget.productModel.brandId).toList();
+                      cubit.updateForYouProducts(brandName:widget.productModel.brandId,brandCategory:null);
+                      navigateTo(context, CategoryProductsScreen( brandProducts,widget.productModel.brandName,));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Text(
+                        widget.productModel.brandName,
+                        style: Theme.of(context).textTheme.caption,
+                      ),
                     ),
                   ),
                 ],

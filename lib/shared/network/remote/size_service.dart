@@ -4,14 +4,14 @@ import 'dart:io';
 import 'package:http/http.dart'as http;
 class SizeService{
 
-  Future<String> sendDataToPython({
+  Future<List<String>> sendDataToPython({
     required File selectedImage,
     required File selectedImage2,
     required String category,
     required String height,
   })async{
     final request=http.MultipartRequest(
-        'POST',Uri.parse('http://10.0.2.2:4000/api'));
+        'POST',Uri.parse('https://d604-197-62-5-112.ngrok.io/upload'));
     final headers={"Content-type":"multipart/form-data"};
     request.files.add(
       http.MultipartFile('image',
@@ -27,7 +27,7 @@ class SizeService{
     final response=await request.send();
     http.Response res=await http.Response.fromStream(response);
     final resJson=jsonDecode(res.body);
-    String message=resJson['message'];
-    return message;
+    List<String> lst=resJson['message'];
+    return lst;
   }
 }
