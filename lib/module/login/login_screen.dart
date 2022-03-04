@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/module/login/cubit/states.dart';
 import 'package:shoppy/module/signup/signup_screen.dart';
@@ -32,6 +33,7 @@ class LoginScreen extends StatelessWidget {
             }
             //login successfully
             if(state is ShoppyLoginSuccessState){
+              ShoppyCubit.get(context).appStart(context: context);
               CacheHelper.saveData(
                   key: 'uId',
                   value: state.uId).then((value) {

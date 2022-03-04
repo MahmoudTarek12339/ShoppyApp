@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/shared/components/components.dart';
-import 'cubit/cubit.dart';
 
 class ShoppyLayout extends StatelessWidget {
 
@@ -16,6 +16,17 @@ class ShoppyLayout extends StatelessWidget {
               context: context,
               title: 'you are currently offline',
               color: Colors.black);
+        }
+        else if(state is ShoppyLoginFirstState){
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alertLogin(
+                  context: context,
+                  title: 'Login First To Save your data '
+              );
+            },
+          );
         }
       },
       builder:(context,state){
@@ -30,7 +41,9 @@ class ShoppyLayout extends StatelessWidget {
             backgroundColor: Theme.of(context).focusColor,
             elevation: 0.0,
           ),
-          body: cubit.screens[cubit.currentIndex],
+          body:(state is ShoppyInternetNotConnectedState ||state is SocialChangeBottomNavState) && ShoppyCubit.get(context).products.isEmpty?
+            buildOffline(context: context,cubit: ShoppyCubit.get(context))
+              : cubit.screens[cubit.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: cubit.currentIndex,
             onTap: (index){
@@ -63,4 +76,39 @@ class ShoppyLayout extends StatelessWidget {
       }
     );
   }
+  Widget buildOffline({required context,required cubit})=>Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        FaIcon(
+            FontAwesomeIcons.wifi,
+            size: 100,
+            color: Theme.of(context).focusColor.withOpacity(0.8)
+        ),
+        Text(
+          'Whoops',
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        SizedBox(height: 5,),
+        Text(
+          'Slow Or no Internet connection. ',
+          style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 16),
+        ),
+        SizedBox(height: 2,),
+        Text(
+          'Please check your internet setting',
+          style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 16),
+        ),
+        SizedBox(height: 15,),
+        defaultButton(
+          onPressFunction: (){
+            cubit.appStart(context:context);
+          },
+          text: 'Try Again',
+          context: context,
+          width: 150
+        )
+      ],
+    ),
+  );
 }

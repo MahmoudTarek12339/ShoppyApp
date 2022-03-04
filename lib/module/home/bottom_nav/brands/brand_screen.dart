@@ -19,25 +19,30 @@ class BrandScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
-          body: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              child: GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap: true,
-                mainAxisSpacing: 10.0,
-                crossAxisSpacing: 10.0,
-                childAspectRatio: 1/0.9,
-                physics: BouncingScrollPhysics(),
-                children: List.generate(
-                  cubit.brands.length,
-                      (index)=>buildBrandItem(
-                          context: context,
-                          cubit: ShoppyCubit.get(context),
-                          brandModel: cubit.brands[index])
+          body: OrientationBuilder(
+            builder: (context,orientation) {
+              bool isPortrait=orientation==Orientation.portrait;
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  child: GridView.count(
+                    crossAxisCount: isPortrait?2:3,
+                    shrinkWrap: true,
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
+                    childAspectRatio: isPortrait?1/0.9:1/1.1,
+                    physics: BouncingScrollPhysics(),
+                    children: List.generate(
+                      cubit.brands.length,
+                          (index)=>buildBrandItem(
+                              context: context,
+                              cubit: ShoppyCubit.get(context),
+                              brandModel: cubit.brands[index])
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              );
+            }
           ),
         );
       },

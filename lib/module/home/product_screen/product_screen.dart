@@ -2,6 +2,7 @@
 
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -68,7 +69,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         rate: widget.productModel.rate,
                         cubit: ShoppyCubit.get(context),
                       ),
-                      sizeList(),
+                      sizeList(recommendedSize:ShoppyCubit.get(context).getRecommendedSize(widget.productModel.category)),
                       addCart(myContext: context,cubit: ShoppyCubit.get(context)),
                     ],
                   ),
@@ -351,7 +352,9 @@ class _ProductScreenState extends State<ProductScreen> {
     ),
   );
 
-  Widget sizeList()=>Column(
+  Widget sizeList({
+  required String? recommendedSize,
+})=>Column(
     children: [
       Padding(
         padding: const EdgeInsets.only(left: 25.0,right: 20),
@@ -362,18 +365,116 @@ class _ProductScreenState extends State<ProductScreen> {
               'Choose your Size',
               style: Theme.of(context).textTheme.caption,
             ),
-            TextButton(
+            ElevatedButton(
               child: Text(
                 'Size Guide',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
+              style: ElevatedButton.styleFrom(primary: Theme.of(context).cardColor),
               onPressed: (){
-                navigateTo(context, EnterHeightScreen(category: widget.productModel.category,));
+                if(FirebaseAuth.instance.currentUser!=null){
+                  if (recommendedSize != null) {
+                    AlertDialog alertUpload = AlertDialog(
+                      title: Text(
+                        "Size Guide",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Theme.of(context).focusColor),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("You already have a recommended size",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(fontSize: 14)),
+                        ],
+                      ),
+                      backgroundColor: Theme.of(context).cardColor,
+                      actions: [
+                        TextButton(
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Theme.of(context).focusColor,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        TextButton(
+                          child: Text(
+                            "Add New",
+                            style: TextStyle(
+                              color: Theme.of(context).focusColor,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            navigateTo(
+                                context,
+                                EnterHeightScreen(
+                                  category: widget.productModel.category,
+                                ));
+                          },
+                        ),
+                      ],
+                    );
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return alertUpload;
+                      },
+                    );
+                  }
+                  else
+                    navigateTo(context, EnterHeightScreen(
+                      category: widget.productModel.category,
+                    ));
+                }
+                else{
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alertLogin(
+                        context: context,
+                        title: 'Login First to Use This Feature'
+                      );
+                    },
+                  );
+                }
               },
             ),
           ],
         ),
       ),
+      recommendedSize!=null?
+        Padding(
+          padding: const EdgeInsets.only(left: 25.0),
+          child: Row(
+            children: [
+              Text(
+                'Recommended Size:  ',
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .caption,
+              ),
+              Text(
+                recommendedSize,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .subtitle1,
+              ),
+          ],
+        ),
+      )
+          :Container(),
+
       Container(
         padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
         height: 65,
@@ -388,7 +489,7 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                 decoration: BoxDecoration(
-                  color: widget.currentSelected==index? Theme.of(context).focusColor.withOpacity(0.4):Theme.of(context).primaryColor,
+                  color: widget.currentSelected==index? Theme.of(context).focusColor.withOpacity(0.8):Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
                       color: Colors.grey.withOpacity(0.4)

@@ -57,7 +57,10 @@ class _EnterHeightScreenState extends State<EnterHeightScreen> {
                             if(value!.isEmpty){
                               return 'Please enter your Height';
                             }
-                            else if(int.parse(value)>250){
+                            else if(int.parse(value)>250||(int.parse(value)<100&&!isSwitched)){
+                              return 'Invalid Length';
+                            }
+                            else if(isSwitched&&(int.parse(value)>100||int.parse(value)<39)){
                               return 'Invalid Length';
                             }
                             else if(isSwitched&&value.length>2){

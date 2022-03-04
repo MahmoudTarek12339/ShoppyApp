@@ -22,232 +22,256 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
-      listener: (context,state){},
+      listener: (context,state){
+        if(state is UserLoggedOutSuccessState){
+          defaultSnackBar(
+            context: context,
+            color: Colors.green,
+            title: 'Logged out successfully',
+          );
+        }
+        else if(state is UserLoggedOutErrorState){
+          defaultSnackBar(
+            context: context,
+            color: Colors.red,
+            title: state.error,
+          );
+        }
+      },
       builder: (context,state){
         var cubit=ShoppyCubit.get(context);
         User? user = FirebaseAuth.instance.currentUser;
-        return  Scaffold(
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            titleSpacing: 10.0,
-            title: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25.0),
-                  color: Theme.of(context).iconTheme.color
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        navigateTo(context, SearchScreen());
-                      },
-                      child: TextFormField(
-                        enabled: false,
-                        decoration: InputDecoration(
-                          hintText: "Search for Product, Brand",
-                          hintStyle: TextStyle(color: Colors.grey),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.grey,
+        return  OrientationBuilder(
+          builder: (context,orientation) {
+            bool isPortrait=orientation==Orientation.portrait;
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                titleSpacing: 10.0,
+                title: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25.0),
+                      color: Theme.of(context).iconTheme.color
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            navigateTo(context, SearchScreen());
+                          },
+                          child: TextFormField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                              hintText: "Search for Product, Brand",
+                              hintStyle: TextStyle(color: Colors.grey),
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: InkWell(
-                      child: CircleAvatar(
-                        radius: 20.0,
-                        backgroundImage: user != null && user.photoURL != null
-                            ? NetworkImage(user.photoURL.toString()) as ImageProvider
-                            : AssetImage('assets/images/default_login2.jpg'),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: InkWell(
+                          child: CircleAvatar(
+                            radius: 20.0,
+                            backgroundImage: user != null && user.photoURL != null
+                                ? NetworkImage(user.photoURL.toString()) as ImageProvider
+                                : AssetImage('assets/images/default_login2.jpg'),
+                          ),
+                          onTap: () async{
+                            bool connected=await cubit.checkInternetConnection();
+                            if(connected){
+                              if (user == null)
+                                navigateTo(context, LoginScreen());
+                              else
+                                navigateTo(context, ProfileScreen());
+                            }
+                          },
+                        ),
                       ),
-                      onTap: () async{
-                        bool connected=await cubit.checkInternetConnection();
-                        if(connected){
-                          if (user == null)
-                            navigateTo(context, LoginScreen());
-                          else
-                            navigateTo(context, ProfileScreen());
-                        }
-                      },
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            actions: [
-              Badge(
-                position: BadgePosition.topEnd(top: 0, end: 3),
-                animationType:BadgeAnimationType.slide,
-                badgeContent: Text(
-                  cubit.cart.length.toString(),
-                  style: TextStyle(color: Colors.white,fontSize: 15),
                 ),
-                child: IconButton(
-                    onPressed: () {
-                      navigateTo(context, CartScreen());
-                    },
-                    icon: FaIcon(
-                      FontAwesomeIcons.shoppingCart,
-                      color: Theme.of(context).iconTheme.color,
-                      size: 25,
-                    )),
-              ),
-            ],
-          ),
-          body:cubit.products.isEmpty?
-          Center(child: CircularProgressIndicator(color: Theme.of(context).focusColor,),)
-              :Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //offers
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
+                actions: [
+                  Badge(
+                    position: BadgePosition.topEnd(top: 0, end: 3),
+                    animationType:BadgeAnimationType.slide,
+                    badgeContent: Text(
+                      cubit.cart.length.toString(),
+                      style: TextStyle(color: Colors.white,fontSize: 15),
                     ),
-                    child: CarouselSlider(
-                      items:[
-                        Image(image:NetworkImage('https://i.pinimg.com/564x/e6/74/8c/e6748c9d19f12257c8b6fa2b2a480dce.jpg'),width: double.infinity,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) => loadingProgress==null?child:Center(child: CircularProgressIndicator()),
-                          errorBuilder: (context, error, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),),
-                        Image(image:NetworkImage('https://i.pinimg.com/564x/ae/29/14/ae29149d86039e2c1b536a515bca1eb2.jpg'),width: double.infinity,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) => loadingProgress==null?child:Center(child: CircularProgressIndicator()),
-                          errorBuilder: (context, error, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),),
-                        Image(image:NetworkImage('https://i.pinimg.com/564x/b8/af/6b/b8af6b66d8d1aaa3251d5b1ff7cc62c4.jpg'),width: double.infinity,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) => loadingProgress==null?child:Center(child: CircularProgressIndicator()),
-                          errorBuilder: (context, error, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),),
-                        Image(image:NetworkImage('https://i.pinimg.com/736x/71/9a/a0/719aa07defbe8a2958ee74602bc19557.jpg'),width: double.infinity,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) => loadingProgress==null?child:Center(child: CircularProgressIndicator()),
-                          errorBuilder: (context, error, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),),
-                      ],
-                      options: CarouselOptions(
-                        height: 150.0,
-                        initialPage: 0,
-                        enableInfiniteScroll: true,
-                        reverse: false,
-                        autoPlay: true,
-                        autoPlayInterval: Duration(seconds: 3) ,
-                        autoPlayAnimationDuration:Duration(seconds: 1),
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        scrollDirection: Axis.horizontal,
-                        viewportFraction: 1.0,
-                        enlargeCenterPage: false,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-
-                  //for you
-                  Text(
-                    ' For you',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Container(
-                    height: 230,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context,index)=>index==cubit.forYouProducts.length?
-                      buildMoreItem(
-                        context: context,
-                        products: cubit.forYouProducts,
-                        name: "For You"
-                      )
-                      :buildCardItem(
-                        cubit: cubit,
-                        context: context,
-                        productModel: cubit.forYouProducts[index],
-                      ),
-                      separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
-                      itemCount: cubit.forYouProducts.length+1,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-
-                  //best sell
-                  Text(
-                    ' Best Sell',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Container(
-                    height: 230,
-                    child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context,index)=>index==cubit.products.length?
-                        buildMoreItem(
-                          context: context,
-                          products: [],
-                          name: 'Best Sell',
-                        )
-                            :buildCardItem(
-                          cubit: cubit,
-                          context: context,
-                          productModel: cubit.products[index],
-                        ),
-                        separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
-                        itemCount: cubit.products.length+1
-                    ),
-                  ),
-
-                  //random images
-                  SizedBox(
-                    height: 35.0,
-                  ),
-                  Text(
-                    ' Find your Inspiration',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Container(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      shrinkWrap: true,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
-                      childAspectRatio: 1/1.45,
-                      physics: NeverScrollableScrollPhysics(),
-                      children: List.generate(
-                        cubit.products.length,
-                            (index)=>buildCardItem(
-                          cubit: cubit,
-                          context: context,
-                          productModel: cubit.products[index],
-                        ),
-                      ),
-                    ),
+                    child: IconButton(
+                        onPressed: () {
+                          navigateTo(context, CartScreen());
+                        },
+                        icon: FaIcon(
+                          FontAwesomeIcons.shoppingCart,
+                          color: Theme.of(context).iconTheme.color,
+                          size: 25,
+                        )),
                   ),
                 ],
               ),
-            ),
-          ),
+              body:cubit.products.isEmpty?
+              Center(child: CircularProgressIndicator(color: Theme.of(context).focusColor,),)
+                  :Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //offers
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          width: isPortrait?null:500,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: CarouselSlider(
+                            items:[
+                              Image(image:NetworkImage('https://i.pinimg.com/564x/e6/74/8c/e6748c9d19f12257c8b6fa2b2a480dce.jpg'),width: double.infinity,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) => loadingProgress==null?child:Center(child: CircularProgressIndicator()),
+                                errorBuilder: (context, error, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),),
+                              Image(image:NetworkImage('https://i.pinimg.com/564x/ae/29/14/ae29149d86039e2c1b536a515bca1eb2.jpg'),width: double.infinity,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) => loadingProgress==null?child:Center(child: CircularProgressIndicator()),
+                                errorBuilder: (context, error, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),),
+                              Image(image:NetworkImage('https://i.pinimg.com/564x/b8/af/6b/b8af6b66d8d1aaa3251d5b1ff7cc62c4.jpg'),width: double.infinity,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) => loadingProgress==null?child:Center(child: CircularProgressIndicator()),
+                                errorBuilder: (context, error, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),),
+                              Image(image:NetworkImage('https://i.pinimg.com/736x/71/9a/a0/719aa07defbe8a2958ee74602bc19557.jpg'),width: double.infinity,
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) => loadingProgress==null?child:Center(child: CircularProgressIndicator()),
+                                errorBuilder: (context, error, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),),
+                            ],
+                            options: CarouselOptions(
+                              height: 150.0,
+                              initialPage: 0,
+                              enableInfiniteScroll: true,
+                              reverse: false,
+                              autoPlay: true,
+                              autoPlayInterval: Duration(seconds: 3) ,
+                              autoPlayAnimationDuration:Duration(seconds: 1),
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              scrollDirection: Axis.horizontal,
+                              viewportFraction: 1.0,
+                              enlargeCenterPage: false,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+
+                      //for you
+                      Text(
+                        ' For you',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        height: 230,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context,index)=>index==cubit.forYouProducts.length?
+                          buildMoreItem(
+                            context: context,
+                            products: cubit.forYouProducts,
+                            name: "For You"
+                          )
+                          :buildCardItem(
+                            cubit: cubit,
+                            context: context,
+                            productModel: cubit.forYouProducts[index],
+                          ),
+                          separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
+                          itemCount: cubit.forYouProducts.length+1,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+
+                      //best sell
+                      Text(
+                        ' Best Sell',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        height: 230,
+                        child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context,index)=>index==cubit.products.length?
+                            buildMoreItem(
+                              context: context,
+                              products: [],
+                              name: 'Best Sell',
+                            )
+                                :buildCardItem(
+                              cubit: cubit,
+                              context: context,
+                              productModel: cubit.products[index],
+                            ),
+                            separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
+                            itemCount: cubit.products.length+1
+                        ),
+                      ),
+
+                      //random images
+                      SizedBox(
+                        height: 35.0,
+                      ),
+                      Text(
+                        ' Find your Inspiration',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Container(
+                        child: GridView.count(
+                          crossAxisCount: isPortrait?2:3,
+                          shrinkWrap: true,
+                          mainAxisSpacing: 10.0,
+                          crossAxisSpacing: 10.0,
+                          childAspectRatio: isPortrait?1/1.45:1/1.1,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: List.generate(
+                            cubit.products.length,
+                                (index)=>buildCardItem(
+                              cubit: cubit,
+                              context: context,
+                              productModel: cubit.products[index],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
         );
       },
     );
@@ -395,4 +419,5 @@ class HomeScreen extends StatelessWidget {
           ),
       ),
   );
+
 }

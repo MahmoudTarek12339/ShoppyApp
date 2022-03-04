@@ -46,64 +46,66 @@ class AccountInfoScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Form(
               key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Email',
-                    style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 14.0),
-                  ),
-                  TextFormField(
-                    enabled: false,
-                    decoration: InputDecoration(
-                      hintText: '  '+'${user.email}',
-                      hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 18,),
-                      disabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText1!.color??Colors.white),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Email',
+                      style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 14.0),
+                    ),
+                    TextFormField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                        hintText: '  '+'${user.email}',
+                        hintStyle: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 18,),
+                        disabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText1!.color??Colors.white),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Text(
-                    'Full Name',
-                    style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 14.0),
-                  ),
-                  TextFormField(
-                    controller: nameController,
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 18,),
-                    decoration: InputDecoration(
-                      enabledBorder:UnderlineInputBorder(
-                        borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText1!.color??Colors.white),
-                      ),
-                      focusedBorder:UnderlineInputBorder(
-                        borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText1!.color??Colors.white),
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
+                    SizedBox(
+                      height: 25,
                     ),
-                    validator: (value){
-                      if(value!.isEmpty){
-                        return 'Name must n\'t Be Empty';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 70,),
-                  defaultButton(
-                    onPressFunction: ()async{
-                      if(formKey.currentState!.validate()){
-                        ShoppyCubit.get(context).changeName(name: nameController.text);
-                      }
-                    },
-                    text: 'Save',
-                    context: context,
-                  ),
-                  if(state is ShoppyChangeNameLoadingState)
-                    LinearProgressIndicator(),
-                ],
+                    Text(
+                      'Full Name',
+                      style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 14.0),
+                    ),
+                    TextFormField(
+                      controller: nameController,
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 18,),
+                      decoration: InputDecoration(
+                        enabledBorder:UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText1!.color??Colors.white),
+                        ),
+                        focusedBorder:UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText1!.color??Colors.white),
+                        ),
+                        errorBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                      ),
+                      validator: (value){
+                        if(value!.isEmpty){
+                          return 'Name must n\'t Be Empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 70,),
+                    defaultButton(
+                      onPressFunction: ()async{
+                        if(formKey.currentState!.validate()){
+                          ShoppyCubit.get(context).changeName(name: nameController.text);
+                        }
+                      },
+                      text: 'Save',
+                      context: context,
+                    ),
+                    if(state is ShoppyChangeNameLoadingState)
+                      LinearProgressIndicator(),
+                  ],
+                ),
               ),
             ),
           ),

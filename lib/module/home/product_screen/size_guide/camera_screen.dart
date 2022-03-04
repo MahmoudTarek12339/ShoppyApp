@@ -20,11 +20,12 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController cameraController;
   late Future<void> _initializeControllerFuture;
-  List<String> sizes=[];
+  List<String?> sizes=[];
   var image;
   var image2;
 
   int currentPicture=0;
+  bool isFlashOn=false;
   final List<String> model=[
     'assets/poses/frontModel.png',
     'assets/poses/side_model.png'
@@ -37,6 +38,7 @@ class _CameraScreenState extends State<CameraScreen> {
       ResolutionPreset.medium,
     );
     _initializeControllerFuture = cameraController.initialize();
+    cameraController.setFlashMode(FlashMode.off);
   }
   @override
   void dispose() {
@@ -97,14 +99,21 @@ class _CameraScreenState extends State<CameraScreen> {
           );
         }
         else if(state is ShoppySendImagesSuccessState){
-          Navigator.pop(context,sizes);
-          Navigator.pop(context,sizes);
-          Navigator.pop(context,sizes);
-          Navigator.pop(context,sizes);
-          Navigator.pop(context,sizes);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          ShoppyCubit.get(context).setUserSizes(sizes:sizes,index:widget.clothing);
         }
         else if(state is ShoppySendImagesErrorState){
           Navigator.pop(context);
+          setState(() {
+            currentPicture=0;
+            image2=null;
+            image=null;
+          });
           defaultSnackBar(
               context: context,
               title: 'Error',
@@ -129,14 +138,37 @@ class _CameraScreenState extends State<CameraScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Stack(
-                          alignment: Alignment.center,
                           children:[
                             CameraPreview(cameraController),
-                            Image.asset(
-                              model[currentPicture],
-                              fit: BoxFit.fitHeight,
-                              height: 400,
+                            Align(
+                              alignment: Alignment.center,
+                              child: Image.asset(
+                                model[currentPicture],
+                                fit: BoxFit.fitHeight,
+                                height: 400,
+                              ),
                             ),
+                            Align(
+                              alignment:Alignment.topRight,
+                              child: IconButton(
+                                icon:isFlashOn?Icon(Icons.flash_off):Icon(Icons.flash_on),
+                                onPressed: (){
+                                  if(isFlashOn){
+                                    setState(() {
+                                      cameraController.setFlashMode(FlashMode.off);
+                                      isFlashOn=!isFlashOn;
+                                    });
+                                  }
+                                  else{
+                                    setState(() {
+                                      cameraController.setFlashMode(FlashMode.torch);
+                                      isFlashOn=!isFlashOn;
+                                    });
+                                  }
+
+                                },
+                              ),
+                            )
                           ]
                       ),
                       Padding(

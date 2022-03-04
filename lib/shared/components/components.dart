@@ -1,7 +1,8 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/shared/styles/colors.dart';
 
 //default button style
@@ -222,39 +223,46 @@ Widget buildLogo(context, screenTitle, height) {
 }
 
 
-AlertDialog internetAlert({
+AlertDialog alertLogin(
+{
   required context,
-  required cubit,
-})=>AlertDialog(
+  required String title,
+}) => AlertDialog(
   title: Text(
-    "No Internet Connection",
-    style: Theme.of(context)
-        .textTheme
-        .bodyText1!
-        .copyWith(color: Theme.of(context).focusColor),
+    "Login",
+    style:Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).focusColor),
   ),
-  content:Text('Please Check you Internet Connection'),
+  content: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(
+          title,
+          style:Theme.of(context).textTheme.subtitle1
+      ),
+    ],
+  ),
   backgroundColor: Theme.of(context).cardColor,
   actions: [
     TextButton(
       child: Text(
-        "No",
+        "Cancel",
         style: TextStyle(
           color: Theme.of(context).focusColor,
         ),
       ),
       onPressed: () {
-        exit(0);
+        Navigator.pop(context);
       },
     ),
     TextButton(
-      child: Text("Try Again",
-          style: TextStyle(
-            color: Theme.of(context).focusColor,
-          )),
+      child: Text(
+        "Login",
+        style: TextStyle(
+          color: Theme.of(context).focusColor,
+        ),
+      ),
       onPressed: () {
-        Navigator.pop(context);
-        cubit.checkInternetConnection();
+        navigateTo(context, LoginScreen());
       },
     ),
   ],

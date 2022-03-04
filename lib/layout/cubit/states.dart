@@ -166,3 +166,15 @@ class ShoppyGetForYouErrorState extends ShoppyStates{
 class ShoppySendImagesLoadingState extends ShoppyStates{}
 class ShoppySendImagesSuccessState extends ShoppyStates{}
 class ShoppySendImagesErrorState extends ShoppyStates{}
+
+class ShoppySendSizesSuccessState extends ShoppyStates{}
+class ShoppySendSizesErrorState extends ShoppyStates{
+  final String error;
+  ShoppySendSizesErrorState(this.error);
+}
+
+class ShoppyGetSizesSuccessState extends ShoppyStates{}
+class ShoppyGetSizesErrorState extends ShoppyStates{
+  final String error;
+  ShoppyGetSizesErrorState(this.error);
+}

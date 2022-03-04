@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,23 +16,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
-      listener: (context,state){
-        if(state is UserLoggedOutSuccessState){
-          Navigator.pop(context);
-          defaultSnackBar(
-            context: context,
-            color: Colors.green,
-            title: 'Logged out successfully',
-          );
-        }
-        else if(state is UserLoggedOutErrorState){
-          defaultSnackBar(
-            context: context,
-            color: Colors.red,
-            title: state.error,
-          );
-        }
-      },
+      listener: (context,state){},
       builder: (context,state){
         User? user = FirebaseAuth.instance.currentUser;
         return Scaffold(
@@ -43,122 +28,125 @@ class ProfileScreen extends StatelessWidget {
           ),
           body: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 75.0,
-                  backgroundImage:  user!.photoURL != null
-                      ? NetworkImage(user.photoURL.toString()) as ImageProvider
-                      : AssetImage('assets/images/default_login2.jpg'),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  user.displayName.toString(),
-                  style: Theme.of(context).textTheme.bodyText1,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                MaterialButton(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  elevation: 1.0,
-                  onPressed: (){
-                    navigateTo(context, AccountInfoScreen());
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Account info',
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                      Spacer(),
-                      Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).iconTheme.color,),
-                    ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 75.0,
+                    backgroundImage:  user!.photoURL != null
+                        ? NetworkImage(user.photoURL.toString()) as ImageProvider
+                        : AssetImage('assets/images/default_login2.jpg'),
                   ),
-                ),
-                MaterialButton(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  elevation: 1.0,
-                  onPressed: (){
-                    navigateTo(context, SavedAddressesScreen());
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Saved Addresses',
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                      Spacer(),
-                      Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).iconTheme.color,),
-                    ],
+                  SizedBox(
+                    height: 5,
                   ),
-                ),
-                MaterialButton(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  elevation: 1.0,
-                  onPressed: (){
-                    navigateTo(context, ResetPasswordScreen());
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Change Password',
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                      Spacer(),
-                      Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).iconTheme.color,),
-                    ],
+                  Text(
+                    user.displayName.toString(),
+                    style: Theme.of(context).textTheme.bodyText1,
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                MaterialButton(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  elevation: 1.0,
-                  onPressed: (){
-                    navigateTo(context, OrdersScreen());
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Orders',
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                      Spacer(),
-                      Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).iconTheme.color,),
-                    ],
+                  SizedBox(
+                    height: 20.0,
                   ),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                TextButton(
-                    onPressed: ()async{
-                      await ShoppyCubit.get(context).signOut();
+                  MaterialButton(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    elevation: 1.0,
+                    onPressed: (){
+                      navigateTo(context, AccountInfoScreen());
                     },
                     child: Row(
-                      mainAxisAlignment:MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Log out',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).focusColor),
+                          'Account info',
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        FaIcon(FontAwesomeIcons.signOutAlt,color: Theme.of(context).focusColor,size: 17,)
+                        Spacer(),
+                        Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).iconTheme.color,),
                       ],
                     ),
-
                   ),
-              ],
+                  MaterialButton(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    elevation: 1.0,
+                    onPressed: (){
+                      navigateTo(context, SavedAddressesScreen());
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Saved Addresses',
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                        Spacer(),
+                        Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).iconTheme.color,),
+                      ],
+                    ),
+                  ),
+                  MaterialButton(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    elevation: 1.0,
+                    onPressed: (){
+                      navigateTo(context, ResetPasswordScreen());
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Change Password',
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                        Spacer(),
+                        Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).iconTheme.color,),
+                      ],
+                    ),
+                  ),
+                  MaterialButton(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    elevation: 1.0,
+                    onPressed: (){
+                      navigateTo(context, OrdersScreen());
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Orders',
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                        Spacer(),
+                        Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).iconTheme.color,),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                        ShoppyCubit.get(context).signOut();
+                      },
+                      child: Row(
+                        mainAxisAlignment:MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Log out',
+                            style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).focusColor),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          FaIcon(FontAwesomeIcons.signOutAlt,color: Theme.of(context).focusColor,size: 17,)
+                        ],
+                      ),
+
+                    ),
+                ],
+              ),
             ),
           )
         );

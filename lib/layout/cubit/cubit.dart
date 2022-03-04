@@ -95,14 +95,13 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     bool connected=await checkInternetConnection();
     if(connected){
       await FirebaseAuth.instance.signOut().then((value) {
-        CacheHelper.removeData(key: 'token').then((value) {
-          if (value) {
-            favorites.clear();
-            cart.clear();
-            cartTotal = 0;
-            userOrders.clear();
-            emit(UserLoggedOutSuccessState());
-          }
+        CacheHelper.removeData(key: 'uId').then((value){
+          favorites.clear();
+          cart.clear();
+          cartTotal = 0;
+          userSizes=[];
+          forYouAnalysis=[];
+          emit(UserLoggedOutSuccessState());
         }).catchError((onError) {
           emit(UserLoggedOutErrorState(onError.toString()));
         });
@@ -189,28 +188,30 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
 
   void addProductToCart(OrderModel orderModel)async{
     bool connected=await checkInternetConnection();
-    if(connected){
-      bool increase = false;
+    {
+      if (connected) {
+        bool increase = false;
 
-      if (cart
-          .where((element) =>
+        if (cart
+            .where((element) =>
+                element.productUid == orderModel.productUid &&
+                element.color == orderModel.color &&
+                element.size == orderModel.size)
+            .isNotEmpty) {
+          int index = cart.indexWhere((element) =>
               element.productUid == orderModel.productUid &&
               element.color == orderModel.color &&
-              element.size == orderModel.size)
-          .isNotEmpty) {
-        int index = cart.indexWhere((element) =>
-            element.productUid == orderModel.productUid &&
-            element.color == orderModel.color &&
-            element.size == orderModel.size);
-        cart[index].quantity += 1;
-        cartTotal += orderModel.price;
-        increase = true;
-      } else {
-        cart.add(orderModel);
-        cartTotal += orderModel.price;
+              element.size == orderModel.size);
+          cart[index].quantity += 1;
+          cartTotal += orderModel.price;
+          increase = true;
+        } else {
+          cart.add(orderModel);
+          cartTotal += orderModel.price;
+        }
+        emit(ShoppyUpdateCartState());
+        addProductToCartFB(orderModel, increase);
       }
-      emit(ShoppyUpdateCartState());
-      addProductToCartFB(orderModel, increase);
     }
   }
   void removeProductFromCart(OrderModel orderModel)async{
@@ -437,9 +438,6 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
         emit(ShoppyGetFavoriteErrorState(onError.toString()));
       });
     }
-    else{
-      emit(ShoppyLoginFirstState());
-    }
   }
 
   List<ProductModel> searchList=[];
@@ -544,7 +542,8 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
 }){
     if(FirebaseAuth.instance.currentUser!=null&&forYouAnalysis.where((element) => element.lastBrand==brandName&&element.lastCategory==brandCategory,).toList().isEmpty){
       if(forYouAnalysis.length>=2){
-        forYouAnalysis[0]= ForYouModel(brandName, brandCategory);
+        forYouAnalysis[0]=forYouAnalysis[1];
+        forYouAnalysis[1]= ForYouModel(brandName, brandCategory);
       }
       else{
         forYouAnalysis.add(ForYouModel(brandName, brandCategory));
@@ -751,22 +750,23 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     if(connection) {
       emit(ShoppyAppStartingState());
       await getAllProducts();
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 500));
       getForYouProducts();
       getFavorites();
       getAllBrands();
       getUserAddresses();
       getUserOrders();
       getCart();
+      getRecSizes();
     }
   }
 
   //send image to python
-  Future<List<String>> sendImages(var image,var image2,String category,String height)async{
+  Future<List<String?>> sendImages(var image,var image2,String category,String height)async{
     emit(ShoppySendImagesLoadingState());
     File file=File(image.path);
     File file2=File(image2.path);
-    List<String> sizes=[];
+    List<String?> sizes=[];
     await SizeService().sendDataToPython(
         selectedImage: file,
         selectedImage2: file2,
@@ -776,8 +776,76 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
         emit(ShoppySendImagesSuccessState());
     }).catchError((error){
       emit(ShoppySendImagesErrorState());
+      print(error);
     });
     return sizes;
+  }
+
+  List<String?> userSizes=[];
+
+  List<String> globalSizes=['XS','S','M','L','XL','2XL','3XL','4XL','5XL'];
+  void setUserSizes({required List<String?> sizes,required index}){
+    if(FirebaseAuth.instance.currentUser!=null){
+      if(index==0){
+        print('increase');
+        String? shirt=globalSizes[globalSizes.indexWhere((element) => element==sizes[0])+1];
+        String? tShirts=globalSizes[globalSizes.indexWhere((element) => element==sizes[1])+1];
+        String? pants=sizes[2];
+        String? shorts=globalSizes[globalSizes.indexWhere((element) => element==sizes[3])+1];
+        String? jacket=globalSizes[globalSizes.indexWhere((element) => element==sizes[4])+1];
+        userSizes=[shirt,tShirts,pants,shorts,jacket];
+      }
+      else
+        userSizes = sizes;
+      FirebaseFirestore.instance
+          .collection('customers')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({'sizes': userSizes})
+          .then((value){
+            emit(ShoppySendSizesSuccessState());
+      }).catchError((error) {
+        emit(ShoppySendSizesErrorState(error.toString()));
+      });
+    }
+  }
+  String? getRecommendedSize(String category){
+    if(userSizes.isNotEmpty){
+      switch (category) {
+        case 'Shirts':
+          return userSizes[0];
+        case 'T-shirts':
+          return userSizes[1];
+        case 'Pants':
+          return userSizes[2];
+        case 'Shorts':
+          return userSizes[3];
+        case 'Jackets':
+          return userSizes[4];
+        default:
+          return 'Error';
+      }
+    }
+    else{
+      return null;
+    }
+  }
+  void getRecSizes()async{
+    bool connected=await checkInternetConnection();
+    if(connected){
+      if(FirebaseAuth.instance.currentUser!=null){
+        FirebaseFirestore.instance
+            .collection('customers')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .get()
+            .then((value){
+            userSizes=value.data()!['sizes'];
+            emit(ShoppyGetSizesSuccessState());
+        }).catchError((error){
+          emit(ShoppyGetSizesErrorState(error.toString()));
+        });
+
+      }
+    }
   }
 
   //check internet connection
