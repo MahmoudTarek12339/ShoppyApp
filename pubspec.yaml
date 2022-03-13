@@ -48,6 +48,7 @@ dependencies:
   clippy_flutter: ^2.0.0-nullsafety.1
   flutter_offline: ^2.1.0
   camera: ^0.9.4+14
+  showcaseview: ^1.1.5
   #payment
   pay: ^1.0.8
 

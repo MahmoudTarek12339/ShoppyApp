@@ -46,7 +46,7 @@ class _GuideScreenState extends State<GuideScreen> {
                     children: [
                       CircleAvatar(
                         child: Text(
-                          index.toString(),
+                          (index+1).toString(),
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                         radius: 12,
