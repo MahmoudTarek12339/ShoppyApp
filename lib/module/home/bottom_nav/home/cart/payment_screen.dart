@@ -1,8 +1,10 @@
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:pay/pay.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
@@ -20,24 +22,34 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  List<String> titles=[
-    '  PayPal',
-    'Credit Card',
-    '  Apple Pay',
-    ' Google Pay',
-    'Cash'
-  ];
+
   int radioPaymentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
 
-    List<FaIcon> icons=[
-      FaIcon(FontAwesomeIcons.paypal,size: 25.0,color: Colors.blue,),
-      FaIcon(FontAwesomeIcons.solidCreditCard,size: 25.0,color: Colors.orangeAccent),
-      FaIcon(FontAwesomeIcons.apple,size: 25.0,color: Theme.of(context).textTheme.bodyText1!.color,),
-      FaIcon(FontAwesomeIcons.google,size: 25.0,color: Colors.red),
-      FaIcon(FontAwesomeIcons.moneyBillWave,size: 24.0,color: Colors.green),
+    final _paymentItems = <PaymentItem>[
+      PaymentItem(
+        label: 'Cart total Price',
+        amount: '${widget.total}',
+        status: PaymentItemStatus.final_price,
+      ),
+      PaymentItem(
+        label: 'Delivery',
+        amount: '12.0',
+        status: PaymentItemStatus.final_price,
+      ),
+      PaymentItem(
+        label: 'total',
+        amount: '${widget.total+12}',
+        status: PaymentItemStatus.final_price,
+      ),
     ];
+
+    Map<String,String> titles={
+      'Google Pay':'assets/payments/googlepay.png',
+      ' Cash':'assets/payments/cash.svg',
+    };
 
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
       listener: (context,state){
@@ -129,15 +141,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   height: 10,
                 ),
                 Container(
-                  height: 270,
+                  height: 100,
                   child: ListView.separated(
                       itemBuilder:(context,index)=>buildRadioPayment(
-                          icon: icons[index],
-                          name: titles[index],
+                          icon: titles[titles.keys.toList()[index]]??'',
+                          name: titles.keys.toList()[index],
                           index: index
                       ),
                       separatorBuilder:(context,index)=> SizedBox(height: 5,),
-                      itemCount: 5
+                      itemCount: 2
                   ),
                 ),
                 SizedBox(
@@ -158,33 +170,41 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     height: 50,
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: (){
-                        if(!(state is ShoppySendOrderLoadingState)){
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return alertPayment;
-                            },
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          onPressed: (){
+                            if(radioPaymentIndex==1){
+                              if (!(state is ShoppySendOrderLoadingState)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return alertPayment;
+                                  },
+                                );
+                              }
+                            }
+                            else{
+                              Pay.withAssets(['gpay.json'])
+                                  .showPaymentSelector(paymentItems: _paymentItems)
+                                  .whenComplete(() {
+                              });
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 0,
+                            primary: Theme.of(context).focusColor,
+                          ),
+                          child:state is ShoppySendOrderLoadingState?
+                          Center(child:CircularProgressIndicator(color: Colors.white,))
+                              : Text(
+                            radioPaymentIndex==0?'Pay Now':'Order Now',
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                        elevation: 0,
-                        primary: Theme.of(context).focusColor,
-                      ),
-                      child:state is ShoppySendOrderLoadingState?
-                        Center(child:CircularProgressIndicator(color: Colors.white,))
-                          : Text(
-                        'Pay Now',
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ],
@@ -196,48 +216,70 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget buildRadioPayment({
-    required FaIcon icon,
+    required String icon,
     required String name,
     required int index,
   }) {
-    return Container(
-      padding: EdgeInsets.only(left: 2),
-      height: 50,
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 1.0),
-                child: icon,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              textUtils(
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold,
-                text: name,
-                color: Theme.of(context).textTheme.bodyText1!.color,
-              ),
-            ],
-          ),
-          Radio(
-            value: index,
-            groupValue: radioPaymentIndex,
-            fillColor: MaterialStateColor.resolveWith((states) => Theme.of(context).focusColor),
-            onChanged: (int? value) {
-              setState(() {
-                radioPaymentIndex = value!;
-              });
-            },
-          ),
-        ],
+    return InkWell(
+      onTap: (){
+        setState(() {
+          radioPaymentIndex = index;
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: 2),
+        height: 50,
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 1.0),
+                  child: index!=1?Image.asset(
+                    icon,
+                    width: 35,
+                    height: 35,
+                  ):
+                  FaIcon(FontAwesomeIcons.moneyBillWave,color: Colors.green,size: 25,),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                textUtils(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  text: name,
+                  color: Theme.of(context).textTheme.caption!.color,
+                ),
+              ],
+            ),
+            Radio(
+              value: index,
+              groupValue: radioPaymentIndex,
+              fillColor: MaterialStateColor.resolveWith((states) => Theme.of(context).focusColor),
+              onChanged: (int? value) {
+                setState(() {
+                  radioPaymentIndex = value!;
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
+  void onGooglePayResult(paymentResult) {
+    // Send the resulting Google Pay token to your server / PSP
+    defaultSnackBar(
+      context: context,
+      color: Colors.green,
+      title: 'Order order \'ll be there within Three Days ',
+    );
+    ShoppyCubit.get(context).clearCart();
+    navigateAndFinish(context, ShoppyLayout());
+  }
 }

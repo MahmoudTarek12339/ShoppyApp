@@ -109,6 +109,7 @@ class _CameraScreenState extends State<CameraScreen> {
         }
         else if(state is ShoppySendImagesErrorState){
           Navigator.pop(context);
+          Navigator.pop(context);
           setState(() {
             currentPicture=0;
             image2=null;
@@ -116,7 +117,21 @@ class _CameraScreenState extends State<CameraScreen> {
           });
           defaultSnackBar(
               context: context,
-              title: 'Error',
+              title: state.error,
+              color: Colors.red
+          );
+        }
+        else if(state is ShoppyCancelSizesSuccessState){
+          Navigator.pop(context);
+          Navigator.pop(context);
+          setState(() {
+            currentPicture=0;
+            image2=null;
+            image=null;
+          });
+          defaultSnackBar(
+              context: context,
+              title: 'Operation Canceled',
               color: Colors.red
           );
         }

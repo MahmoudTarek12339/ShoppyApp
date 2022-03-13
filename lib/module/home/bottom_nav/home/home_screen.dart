@@ -63,7 +63,7 @@ class HomeScreen extends StatelessWidget {
                           child: TextFormField(
                             enabled: false,
                             decoration: InputDecoration(
-                              hintText: "Search for Product, Brand",
+                              hintText: "Search for Product, Store",
                               hintStyle: TextStyle(color: Colors.grey),
                               prefixIcon: Icon(
                                 Icons.search,

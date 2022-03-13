@@ -55,8 +55,8 @@ class ShoppyLayout extends StatelessWidget {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.compass),
-                label: 'Brands',
+                icon: FaIcon(FontAwesomeIcons.shopify),
+                label: 'Stores',
               ),
               BottomNavigationBarItem(
                   icon: FaIcon(FontAwesomeIcons.listAlt),

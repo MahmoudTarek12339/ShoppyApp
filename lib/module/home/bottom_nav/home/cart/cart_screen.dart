@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/model/address_model.dart';
+import 'package:shoppy/model/order_model.dart';
 import 'package:shoppy/model/product_model.dart';
 import 'package:shoppy/module/home/bottom_nav/home/cart/payment_screen.dart';
 import 'package:shoppy/module/home/product_screen/product_screen.dart';
@@ -22,7 +23,7 @@ class CartScreen extends StatelessWidget {
         alertAddress = AlertDialog(
           title: Text(
             "Select Address",
-            style:Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).focusColor),
+            style:Theme.of(context).textTheme.bodyText1!.copyWith(color: Color(0xffec8d2f)),
           ),
           content: Container(
             height: 120,
@@ -39,18 +40,18 @@ class CartScreen extends StatelessWidget {
                 ),
               separatorBuilder: (context, index) =>Divider(
                 height: 3,
-                color: Theme.of(context).focusColor.withOpacity(0.5),
+                color: Color(0xffec8d2f).withOpacity(0.5),
               ),
               itemCount: cubit.userAddresses.length+1,
             ),
           ),
-          backgroundColor: Theme.of(context).cardColor,
+          backgroundColor: Color(0xff1e224c),
           actions: [
             TextButton(
               child: Text(
                 "No",
                 style: TextStyle(
-                  color: Theme.of(context).focusColor,
+                  color: Color(0xffec8d2f),
                 ),
               ),
               onPressed: () {
@@ -61,7 +62,7 @@ class CartScreen extends StatelessWidget {
               child: Text(
                   "OK",
                   style: TextStyle(
-                    color: Theme.of(context).focusColor,
+                    color: Color(0xffec8d2f),
                   )
               ),
               onPressed: () {
@@ -190,7 +191,7 @@ class CartScreen extends StatelessWidget {
 
   Widget cartProductCard({
     required cubit,
-    required orderModel,
+    required OrderModel orderModel,
     required context,
   })=>InkWell(
 
@@ -239,7 +240,21 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 5,
+                ),
+                Text(
+                  'Color : '+orderModel.color,
+                  style: Theme.of(context).textTheme.caption
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'Size : '+orderModel.size,
+                  style: Theme.of(context).textTheme.caption
+                ),
+                SizedBox(
+                  height: 5,
                 ),
                 Text(
                   '\$ ${orderModel.price*orderModel.quantity}',
@@ -303,6 +318,7 @@ class CartScreen extends StatelessWidget {
     ),
   );
 
+  //ui if card is empty
   Widget emptyCart({required context})=>Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -376,6 +392,7 @@ class CartScreen extends StatelessWidget {
     ),
   );
 
+  //alert dialog code to pick up address
   Widget addressAlertItem({
   required AddressModel addressModel,
   required context,
@@ -396,7 +413,7 @@ class CartScreen extends StatelessWidget {
                 children: [
                   Text(
                     addressModel.cityName,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12,color: Colors.white),
                   ),
                   SizedBox(
                     height: 5,
@@ -426,11 +443,11 @@ class CartScreen extends StatelessWidget {
             },
           ),
         ],
-
       ),
   ),
 );
 
+  //add new address ui
   Widget addAddressItem({
   required context,
 })=>InkWell(
@@ -445,7 +462,8 @@ class CartScreen extends StatelessWidget {
             Expanded(
               child: Text(
                 'Add Address',
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12),
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12,color: Colors.white),
+
               ),
             ),
             Padding(

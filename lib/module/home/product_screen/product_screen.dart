@@ -4,6 +4,7 @@ import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:readmore/readmore.dart';
@@ -32,7 +33,6 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  //final List<String> sizesList= as List<String> ;
   CarouselController carouselController=CarouselController();
   int currentPage=0;
   int currentColor=0;
@@ -52,6 +52,11 @@ class _ProductScreenState extends State<ProductScreen> {
 
       } ,
       builder:(context,state){
+        SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(
+            statusBarColor: Theme.of(context).primaryColor,
+            statusBarIconBrightness:Theme.of(context).primaryColor==Colors.white?Brightness.dark:Brightness.light,
+        ));
         return SafeArea(
           child: Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,

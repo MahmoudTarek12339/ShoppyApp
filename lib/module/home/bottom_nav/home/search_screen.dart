@@ -31,7 +31,7 @@ class SearchScreen extends StatelessWidget {
               autofocus: true,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "Search for Product, Brand",
+                hintText: "Search for Product, Store",
                 hintStyle: TextStyle(color: Colors.grey),
                 suffixIcon: searchController.text.isNotEmpty?IconButton(
                   onPressed: (){
@@ -71,7 +71,7 @@ class SearchScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            ' Brands',
+                            ' Stores',
                             textAlign: TextAlign.left,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),

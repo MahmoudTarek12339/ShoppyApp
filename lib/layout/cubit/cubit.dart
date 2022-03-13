@@ -381,7 +381,6 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       updateWishListFB(productUid: productUid);
     }
   }
-
   void updateWishListFB({required String productUid})async{
     if (FirebaseAuth.instance.currentUser != null) {
       final snapShot = await FirebaseFirestore.instance
@@ -430,7 +429,16 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
           .get()
           .then((value) {
         value.docs.forEach((element) {
-          favorites.add(element.id);
+          if(products.where((e) => e.productUid==element.id).isNotEmpty)
+            favorites.add(element.id);
+          else{
+            FirebaseFirestore.instance.collection('customers')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .collection('favorites')
+                .doc(element.id)
+                .delete();
+            print('removed');
+          }
         });
         emit(ShoppyGetFavoriteSuccessState());
       }).catchError((onError){
@@ -523,7 +531,11 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
           });
         }
         else{
-          forYouProducts=products..shuffle();
+          if(products.length>20){
+            forYouProducts=products.sublist(0,20)..shuffle();
+          }
+          else
+            forYouProducts=products..shuffle();
         }
         emit(ShoppyGetForYouSuccessState());
       }).catchError((error) {
@@ -775,7 +787,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
         sizes=value;
         emit(ShoppySendImagesSuccessState());
     }).catchError((error){
-      emit(ShoppySendImagesErrorState());
+      emit(ShoppySendImagesErrorState(error.toString()));
       print(error);
     });
     return sizes;
@@ -848,6 +860,9 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     }
   }
 
+  void cancelRequest(){
+    emit(ShoppyCancelSizesSuccessState());
+  }
   //check internet connection
   Future<bool> checkInternetConnection() async{
     final ConnectivityResult result = await Connectivity().checkConnectivity();
