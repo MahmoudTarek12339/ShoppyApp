@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
@@ -30,6 +31,10 @@ class MyApp extends StatelessWidget {
       child:BlocConsumer<ShoppyCubit,ShoppyStates>(
         listener:(context,state){},
         builder:(context,state){
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              statusBarBrightness:Theme.of(context).primaryColor==Colors.white?Brightness.dark:Brightness.light,
+          ));
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
