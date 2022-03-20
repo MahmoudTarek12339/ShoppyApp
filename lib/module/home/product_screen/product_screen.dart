@@ -37,14 +37,6 @@ class _ProductScreenState extends State<ProductScreen> {
   CarouselController carouselController=CarouselController();
   int currentPage=0;
   int currentColor=0;
-  List<Color> colorSelected=[
-  Color(0xFFff4667),
-  Color(0xff685959),
-  Color(0xffADA79B),
-  Color(0xffA5947F),
-  Color(0xff738B71),
-  Color(0xff6D454D),
-  ];
   final GlobalKey _one=GlobalKey();
   final GlobalKey _two=GlobalKey();
 
@@ -229,12 +221,11 @@ class _ProductScreenState extends State<ProductScreen> {
                       });
                     },
                     child: colorPicker(
-                        outerBorder: currentColor==index,
-                        color: colorSelected[index]
+                        index: index,
                     ),
                   ),
                   separatorBuilder: (context,index)=>SizedBox(height: 3,),
-                  itemCount: colorSelected.length),
+                  itemCount: widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.length),
             ),
           )
       ),
@@ -242,19 +233,23 @@ class _ProductScreenState extends State<ProductScreen> {
   );
 
   Widget colorPicker({
-    required outerBorder,
-    required color
+    required index,
   }){
     return Container(
       padding: EdgeInsets.all(3),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: outerBorder?Border.all(color: color,width: 2):null,
+        border: currentColor==index?Border.all(color: Color(
+            int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor]))
+            ,width: 2
+        ):null,
       ),
       child:Container(
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: color,
+          color: Color(
+              int.parse(
+                  widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[index])),
           shape: BoxShape.circle,
         ),
       ),
@@ -529,7 +524,7 @@ class _ProductScreenState extends State<ProductScreen> {
                  ),
                ),
                child: Text(
-                 widget.productModel.sizes[index],
+                 widget.productModel.data.keys.toList()[index],
                  style: TextStyle(
                    color:Theme.of(context).textTheme.bodyText1!.color,
                    fontWeight: FontWeight.bold,
@@ -538,7 +533,7 @@ class _ProductScreenState extends State<ProductScreen> {
              ),
            ),
            separatorBuilder: (context,index)=>SizedBox(width: 10,),
-           itemCount: widget.productModel.sizes.length
+           itemCount: widget.productModel.data.keys.length
        ),
      ),
    ],
@@ -585,8 +580,8 @@ class _ProductScreenState extends State<ProductScreen> {
                       productUid: widget.productModel.productUid,
                       quantity: 1,
                       price: widget.productModel.price,
-                      size: widget.productModel.sizes[widget.currentSelected],
-                      color: widget.productModel.colors[currentColor],
+                      size: widget.productModel.data.keys.toList()[widget.currentSelected],
+                      color: widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor],
                       brandId: widget.productModel.brandId,
                     )
                 );

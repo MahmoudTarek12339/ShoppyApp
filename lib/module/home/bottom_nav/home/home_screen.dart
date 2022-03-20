@@ -355,7 +355,7 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  productModel.rate>0?
+                  productModel.offer>0?
                     Padding(
                     padding: const EdgeInsets.only(left: 9),
                     child: Arc(
@@ -368,7 +368,7 @@ class HomeScreen extends StatelessWidget {
                         width: 30,
                         child: Center(
                           child: Text(
-                            '${productModel.offer*100}%',
+                            '${productModel.offer}%',
                             style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 10),
                           ),
                         ),

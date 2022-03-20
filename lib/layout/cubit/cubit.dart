@@ -504,7 +504,6 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
 
   getForYouProducts(){
     if(FirebaseAuth.instance.currentUser!=null){
-      forYouProducts=[];
       FirebaseFirestore.instance
           .collection('customers')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -552,7 +551,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     String? brandName,
     String? brandCategory,
 }){
-    if(FirebaseAuth.instance.currentUser!=null&&forYouAnalysis.where((element) => element.lastBrand==brandName&&element.lastCategory==brandCategory,).toList().isEmpty){
+    if(FirebaseAuth.instance.currentUser!=null&&forYouAnalysis.where((element) => element.lastBrand==brandName||element.lastCategory==brandCategory,).toList().isEmpty){
       if(forYouAnalysis.length>=2){
         forYouAnalysis[0]=forYouAnalysis[1];
         forYouAnalysis[1]= ForYouModel(brandName, brandCategory);
@@ -761,15 +760,16 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     bool connection =await checkInternetConnection();
     if(connection) {
       emit(ShoppyAppStartingState());
-      await getAllProducts();
-      await Future.delayed(const Duration(milliseconds: 500));
-      getForYouProducts();
-      getFavorites();
-      getAllBrands();
-      getUserAddresses();
-      getUserOrders();
-      getCart();
-      getRecSizes();
+      getAllProducts().then((value) async{
+        await Future.delayed(const Duration(milliseconds: 100));
+        getFavorites();
+        getAllBrands();
+        getUserAddresses();
+        getUserOrders();
+        getCart();
+        getRecSizes();
+        getForYouProducts();
+      });
     }
   }
 
@@ -850,7 +850,8 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .get()
             .then((value){
-            userSizes=value.data()!['sizes'];
+              if(value.data()!['sizes']!=null)
+                userSizes=value.data()!['sizes'];
             emit(ShoppyGetSizesSuccessState());
         }).catchError((error){
           emit(ShoppyGetSizesErrorState(error.toString()));
