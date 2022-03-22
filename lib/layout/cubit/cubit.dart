@@ -623,6 +623,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
         UserOrderModel orderModel = UserOrderModel(
           orderState: userOrderModel.orderState,
           orderDate: userOrderModel.orderDate,
+          userId: FirebaseAuth.instance.currentUser!.uid,
           orderPhoto: ord[0].photo,
           orderPrice: userOrderModel.orderPrice,
           orders: ord,

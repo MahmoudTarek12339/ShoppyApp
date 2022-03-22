@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
@@ -39,12 +40,12 @@ class _ProductScreenState extends State<ProductScreen> {
   int currentColor=0;
   final GlobalKey _one=GlobalKey();
   final GlobalKey _two=GlobalKey();
+  final GlobalKey _three=GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
       listener:(context,state){
-
       } ,
       builder:(context,state){
         final bool showCaseBool =CacheHelper.getData(key: 'Screen2')??true;
@@ -61,7 +62,7 @@ class _ProductScreenState extends State<ProductScreen> {
               builder: (context) {
                 if(showCaseBool){
                   WidgetsBinding.instance!.addPostFrameCallback((_) {
-                    ShowCaseWidget.of(context)!.startShowCase([_one, _two]);
+                    ShowCaseWidget.of(context)!.startShowCase([_one, _two,_three]);
                   });
                 }
                 return Scaffold(
@@ -198,7 +199,7 @@ class _ProductScreenState extends State<ProductScreen> {
           )
       ),
       Positioned(
-          bottom: 5,
+          bottom: 15,
           right: 10,
           child:Showcase(
             key: _two,
@@ -206,7 +207,9 @@ class _ProductScreenState extends State<ProductScreen> {
             descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
             showcaseBackgroundColor: Theme.of(context).focusColor,
             child: Container(
-              height: 170,
+              height: widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.length>=3
+                  ?150
+                  :widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.length*60.0,
               width: 50,
               padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -298,6 +301,27 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                 ],
                 crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+            ),
+            Showcase(
+              key: _three,
+              descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
+              showcaseBackgroundColor: Theme.of(context).focusColor,
+              description: 'Press here to review product',
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.grey.withOpacity(0.1),
+                  child: IconButton(
+                    onPressed: (){
+                    },
+                    icon: Icon(
+                      Icons.preview_rounded,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
               ),
             ),
             Padding(

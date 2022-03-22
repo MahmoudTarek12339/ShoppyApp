@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -153,6 +154,7 @@ class OrdersScreen extends StatelessWidget {
                     cubit.sendOrder(UserOrderModel(
                         orderState: 'In Progress',
                         orderDate: date,
+                        userId: FirebaseAuth.instance.currentUser!.uid,
                         orderPhoto: userOrderModel.orderPhoto,
                         orderPrice: userOrderModel.orderPrice,
                         orders: userOrderModel.orders,

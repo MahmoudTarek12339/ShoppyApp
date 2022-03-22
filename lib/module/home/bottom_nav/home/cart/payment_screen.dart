@@ -1,5 +1,6 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -108,6 +109,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       orderPhoto: cubit.cart[0].photo,
                       orderPrice: widget.total,
                       orderDate: date.toString(),
+                      userId: FirebaseAuth.instance.currentUser!.uid,
                       orderState: 'In Progress',
                       orders: cubit.cart,
                       addressModel:widget.userAddress,
