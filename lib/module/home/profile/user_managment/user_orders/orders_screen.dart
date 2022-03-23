@@ -165,10 +165,10 @@ class OrdersScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      userOrderModel.orderState=='Delivered'?'Re-Order':'Cancel',
+                      userOrderModel.orderState=='Approved'?'Re-Order':'Cancel',
                       style: Theme.of(context).textTheme.subtitle1!.copyWith(color:Theme.of(context).focusColor),
                     ),
-                    if(userOrderModel.orderState=='Delivered')
+                    if(userOrderModel.orderState=='Approved')
                       Icon(Icons.refresh,color: Theme.of(context).focusColor,size: 15,)
                   ],
                 ),

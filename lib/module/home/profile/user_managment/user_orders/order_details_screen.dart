@@ -195,7 +195,7 @@ class OrderDetailsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      userOrderModel.orderState=='Delivered'?'Re-Order':'Cancel',
+                      userOrderModel.orderState=='Approved'?'Re-Order':'Cancel',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
