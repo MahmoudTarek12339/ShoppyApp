@@ -136,7 +136,7 @@ class CartScreen extends StatelessWidget {
                   color: Colors.grey
               ),
               Text(
-                '\$ ${cubit.cartTotal.toStringAsFixed(2)}',
+                '${cubit.cartTotal.toStringAsFixed(2)}',
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1!.color,
                   fontWeight: FontWeight.bold,
@@ -267,7 +267,7 @@ class CartScreen extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  '\$ ${orderModel.price*orderModel.quantity}',
+                  '${orderModel.price*orderModel.quantity}',
                   style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     color:Theme.of(context).textTheme.bodyText1!.color,

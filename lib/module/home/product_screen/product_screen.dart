@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
@@ -580,7 +579,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 color: Colors.grey
             ),
             Text(
-              '\$ ${widget.productModel.price}',
+              '${widget.productModel.price}',
               style: TextStyle(
                 color: Theme.of(myContext).textTheme.bodyText1!.color,
                 fontSize: 20,

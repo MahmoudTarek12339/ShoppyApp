@@ -647,6 +647,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
               .set(orderModel.toMap())
               .then((value) {
             userOrders.add(orderModel);
+            getUserOrders();
             emit(ShoppySendOrderSuccessState());
           }).catchError((error) {
             emit(ShoppySendOrderErrorState(error.toString()));
@@ -684,6 +685,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
             .doc(userOrderModel.orderId)
             .delete()
             .then((value) {
+          getUserOrders();
           emit(ShoppyRemoveFromOrdersSuccessState());
         }).catchError((error) {
           emit(ShoppyRemoveFromOrdersErrorState(error.toString()));

@@ -189,7 +189,7 @@ class SearchScreen extends StatelessWidget {
                         width: 30,
                         child: Center(
                           child: Text(
-                            '${productModel.offer*100}%',
+                            '${productModel.offer}%',
                             style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 10),
                           ),
                         ),
@@ -232,7 +232,7 @@ class SearchScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$ ${productModel.price}',
+                      '${productModel.price}',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

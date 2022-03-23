@@ -114,7 +114,7 @@ class OrderDetailsScreen extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                '\$ ${orderModel.price*orderModel.quantity}',
+                '${orderModel.price*orderModel.quantity}',
                 style: Theme.of(context).textTheme.caption
               ),
             ],
@@ -143,7 +143,7 @@ class OrderDetailsScreen extends StatelessWidget {
                   color: Colors.grey
               ),
               Text(
-                '\$ $totalPrice',
+                '$totalPrice',
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1!.color,
                   fontWeight: FontWeight.bold,

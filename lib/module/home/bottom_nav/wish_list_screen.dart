@@ -114,7 +114,7 @@ class WishListScreen extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        '\$ ${productModel.price}',
+                        '${productModel.price}',
                         style: TextStyle(
                           color:Theme.of(context).textTheme.bodyText1!.color,
                           overflow: TextOverflow.ellipsis,

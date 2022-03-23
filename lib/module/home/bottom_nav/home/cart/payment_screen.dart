@@ -162,7 +162,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   child: textUtils(
                     fontSize: 25.0,
                     fontWeight: FontWeight.bold,
-                    text: 'Total: ${widget.total.toStringAsFixed(2)}\$',
+                    text: 'Total: ${widget.total.toStringAsFixed(2)}',
                     color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
                 ),
