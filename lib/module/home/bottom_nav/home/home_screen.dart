@@ -265,19 +265,19 @@ class HomeScreen extends StatelessWidget {
                               child: ListView.separated(
                                   scrollDirection: Axis.horizontal,
                                   physics: BouncingScrollPhysics(),
-                                  itemBuilder: (context,index)=>index==cubit.products.length?
+                                  itemBuilder: (context,index)=>index==cubit.bestSellProducts.length?
                                   buildMoreItem(
                                     context: context,
-                                    products: [],
+                                    products: cubit.bestSellProducts,
                                     name: 'Best Sell',
                                   )
                                       :buildCardItem(
                                     cubit: cubit,
                                     context: context,
-                                    productModel: cubit.products[index],
+                                    productModel: cubit.bestSellProducts[index],
                                   ),
                                   separatorBuilder: (context,index)=>SizedBox(width: 10.0,),
-                                  itemCount: cubit.products.length+1
+                                  itemCount: cubit.bestSellProducts.length+1
                               ),
                             ),
 

@@ -191,7 +191,9 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     {
       if (connected) {
         bool increase = false;
-
+        products[products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]=
+          (int.parse(products[products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color])-1).toString();
+        print(products[products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]);
         if (cart
             .where((element) =>
                 element.productUid == orderModel.productUid &&
@@ -205,7 +207,8 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
           cart[index].quantity += 1;
           cartTotal += orderModel.price;
           increase = true;
-        } else {
+        }
+        else {
           cart.add(orderModel);
           cartTotal += orderModel.price;
         }
@@ -222,6 +225,10 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
               element.color == orderModel.color &&
               element.size == orderModel.size)]
           .quantity;
+      products[products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]=
+          (int.parse(products[products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color])+1).toString();
+      print(products[products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]);
+
       if (quantity > 1) {
         cart[cart.indexWhere((element) =>
                 element.productUid == orderModel.productUid &&
@@ -247,6 +254,10 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     bool connected=await checkInternetConnection();
     if(connected) {
       cartTotal -= orderModel.price * orderModel.quantity;
+      products[products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]=
+          (int.parse(products[products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color])+orderModel.quantity).toString();
+      print(products[products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]);
+
       cart.removeWhere((element) =>
           element.productUid == orderModel.productUid &&
           element.color == orderModel.color &&
@@ -259,6 +270,11 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
   void clearCart()async{
     bool connected=await checkInternetConnection();
     if(connected){
+      cart.forEach((element) {
+        products[products.indexWhere((e) => e.productUid==element.productUid)].data[element.size][element.color]=
+            (int.parse(products[products.indexWhere((e) => e.productUid==element.productUid)].data[element.size][element.color])+element.quantity).toString();
+        print(products[products.indexWhere((e) => e.productUid==element.productUid)].data[element.size][element.color]);
+      });
       cartTotal = 0;
       cart.clear();
       emit(ShoppyUpdateCartState());
@@ -475,7 +491,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     await FirebaseFirestore.instance
         .collection('admins')
         .get()
-        .then((value) {
+        .then((value) async{
        value.docs.forEach((element) {
         String brandName =element.data()['brandName'];
         String brandId = element.id;
@@ -492,14 +508,32 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
           });
         });
       });
-      emit(ShoppyGetAllProductsSuccessState());
+       await Future.delayed(const Duration(milliseconds: 500));
+       print('products length'+products.length.toString());
+       products.sort((a,b){
+         if(a.offer<b.offer)
+           return 1;
+         return 0;
+       });
+       emit(ShoppyGetAllProductsSuccessState());
     }).catchError((onError){
       emit(ShoppyGetAllProductsErrorState(onError.toString()));
     });
   }
 
-  List<ProductModel> forYouProducts=[];
+  List<ProductModel> bestSellProducts=[];
+  void getBestSellProduct(){
+    bestSellProducts.addAll(products);
+    bestSellProducts.sort((a,b){
+      if(a.bestSeller<b.bestSeller)
+        return 1;
+      return 0;
+    });
+    bestSellProducts.removeWhere((element) => element.bestSeller==0);
+    emit(ShoppyGetBestSellerProductsSuccessState());
+  }
 
+  List<ProductModel> forYouProducts=[];
   List<ForYouModel> forYouAnalysis=[];
 
   getForYouProducts(){
@@ -764,13 +798,14 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     if(connection) {
       emit(ShoppyAppStartingState());
       getAllProducts().then((value) async{
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 200));
         getFavorites();
         getAllBrands();
         getUserAddresses();
         getUserOrders();
         getCart();
         getRecSizes();
+        getBestSellProduct();
         getForYouProducts();
       });
     }

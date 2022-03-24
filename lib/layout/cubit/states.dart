@@ -70,6 +70,7 @@ class ShoppyGetAllProductsErrorState extends ShoppyStates{
   final String error;
   ShoppyGetAllProductsErrorState(this.error);
 }
+class ShoppyGetBestSellerProductsSuccessState extends ShoppyStates{}
 
 
 class ShoppyUpdateCartState extends ShoppyStates{}

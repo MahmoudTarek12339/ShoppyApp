@@ -81,6 +81,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               cubit: ShoppyCubit.get(context),
                             ),
                             sizeList(recommendedSize:ShoppyCubit.get(context).getRecommendedSize(widget.productModel.category)),
+                            colorList(),
                             addCart(myContext: context,cubit: ShoppyCubit.get(context)),
                           ],
                         ),
@@ -149,8 +150,53 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-
+  Widget colorList()=>Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Choose your Color',
+          style: Theme.of(context).textTheme.caption,
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Showcase(
+          key: _two,
+          description: 'pick up color from here',
+          descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
+          showcaseBackgroundColor: Theme.of(context).focusColor,
+          child: Container(
+            width: widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.length*50.0,
+            height: 50,
+            margin: EdgeInsets.only(left: 5),
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(25)
+            ),
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context,index)=>GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      currentColor=index;
+                    });
+                  },
+                  child: colorPicker(
+                    index: index,
+                  ),
+                ),
+                separatorBuilder: (context,index)=>SizedBox(width: 3,),
+                itemCount: widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.length),
+          ),
+        ),
+      ],
+    ),
+  );
   Widget imageSlider()=>Stack(
+    alignment: Alignment.bottomCenter,
     children: [
       CarouselSlider.builder(
         itemCount: widget.productModel.photos.length,
@@ -183,53 +229,19 @@ class _ProductScreenState extends State<ProductScreen> {
           );
         },
       ),
-      Positioned(
-          bottom: 30,
-          left: 180,
-          child:AnimatedSmoothIndicator(
-            activeIndex: currentPage,
-            count: widget.productModel.photos.length,
-            effect: ExpandingDotsEffect(
-              dotHeight: 10,
-              dotWidth: 10,
-              activeDotColor: Theme.of(context).focusColor,
-              dotColor: Colors.black ,
-            ),
-          )
-      ),
-      Positioned(
-          bottom: 15,
-          right: 10,
-          child:Showcase(
-            key: _two,
-            description: 'pick up color from here',
-            descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
-            showcaseBackgroundColor: Theme.of(context).focusColor,
-            child: Container(
-              height: widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.length>=3
-                  ?150
-                  :widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.length*60.0,
-              width: 50,
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: ListView.separated(
-                  itemBuilder: (context,index)=>GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        currentColor=index;
-                      });
-                    },
-                    child: colorPicker(
-                        index: index,
-                    ),
-                  ),
-                  separatorBuilder: (context,index)=>SizedBox(height: 3,),
-                  itemCount: widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.length),
-            ),
-          )
+      Center(
+        heightFactor: 6,
+        child: AnimatedSmoothIndicator(
+
+          activeIndex: currentPage,
+          count: widget.productModel.photos.length,
+          effect: ExpandingDotsEffect(
+            dotHeight: 7,
+            dotWidth: 7,
+            activeDotColor: Theme.of(context).focusColor,
+            dotColor: Colors.black ,
+          ),
+        ),
       ),
     ],
   );
@@ -266,7 +278,7 @@ class _ProductScreenState extends State<ProductScreen> {
     required description,
     required cubit
   })=>Container(
-    padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
+    padding: EdgeInsets.symmetric(horizontal: 17,vertical: 10),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -302,29 +314,8 @@ class _ProductScreenState extends State<ProductScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
               ),
             ),
-            Showcase(
-              key: _three,
-              descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
-              showcaseBackgroundColor: Theme.of(context).focusColor,
-              description: 'Press here to review product',
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.grey.withOpacity(0.1),
-                  child: IconButton(
-                    onPressed: (){
-                    },
-                    icon: Icon(
-                      Icons.preview_rounded,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(5.0),
               child: CircleAvatar(
                 radius: 20,
                 backgroundColor: Colors.grey.withOpacity(0.1),
@@ -368,16 +359,28 @@ class _ProductScreenState extends State<ProductScreen> {
               itemSize: 20.0,
               unratedColor: Colors.orangeAccent.withAlpha(50),
             ),
+            Spacer(),
+            Showcase(
+              key: _three,
+              descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
+              showcaseBackgroundColor: Theme.of(context).focusColor,
+              description: 'Press here to review product',
+              child: ElevatedButton(
+                child: Text(
+                  'Preview Product',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+                style: ElevatedButton.styleFrom(primary: Theme.of(context).cardColor),
+                onPressed: (){},
+              ),
+            ),
           ],
-        ),
-        SizedBox(
-          height: 20,
         ),
         ReadMoreText(
           description,
           trimLines: 3,
           trimMode: TrimMode.Line,
-          textAlign: TextAlign.justify,
+          textAlign: TextAlign.center,
           trimCollapsedText: 'Show More',
           trimExpandedText: 'Show Less',
           lessStyle: TextStyle(
@@ -403,7 +406,7 @@ class _ProductScreenState extends State<ProductScreen> {
 })=>Column(
    children: [
      Padding(
-       padding: const EdgeInsets.only(left: 25.0,right: 20),
+       padding: const EdgeInsets.only(left: 15.0,right: 20),
        child: Row(
          mainAxisAlignment: MainAxisAlignment.spaceBetween,
          children: [
@@ -505,7 +508,7 @@ class _ProductScreenState extends State<ProductScreen> {
      ),
      recommendedSize!=null?
        Padding(
-         padding: const EdgeInsets.only(left: 25.0),
+         padding: const EdgeInsets.only(left: 15.0),
          child: Row(
            children: [
              Text(
@@ -525,10 +528,10 @@ class _ProductScreenState extends State<ProductScreen> {
          ],
        ),
      )
-         :Container(),
+         :SizedBox(),
      Container(
-       padding: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
-       height: 65,
+       padding: EdgeInsets.symmetric(horizontal: 20),
+       height: 50,
        child: ListView.separated(
            scrollDirection: Axis.horizontal,
            itemBuilder: (context,index)=>GestureDetector(
@@ -559,6 +562,9 @@ class _ProductScreenState extends State<ProductScreen> {
            itemCount: widget.productModel.data.keys.length
        ),
      ),
+     SizedBox(
+       height: 10,
+     )
    ],
  );
 
@@ -595,19 +601,29 @@ class _ProductScreenState extends State<ProductScreen> {
             height: 60,
             child: ElevatedButton(
               onPressed: (){
-                cubit.addProductToCart(
-                    OrderModel(
-                      photo:widget.productModel.photos[0],
-                      description:widget.productModel.description,
-                      productName: widget.productModel.productName,
-                      productUid: widget.productModel.productUid,
-                      quantity: 1,
-                      price: widget.productModel.price,
-                      size: widget.productModel.data.keys.toList()[widget.currentSelected],
-                      color: widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor],
-                      brandId: widget.productModel.brandId,
-                    )
-                );
+                int availableQuantity=int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.values.toList()[currentColor]);
+                if(availableQuantity!=0) {
+                  cubit.addProductToCart(OrderModel(
+                    photo: widget.productModel.photos[0],
+                    description: widget.productModel.description,
+                    productName: widget.productModel.productName,
+                    productUid: widget.productModel.productUid,
+                    quantity: 1,
+                    price: widget.productModel.price,
+                    size: widget.productModel.data.keys
+                        .toList()[widget.currentSelected],
+                    color: widget
+                        .productModel
+                        .data[widget.productModel.data.keys
+                            .toList()[widget.currentSelected]]!
+                        .keys
+                        .toList()[currentColor],
+                    brandId: widget.productModel.brandId,
+                  ));
+                }
+                else{
+                  defaultSnackBar(context: context, title: 'no more available items of this color', color: Colors.black);
+                }
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

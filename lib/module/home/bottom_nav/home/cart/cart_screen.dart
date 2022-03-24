@@ -302,7 +302,13 @@ class CartScreen extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: (){
-                      cubit.addProductToCart(orderModel);
+                      int availableQuantity=int.parse(cubit.products[cubit.products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]);
+                      if(availableQuantity!=0) {
+                        cubit.addProductToCart(orderModel);
+                      }
+                      else{
+                        defaultSnackBar(context: context, title: 'no more available items of this color', color: Colors.black);
+                      }
                     },
                     icon: Icon(
                       Icons.add_circle,

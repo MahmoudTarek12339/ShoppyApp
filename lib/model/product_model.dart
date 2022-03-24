@@ -8,6 +8,7 @@ class ProductModel{
   late double price;
   late double rate;
   late int offer;
+  late int bestSeller;
   late List photos;
   late Map<String,dynamic> data;
 
@@ -32,8 +33,9 @@ class ProductModel{
     brandName= _brandName;
     brandId= _brandId;
     price=double.parse(json['price']);
-    rate=json['rate']??1.2;
+    rate=json['rate']??5;
     offer=json['offer']!=''?double.parse(json['offer']).floor():0;
+    bestSeller=json['bestSeller'];
     photos=json['photos'];
     data =json['data'];
   }
