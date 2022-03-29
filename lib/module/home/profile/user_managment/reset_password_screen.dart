@@ -127,7 +127,7 @@ class ResetPasswordScreen extends StatelessWidget {
                             if(value!.isEmpty){
                               return 'password mustn\'t be empty';
                             }
-                            else if(value!=currentPasswordController.text){
+                            else if(value!=newPasswordController.text){
                               return 'not Match';
                             }
                             else if(value.length<8){

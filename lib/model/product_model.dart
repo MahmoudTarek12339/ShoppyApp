@@ -32,7 +32,7 @@ class ProductModel{
     category=json['category'];
     brandName= _brandName;
     brandId= _brandId;
-    price=double.parse(json['price']);
+    price=json['offer']!=''?double.parse(json['price'])*((100-double.parse(json['offer']))/100):double.parse(json['price']);
     rate=json['rate']??5;
     offer=json['offer']!=''?double.parse(json['offer']).floor():0;
     bestSeller=json['bestSeller'];

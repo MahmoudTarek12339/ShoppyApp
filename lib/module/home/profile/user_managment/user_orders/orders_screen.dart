@@ -15,67 +15,107 @@ class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
-      listener: (context,state){
-        if(state is ShoppyRemoveFromOrdersSuccessState){
-          defaultSnackBar(
-            context: context,
-            color: Colors.green,
-            title: 'Order Cancelled Successfully',
-          );
-        }
-        else if(state is ShoppyRemoveFromOrdersErrorState){
-          defaultSnackBar(
-            context: context,
-            color: Colors.red,
-            title: state.error,
-          );
-        }
-        if(state is ShoppySendOrderSuccessState){
-          defaultSnackBar(
-            context: context,
-            color: Colors.green,
-            title: 'Re Ordered Successfully',
-          );
+        listener: (context,state){
+          if(state is ShoppyRemoveFromOrdersSuccessState){
+            defaultSnackBar(
+              context: context,
+              color: Colors.green,
+              title: 'Order Cancelled Successfully',
+            );
+          }
+          else if(state is ShoppyRemoveFromOrdersErrorState){
+            defaultSnackBar(
+              context: context,
+              color: Colors.red,
+              title: state.error,
+            );
+          }
+          if(state is ShoppySendOrderSuccessState){
+            defaultSnackBar(
+              context: context,
+              color: Colors.green,
+              title: 'Re Ordered Successfully',
+            );
 
-        }
-        else if(state is ShoppySendOrderErrorState){
-          defaultSnackBar(
-            context: context,
-            color: Colors.red,
-            title: state.error,
+          }
+          else if(state is ShoppySendOrderErrorState){
+            defaultSnackBar(
+              context: context,
+              color: Colors.red,
+              title: state.error,
+            );
+          }
+        },
+        builder: (context,state){
+          var cubit=ShoppyCubit.get(context);
+          return Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            appBar: AppBar(
+              title: Text("Orders"),
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Theme.of(context).focusColor,
+            ),
+            body:StreamBuilder(
+                stream: cubit.getUserOrders(),
+                builder: (context,snapShot) {
+                  if(snapShot.hasData){
+                    final  userOrders = snapShot.data as List<UserOrderModel>;
+                    print(userOrders.length);
+                    return ListView.separated(
+                        padding: EdgeInsets.only(top: 10),
+                        itemBuilder:(context,index)=> buildOrderCard(
+                          cubit: cubit,
+                          context: context,
+                          userOrderModel: userOrders[index],
+                          photo:cubit.brands.where((element) => element.brandUId==userOrders[index].orders[0].brandId).first.brandImage,
+                        ),
+                        separatorBuilder:(context,index)=> SizedBox(),
+                        itemCount: userOrders.length);
+                  }
+                  else if(snapShot.connectionState==ConnectionState.waiting){
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    );
+                  }
+                  else if(snapShot.hasError){
+                    print(snapShot.error.toString());
+                    return Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Container(
+                        height: 100,
+                        width: 200,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.deepPurple),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.deepOrange),
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Text(
+                            'Something went wrong',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return emptyOrders(context: context);
+                }
+            ),
           );
-        }
-      },
-      builder: (context,state){
-        var cubit=ShoppyCubit.get(context);
-        return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          appBar: AppBar(
-            title: Text("Orders"),
-            centerTitle: true,
-            elevation: 0,
-            backgroundColor: Theme.of(context).focusColor,
-          ),
-          body:cubit.userOrders.isEmpty?
-            emptyOrders(context: context)
-              :ListView.separated(
-              padding: EdgeInsets.only(top: 10),
-              itemBuilder:(context,index)=> buildOrderCard(
-                cubit: cubit,
-                context: context,
-                userOrderModel: cubit.userOrders[index],
-              ),
-              separatorBuilder:(context,index)=> SizedBox(),
-              itemCount: cubit.userOrders.length),
-        );
-      },
-    );
+        });
   }
 
   Widget buildOrderCard({
     required cubit,
     required UserOrderModel userOrderModel,
     required context,
+    required String photo,
   })=>InkWell(
     onTap: (){
       navigateTo(context,OrderDetailsScreen(
@@ -90,90 +130,116 @@ class OrdersScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         color:Theme.of(context).cardColor
       ),
-      child: Row(
+      child: Stack(
+        alignment: Alignment.topRight,
         children: [
-          Container(
-            height: 110,
-            width: 100,
-            margin: EdgeInsets.only(left: 7),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(
-                  image:NetworkImage(userOrderModel.orderPhoto),
-                  fit: BoxFit.cover,
-                )
-            ),
-          ),
-          SizedBox(width: 7,),
-          Expanded(
-            flex: 15,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  userOrderModel.orderState,
-                  style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    color:userOrderModel.orderState=='In Progress'?Colors.redAccent :Colors.green,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
+          Row(
+            children: [
+              Container(
+                height: 110,
+                width: 100,
+                margin: EdgeInsets.only(left: 7),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                      image:NetworkImage(photo),
+                      fit: BoxFit.cover,
+                    )
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  userOrderModel.orderDate,
-                  style: Theme.of(context).textTheme.caption
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 100,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: TextButton(
-                onPressed: () {
-                  if(userOrderModel.orderState=='In Progress') {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return makeAlert(
-                            context: context,
-                            cubit: cubit,
-                            orderModel: userOrderModel
-                        );
-                      },
-                    );
-                  }
-                  else{
-                    var date=DateFormat.d().add_yMMM().add_Hm().format(DateTime.now());
-                    cubit.sendOrder(UserOrderModel(
-                        orderState: 'In Progress',
-                        orderDate: date,
-                        userId: FirebaseAuth.instance.currentUser!.uid,
-                        orderPhoto: userOrderModel.orderPhoto,
-                        orderPrice: userOrderModel.orderPrice,
-                        orders: userOrderModel.orders,
-                        addressModel: userOrderModel.addressModel
-                    ));
-                  }
-                  },
-                child: Row(
+              ),
+              SizedBox(width: 7,),
+              Expanded(
+                flex: 15,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userOrderModel.orderState=='Approved'?'Re-Order':'Cancel',
-                      style: Theme.of(context).textTheme.subtitle1!.copyWith(color:Theme.of(context).focusColor),
+                      userOrderModel.orderState,
+                      style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        color:userOrderModel.orderState=='In Progress'?Colors.redAccent :Colors.green,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    if(userOrderModel.orderState=='Approved')
-                      Icon(Icons.refresh,color: Theme.of(context).focusColor,size: 15,)
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      userOrderModel.orderDate,
+                      style: Theme.of(context).textTheme.caption
+                    ),
                   ],
                 ),
+              ),
+              SizedBox(
+                height: 100,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: TextButton(
+                    onPressed: () {
+                      if(userOrderModel.orderState=='In Progress') {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return makeAlert(
+                                context: context,
+                                cubit: cubit,
+                                orderModel: userOrderModel
+                            );
+                          },
+                        );
+                      }
+                      else{
+                        var date=DateFormat.d().add_yMMM().add_Hm().format(DateTime.now());
+                        cubit.sendOrder(UserOrderModel(
+                            orderState: 'In Progress',
+                            orderDate: date,
+                            userId: FirebaseAuth.instance.currentUser!.uid,
+                            orderPhoto: userOrderModel.orderPhoto,
+                            orderPrice: userOrderModel.orderPrice,
+                            orders: userOrderModel.orders,
+                            addressModel: userOrderModel.addressModel
+                        ));
+                      }
+                      },
+                    child: Row(
+                      children: [
+                        Text(
+                          userOrderModel.orderState=='Approved'?'Re-Order':'Cancel',
+                          style: Theme.of(context).textTheme.subtitle1!.copyWith(color:Theme.of(context).focusColor),
+                        ),
+                        if(userOrderModel.orderState=='Approved')
+                          Icon(Icons.refresh,color: Theme.of(context).focusColor,size: 15,)
+                      ],
+                    ),
+                  )
+                ),
               )
-            ),
+            ],
+          ),
+          IconButton(
+            icon: Icon(Icons.close,color: Colors.grey,size: 18,),
+            onPressed: (){
+              if(userOrderModel.orderState=='In Progress'){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return makeAlert(
+                        context: context,
+                        cubit: cubit,
+                        orderModel: userOrderModel
+                    );
+                  },
+                );
+              }
+              else{
+                cubit.deleteOrder(userOrderModel);
+              }
+
+            },
           )
         ],
       ),

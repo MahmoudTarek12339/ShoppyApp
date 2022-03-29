@@ -81,7 +81,7 @@ class CategoryProductsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  productModel.rate>0?
+                  productModel.offer>0?
                   Padding(
                     padding: const EdgeInsets.only(left: 9),
                     child: Arc(

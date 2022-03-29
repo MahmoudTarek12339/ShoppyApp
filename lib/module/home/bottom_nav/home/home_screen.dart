@@ -411,7 +411,7 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${productModel.price}',
+                      '${productModel.price.toStringAsFixed(2)}',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
