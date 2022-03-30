@@ -8,6 +8,7 @@ import 'package:shoppy/model/product_model.dart';
 import 'package:shoppy/module/home/bottom_nav/category/category_products_screen.dart';
 import 'package:shoppy/module/home/product_screen/product_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchScreen extends StatelessWidget {
   final TextEditingController searchController= TextEditingController();
@@ -31,7 +32,7 @@ class SearchScreen extends StatelessWidget {
               autofocus: true,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: "Search for Product, Store",
+                hintText: "${AppLocalizations.of(context)!.search}",
                 hintStyle: TextStyle(color: Colors.grey),
                 suffixIcon: searchController.text.isNotEmpty?IconButton(
                   onPressed: (){

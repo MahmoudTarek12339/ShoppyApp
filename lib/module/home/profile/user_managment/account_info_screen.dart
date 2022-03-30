@@ -5,6 +5,7 @@ import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountInfoScreen extends StatelessWidget {
   final TextEditingController nameController=TextEditingController();
@@ -51,7 +52,7 @@ class AccountInfoScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Email',
+                      '${AppLocalizations.of(context)!.email}',
                       style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 14.0),
                     ),
                     TextFormField(
@@ -68,7 +69,7 @@ class AccountInfoScreen extends StatelessWidget {
                       height: 25,
                     ),
                     Text(
-                      'Full Name',
+                      '${AppLocalizations.of(context)!.fullName}',
                       style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 14.0),
                     ),
                     TextFormField(
@@ -99,7 +100,7 @@ class AccountInfoScreen extends StatelessWidget {
                           ShoppyCubit.get(context).changeName(name: nameController.text);
                         }
                       },
-                      text: 'Save',
+                      text: '${AppLocalizations.of(context)!.save}',
                       context: context,
                     ),
                     if(state is ShoppyChangeNameLoadingState)

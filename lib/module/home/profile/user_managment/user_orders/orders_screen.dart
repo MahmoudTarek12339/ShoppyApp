@@ -9,7 +9,7 @@ import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/model/user_orders_model.dart';
 import 'package:shoppy/module/home/profile/user_managment/user_orders/order_details_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class OrdersScreen extends StatelessWidget {
 
   @override
@@ -156,10 +156,15 @@ class OrdersScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userOrderModel.orderState,
+                      userOrderModel.orderState=='In Progress'?
+                        '${AppLocalizations.of(context)!.inProgress}'
+                          :userOrderModel.orderState=='Canceled'?
+                            '${AppLocalizations.of(context)!.canceled}'
+                              :'${AppLocalizations.of(context)!.delivered}',
                       style: TextStyle(
                         overflow: TextOverflow.ellipsis,
-                        color:userOrderModel.orderState=='In Progress'?Colors.redAccent :Colors.green,
+                        color:userOrderModel.orderState=='In Progress'?Colors.orangeAccent:
+                        userOrderModel.orderState=='Canceled'?Colors.red:Colors.green,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -208,10 +213,10 @@ class OrdersScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          userOrderModel.orderState=='Approved'?'Re-Order':'Cancel',
+                          userOrderModel.orderState=='In Progress'?'${AppLocalizations.of(context)!.cancel}':'${AppLocalizations.of(context)!.reOrder}',
                           style: Theme.of(context).textTheme.subtitle1!.copyWith(color:Theme.of(context).focusColor),
                         ),
-                        if(userOrderModel.orderState=='Approved')
+                        if(userOrderModel.orderState!='In Progress')
                           Icon(Icons.refresh,color: Theme.of(context).focusColor,size: 15,)
                       ],
                     ),
@@ -223,7 +228,7 @@ class OrdersScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.close,color: Colors.grey,size: 18,),
             onPressed: (){
-              if(userOrderModel.orderState=='In Progress'){
+              if(userOrderModel.orderState=='Approved'){
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -238,7 +243,6 @@ class OrdersScreen extends StatelessWidget {
               else{
                 cubit.deleteOrder(userOrderModel);
               }
-
             },
           )
         ],

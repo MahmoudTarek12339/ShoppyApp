@@ -35,7 +35,7 @@ class ProductModel{
     price=json['offer']!=''?double.parse(json['price'])*((100-double.parse(json['offer']))/100):double.parse(json['price']);
     rate=json['rate']??5;
     offer=json['offer']!=''?double.parse(json['offer']).floor():0;
-    bestSeller=json['bestSeller'];
+    bestSeller=json['bestSeller']??0;
     photos=json['photos'];
     data =json['data'];
   }

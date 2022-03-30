@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/module/login/cubit/cubit.dart';
 import 'package:shoppy/module/login/cubit/states.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../shared/components/constants.dart';
 
@@ -88,7 +89,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                             }
                             return null;
                           },
-                          label: 'Email',
+                          label: '${AppLocalizations.of(context)!.email}',
                           context: context,
                           prefix:Icons.search,
                         ),
@@ -96,7 +97,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                           height: 50,
                         ),
                         defaultButton(
-                          text: 'SEND',
+                          text: '${AppLocalizations.of(context)!.send}',
                           onPressFunction: (){
                             if(formKey.currentState!.validate()){
                               String email=emailController.text.toString().trim();

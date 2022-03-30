@@ -16,6 +16,7 @@ import 'package:shoppy/shared/components/components.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../product_screen/product_screen.dart';
 
@@ -94,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                                   child: TextFormField(
                                     enabled: false,
                                     decoration: InputDecoration(
-                                      hintText: "Search for Product, Store",
+                                      hintText: "${AppLocalizations.of(context)!.search}",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       prefixIcon: Icon(
                                         Icons.search,
@@ -222,7 +223,7 @@ class HomeScreen extends StatelessWidget {
 
                             //for you
                             Text(
-                              ' For you',
+                              ' ${AppLocalizations.of(context)!.forYou}',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             SizedBox(
@@ -254,7 +255,7 @@ class HomeScreen extends StatelessWidget {
 
                             //best sell
                             Text(
-                              ' Best Sell',
+                              ' ${AppLocalizations.of(context)!.bestSell}',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             SizedBox(
@@ -286,7 +287,7 @@ class HomeScreen extends StatelessWidget {
                               height: 35.0,
                             ),
                             Text(
-                              ' Find your Inspiration',
+                              ' ${AppLocalizations.of(context)!.youMayLike}',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             SizedBox(

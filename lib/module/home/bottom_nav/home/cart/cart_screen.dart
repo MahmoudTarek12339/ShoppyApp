@@ -65,7 +65,7 @@ class CartScreen extends StatelessWidget {
                     color: Color(0xffec8d2f),
                   )
               ),
-              onPressed: () {
+              onPressed: ()async{
                 navigateTo(context, PaymentScreen(cubit.cartTotal,cubit.userAddresses[cubit.radioIndex]));
               },
             ),
@@ -267,7 +267,7 @@ class CartScreen extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  '${orderModel.price*orderModel.quantity}',
+                  '${(orderModel.price*orderModel.quantity).toStringAsFixed(2)}',
                   style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     color:Theme.of(context).textTheme.bodyText1!.color,
@@ -301,9 +301,15 @@ class CartScreen extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: (){
+                    onPressed: ()async{
+                      await cubit.updateProductQuantity(
+                        orderModel.brandId,
+                        orderModel.productUid,
+                        orderModel.size,
+                        orderModel.color,
+                      );
                       int availableQuantity=int.parse(cubit.products[cubit.products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]);
-                      if(availableQuantity!=0) {
+                      if(availableQuantity>0) {
                         cubit.addProductToCart(orderModel);
                       }
                       else{
@@ -312,7 +318,9 @@ class CartScreen extends StatelessWidget {
                     },
                     icon: Icon(
                       Icons.add_circle,
-                      color: Theme.of(context).focusColor,
+                      color:int.parse(cubit.products[cubit.products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color])>0?
+                        Theme.of(context).focusColor
+                          :Theme.of(context).focusColor.withOpacity(0.3),
                     ),
                   )
                 ],

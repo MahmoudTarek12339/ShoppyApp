@@ -16,6 +16,7 @@ import 'package:shoppy/shared/components/components.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 import '../bottom_nav/home/cart/cart_screen.dart';
@@ -156,7 +157,7 @@ class _ProductScreenState extends State<ProductScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Choose your Color',
+          '${AppLocalizations.of(context)!.chooseYourColor}',
           style: Theme.of(context).textTheme.caption,
         ),
         SizedBox(
@@ -367,7 +368,7 @@ class _ProductScreenState extends State<ProductScreen> {
               description: 'Press here to review product',
               child: ElevatedButton(
                 child: Text(
-                  'Preview Product',
+                  '${AppLocalizations.of(context)!.previewProduct}',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 style: ElevatedButton.styleFrom(primary: Theme.of(context).cardColor),
@@ -411,7 +412,7 @@ class _ProductScreenState extends State<ProductScreen> {
          mainAxisAlignment: MainAxisAlignment.spaceBetween,
          children: [
            Text(
-             'Choose your Size',
+             '${AppLocalizations.of(context)!.chooseYourSize}',
              style: Theme.of(context).textTheme.caption,
            ),
            Showcase(
@@ -421,7 +422,7 @@ class _ProductScreenState extends State<ProductScreen> {
              showcaseBackgroundColor: Theme.of(context).focusColor,
              child: ElevatedButton(
                child: Text(
-                 'Size Guide',
+                 '${AppLocalizations.of(context)!.sizeGuide}',
                  style: Theme.of(context).textTheme.subtitle1,
                ),
                style: ElevatedButton.styleFrom(primary: Theme.of(context).cardColor),
@@ -600,9 +601,21 @@ class _ProductScreenState extends State<ProductScreen> {
           child: SizedBox(
             height: 60,
             child: ElevatedButton(
-              onPressed: (){
+              onPressed: ()async{
+                cubit.updateProductQuantity(
+                  widget.productModel.brandId,
+                  widget.productModel.productUid,
+                  widget.productModel.data.keys
+                      .toList()[widget.currentSelected],
+                  widget
+                      .productModel
+                      .data[widget.productModel.data.keys
+                      .toList()[widget.currentSelected]]!
+                      .keys
+                      .toList()[currentColor],
+                );
                 int availableQuantity=int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.values.toList()[currentColor]);
-                if(availableQuantity!=0) {
+                if(availableQuantity>0) {
                   cubit.addProductToCart(OrderModel(
                     photo: widget.productModel.photos[0],
                     description: widget.productModel.description,
@@ -630,13 +643,15 @@ class _ProductScreenState extends State<ProductScreen> {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 elevation: 0,
-                primary: Theme.of(myContext).focusColor,
+                primary:int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.values.toList()[currentColor])>0?
+                  Theme.of(myContext).focusColor:Theme.of(myContext).focusColor.withOpacity(0.2),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Add to Cart',
+                      int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.values.toList()[currentColor])>0?
+                      '${AppLocalizations.of(context)!.addToCart}':'${AppLocalizations.of(context)!.soldOut}',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

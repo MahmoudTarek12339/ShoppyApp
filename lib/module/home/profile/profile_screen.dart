@@ -9,6 +9,7 @@ import 'package:shoppy/module/home/profile/user_managment/user_orders/orders_scr
 import 'package:shoppy/module/home/profile/user_managment/reset_password_screen.dart';
 import 'package:shoppy/module/home/profile/user_managment/user_addresses/saved_addresses_screen.dart';
 import 'package:shoppy/module/home/profile/user_managment/account_info_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:shoppy/shared/components/components.dart';
 
@@ -60,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Account info',
+                          '${AppLocalizations.of(context)!.accountInfo}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                         Spacer(),
@@ -78,7 +79,7 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Saved Addresses',
+                          '${AppLocalizations.of(context)!.savedAddresses}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                         Spacer(),
@@ -96,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Change Password',
+                          '${AppLocalizations.of(context)!.changePassword}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                         Spacer(),
@@ -114,7 +115,7 @@ class ProfileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Orders',
+                          '${AppLocalizations.of(context)!.orders}',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                         Spacer(),
@@ -134,7 +135,7 @@ class ProfileScreen extends StatelessWidget {
                         mainAxisAlignment:MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Log out',
+                            '${AppLocalizations.of(context)!.logOut}',
                             style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).focusColor),
                           ),
                           SizedBox(

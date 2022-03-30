@@ -6,6 +6,7 @@ import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/model/user_orders_model.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   final UserOrderModel userOrderModel;
@@ -195,7 +196,7 @@ class OrderDetailsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      userOrderModel.orderState=='Approved'?'Re-Order':'Cancel',
+                      userOrderModel.orderState!='${AppLocalizations.of(context)!.inProgress}'?'${AppLocalizations.of(context)!.reOrder}':'${AppLocalizations.of(context)!.cancel}',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

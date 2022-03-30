@@ -530,6 +530,31 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     });
   }
 
+  void updateProductQuantity(String brandId,String productUid,String size,String color){
+    FirebaseFirestore.instance
+        .collection('admins')
+        .doc(brandId)
+        .collection('products')
+        .doc(productUid)
+        .get().then((value) {
+       int productIndex=products.indexWhere((element) => element.productUid==productUid);
+
+       products[productIndex].data[size][color]=value.data()!['data'][size][color];
+       int quantity=cart.where((element) => element.productUid==productUid&&element.color==color&&element.size==size).first.quantity;
+       int fBQuantity=int.parse(products[productIndex].data[size][color]);
+       print(quantity);
+       print(fBQuantity);
+       if(fBQuantity>quantity)
+         products[productIndex].data[size][color]=(fBQuantity-quantity).toString();
+       else {
+         products[productIndex].data[size][color] = '0';
+         cart.where((element) => element.productUid==productUid&&element.color==color&&element.size==size).first.quantity=quantity-(quantity-fBQuantity);
+       }
+       if(cart.where((element) => element.productUid==productUid&&element.color==color&&element.size==size).first.quantity==0){
+         removeProductFromCart(cart.where((element) => element.productUid==productUid&&element.color==color&&element.size==size).first);
+       }
+    });
+    }
   List<ProductModel> bestSellProducts=[];
   void getBestSellProduct(){
     bestSellProducts.addAll(products);
@@ -646,8 +671,29 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       });
     }
   }
+  List<OrderModel> notAvailableOrders=[];
 
   //send order to firebase
+  Future<bool> checkOrderProducts()async{
+    notAvailableOrders.clear();
+    await Future.forEach(cart, (OrderModel element)async{
+      await FirebaseFirestore.instance
+          .collection('admins')
+          .doc(element.brandId)
+          .collection('products')
+          .doc(element.productUid)
+          .get().then((value) {
+        Map<String,dynamic>data=value.data()!['data'];
+        int quantity=int.parse(data[element.size]![element.color]);
+        if(quantity<element.quantity){
+          notAvailableOrders.add(element);
+        }
+      });
+    });
+    print(notAvailableOrders.length);
+   return notAvailableOrders.isEmpty;
+  }
+
   void sendOrder(UserOrderModel userOrderModel)async{
     bool connected=await checkInternetConnection();
     if(connected){

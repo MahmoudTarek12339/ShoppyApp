@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   final TextEditingController currentPasswordController=TextEditingController();
@@ -84,7 +85,7 @@ class ResetPasswordScreen extends StatelessWidget {
                             return null;
                           },
                           isPassword: ShoppyCubit.get(context).isPassword,
-                          label: "Current Password",
+                          label: "${AppLocalizations.of(context)!.currentPassword}",
                           suffix: ShoppyCubit.get(context).icon,
                           suffixPressed: () {
                             ShoppyCubit.get(context).changePasswordVisibility(1);
@@ -110,7 +111,7 @@ class ResetPasswordScreen extends StatelessWidget {
                             return null;
                           },
                           isPassword: ShoppyCubit.get(context).isPassword2,
-                          label: "Password",
+                          label: "${AppLocalizations.of(context)!.password}",
                           suffix: ShoppyCubit.get(context).icon2,
                           suffixPressed: () {
                             ShoppyCubit.get(context).changePasswordVisibility(2);
@@ -137,7 +138,7 @@ class ResetPasswordScreen extends StatelessWidget {
 
                           },
                           isPassword: ShoppyCubit.get(context).isPassword3,
-                          label: "Confirm new Password",
+                          label: "${AppLocalizations.of(context)!.confirmPassword}",
                           suffix: ShoppyCubit.get(context).icon3,
                           suffixPressed: () {
                             ShoppyCubit.get(context).changePasswordVisibility(3);
@@ -164,7 +165,7 @@ class ResetPasswordScreen extends StatelessWidget {
                           clipBehavior: Clip.antiAlias,
                           child: state is ShoppyChangePasswordLoadingState?
                             Center(child: CircularProgressIndicator()):Text(
-                                'Change Password',
+                                '${AppLocalizations.of(context)!.save}',
                                 style: TextStyle(
                                   color: Theme.of(context).iconTheme.color,
                                 ),)

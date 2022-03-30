@@ -6,6 +6,7 @@ import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/module/login/login_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../shared/components/constants.dart';
 import 'cubit/cubit.dart';
@@ -99,13 +100,13 @@ class SignupScreen extends StatelessWidget {
                               textUtils(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.w500,
-                                text: 'Sign',
+                                text: '${AppLocalizations.of(context)!.sign}',
                                 color:Theme.of(context).focusColor ,
                               ),
                               textUtils(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.w500,
-                                text: ' Up',
+                                text: ' ${AppLocalizations.of(context)!.up}',
                                 color:Theme.of(context).textTheme.bodyText1!.color ,
                               ),
                             ],
@@ -115,7 +116,7 @@ class SignupScreen extends StatelessWidget {
                           ),
 
                           Text(
-                            'Sign up with one of The following Options',
+                            '${AppLocalizations.of(context)!.loginWithOneOfTheFollowingOptions}',
                             style: Theme.of(context).textTheme.caption,
                           ),
                           SizedBox(height: 15.0,),
@@ -173,7 +174,7 @@ class SignupScreen extends StatelessWidget {
                                     }
                                     return null;
                                   },
-                                  label: "First Name",
+                                  label: "${AppLocalizations.of(context)!.firstName}",
                                 ),
                               ),
                               SizedBox(width: 20.0,),
@@ -188,7 +189,7 @@ class SignupScreen extends StatelessWidget {
                                     }
                                     return null;
                                   },
-                                  label: "Last Name",
+                                  label: "${AppLocalizations.of(context)!.lastName}",
                                 ),
                               ),
                             ],
@@ -204,7 +205,7 @@ class SignupScreen extends StatelessWidget {
                               }
                               return null;
                             },
-                            label: "Phone Number",
+                            label: "${AppLocalizations.of(context)!.phoneNumber}",
                           ),
                           SizedBox(height: 20.0,),
                           defaultFormField(
@@ -217,7 +218,7 @@ class SignupScreen extends StatelessWidget {
                               }
                               return null;
                             },
-                            label: "Email",
+                            label: "${AppLocalizations.of(context)!.email}",
                           ),
                           SizedBox(height: 20.0,),
                           defaultFormField(
@@ -231,7 +232,7 @@ class SignupScreen extends StatelessWidget {
                               return null;
                             },
                             isPassword: ShoppySignupCubit.get(context).isPassword,
-                            label: "Password",
+                            label: "${AppLocalizations.of(context)!.password}",
                             suffix: ShoppySignupCubit.get(context).icon,
                             suffixPressed: () {
                               ShoppySignupCubit.get(context).changePasswordVisibility();
@@ -252,7 +253,7 @@ class SignupScreen extends StatelessWidget {
                               return null;
                             },
                             isPassword: true,
-                            label: "Confirm Password",
+                            label: "${AppLocalizations.of(context)!.confirmPassword}",
                           ),
                           SizedBox(
                             height: 35.0,
@@ -273,7 +274,7 @@ class SignupScreen extends StatelessWidget {
                                   navigateTo(context, ImagePickingScreen());
                                 }
                               },
-                              text: 'Create Account',
+                              text: '${AppLocalizations.of(context)!.signUp}',
                             ),
                           ),
                           SizedBox(
@@ -283,13 +284,13 @@ class SignupScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'already have account!',
+                                '${AppLocalizations.of(context)!.alreadyHaveAccount}!',
                                 style: Theme.of(context).textTheme.subtitle1,
                               ),
                               TextButton(onPressed: (){
                                 navigateAndFinish(context,LoginScreen());
                               },
-                                  child: Text('Log in'))
+                                  child: Text('${AppLocalizations.of(context)!.logIn}'))
                             ],
                           )
                         ],

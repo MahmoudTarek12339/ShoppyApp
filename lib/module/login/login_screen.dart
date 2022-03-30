@@ -12,6 +12,8 @@ import 'package:shoppy/shared/network/local/cache_helper.dart';
 import '../../shared/components/constants.dart';
 import 'cubit/cubit.dart';
 import 'forgot_password.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController=TextEditingController();
@@ -111,13 +113,13 @@ class LoginScreen extends StatelessWidget {
                               textUtils(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.w500,
-                                text: 'Log',
+                                text: '${AppLocalizations.of(context)!.log}',
                                 color:Theme.of(context).focusColor ,
                               ),
                               textUtils(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.w500,
-                                text: ' In',
+                                text: ' ${AppLocalizations.of(context)!.iN}',
                                 color:Theme.of(context).textTheme.bodyText1!.color ,
                               ),
                             ],
@@ -126,7 +128,7 @@ class LoginScreen extends StatelessWidget {
                             height: 50,
                           ),
                           Text(
-                            'Login with one of The following Options',
+                            '${AppLocalizations.of(context)!.loginWithOneOfTheFollowingOptions}',
                             style: Theme.of(context).textTheme.caption,
                           ),
                           SizedBox(height: 15.0,),
@@ -170,7 +172,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 20.0,),
                           Text(
-                            'Email',
+                            '${AppLocalizations.of(context)!.email}',
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           SizedBox(height: 15.0,),
@@ -184,11 +186,11 @@ class LoginScreen extends StatelessWidget {
                               }
                               return null;
                             },
-                            label: "Email",
+                            label: "${AppLocalizations.of(context)!.email}",
                           ),
                           SizedBox(height: 20.0,),
                           Text(
-                            'Password',
+                            '${AppLocalizations.of(context)!.password}',
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           SizedBox(height: 15.0,),
@@ -203,7 +205,7 @@ class LoginScreen extends StatelessWidget {
                               return null;
                             },
                             isPassword: ShoppyLoginCubit.get(context).isPassword,
-                            label: "Password",
+                            label: "${AppLocalizations.of(context)!.password}",
                             suffix: ShoppyLoginCubit.get(context).icon,
                             suffixPressed: () {
                               ShoppyLoginCubit.get(context).changePasswordVisibility();
@@ -219,7 +221,7 @@ class LoginScreen extends StatelessWidget {
                                   navigateTo(context,ForgetPasswordScreen());
                                 },
                                 child: textUtils(
-                                  text: 'Forgot Password?',
+                                  text: '${AppLocalizations.of(context)!.forgetPassword}',
                                   color: Theme.of(context).textTheme.bodyText1!.color,
                                   fontWeight: FontWeight.normal,
                                   fontSize: 14.0,
@@ -242,7 +244,7 @@ class LoginScreen extends StatelessWidget {
                                       password: passwordController.text);
                                 }
                               },
-                              text: 'LOGIN',
+                              text: '${AppLocalizations.of(context)!.logIn}',
                             ):Center(child: CircularProgressIndicator()),
                           ),
                           SizedBox(
@@ -252,14 +254,14 @@ class LoginScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Don\'t have an account?',
+                                '${AppLocalizations.of(context)!.doNotHaveAnAccount}',
                                 style: Theme.of(context).textTheme.subtitle1,
 
                               ),
                               TextButton(onPressed: (){
                                 navigateTo(context,SignupScreen());
                               },
-                                  child: Text('Register Now'))
+                                  child: Text('${AppLocalizations.of(context)!.registerNow}'))
                             ],
                           )
                         ],
