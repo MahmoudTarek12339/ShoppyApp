@@ -20,7 +20,7 @@ class OrdersScreen extends StatelessWidget {
             defaultSnackBar(
               context: context,
               color: Colors.green,
-              title: 'Order Cancelled Successfully',
+              title: '${AppLocalizations.of(context)!.orderCancelledSuccessfully}',
             );
           }
           else if(state is ShoppyRemoveFromOrdersErrorState){
@@ -34,7 +34,7 @@ class OrdersScreen extends StatelessWidget {
             defaultSnackBar(
               context: context,
               color: Colors.green,
-              title: 'Re Ordered Successfully',
+              title: '${AppLocalizations.of(context)!.reOrderedSuccessfully}',
             );
 
           }
@@ -94,7 +94,7 @@ class OrdersScreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
                           child: Text(
-                            'Something went wrong',
+                            '${AppLocalizations.of(context)!.somethingWentWrong}',
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
@@ -266,7 +266,7 @@ class OrdersScreen extends StatelessWidget {
           text: TextSpan(
               children:[
                 TextSpan(
-                  text: 'No order ',
+                  text: '${AppLocalizations.of(context)!.noOrder}',
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1!.color,
                     fontSize: 30,
@@ -274,7 +274,7 @@ class OrdersScreen extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: 'Placed',
+                  text: '${AppLocalizations.of(context)!.placed}',
                   style: TextStyle(
                     color: Theme.of(context).focusColor,
                     fontSize: 30,
@@ -288,7 +288,7 @@ class OrdersScreen extends StatelessWidget {
           height: 15,
         ),
         Text(
-          'order placed will be displayed here',
+          '${AppLocalizations.of(context)!.orderPlacedWillBeDisplayedHere}',
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyText1!.color,
             fontSize: 12,
@@ -305,7 +305,7 @@ class OrdersScreen extends StatelessWidget {
               navigateAndFinish(context,ShoppyLayout());
             },
             child: Text(
-              'Order Now',
+              '${AppLocalizations.of(context)!.orderNow}',
               style: TextStyle(
                 fontSize: 20,
               ),
@@ -329,18 +329,18 @@ class OrdersScreen extends StatelessWidget {
     required UserOrderModel orderModel,
   })=> AlertDialog(
     title: Text(
-      "Confirm Cancel",
+      "${AppLocalizations.of(context)!.confirmCancel}",
       style:Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).focusColor),
     ),
     content: Text(
-        "Are you Sure you Want to Cancel This Order.",
+        "${AppLocalizations.of(context)!.areYouSureYouWantToBuyOnThisWay}.",
         style:Theme.of(context).textTheme.subtitle1
     ),
     backgroundColor: Theme.of(context).cardColor,
     actions: [
       TextButton(
         child: Text(
-          "No",
+          "${AppLocalizations.of(context)!.no}",
           style: TextStyle(
             color: Theme.of(context).focusColor,
           ),
@@ -351,7 +351,7 @@ class OrdersScreen extends StatelessWidget {
       ),
       TextButton(
         child: Text(
-            "OK",
+            "${AppLocalizations.of(context)!.oK}",
             style: TextStyle(
               color: Theme.of(context).focusColor,
             )

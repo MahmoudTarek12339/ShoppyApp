@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'camera_screen.dart';
 class PosesGuideScreen extends StatefulWidget {
@@ -126,7 +127,7 @@ class _PosesGuideScreenState extends State<PosesGuideScreen> {
                             :SizedBox(),
                         TextButton(
                           child: Text(
-                            currentIndex==poses.length-1?'Continue':'Next',
+                            currentIndex==poses.length-1?'${AppLocalizations.of(context)!.continueE}':'${AppLocalizations.of(context)!.next}',
                             style: Theme.of(context).textTheme.bodyText1!.copyWith(color:Theme.of(context).focusColor),
                           ),
                           onPressed: ()async{

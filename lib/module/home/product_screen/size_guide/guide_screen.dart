@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:shoppy/module/home/product_screen/size_guide/poses_guide_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class GuideScreen extends StatefulWidget {
   final double height;
@@ -15,17 +17,18 @@ class GuideScreen extends StatefulWidget {
 
 class _GuideScreenState extends State<GuideScreen> {
 
-  final List guides=[
-    'Stand a meter away from the wall',
-    'Please Tie your hair',
-    'Please wear tight fitted clothing',
-    'Your Full body Must Be visible Inside the phone Screen',
-    'Ensure your background adjacent with your clothing color',
-    'Place the phone at a vertical angle in front of you'
-  ];
 
   @override
   Widget build(BuildContext context) {
+    List guides=[
+      '${AppLocalizations.of(context)!.standAMeterAwayFromTheWall}',
+      '${AppLocalizations.of(context)!.pleaseTieYourHair}',
+      '${AppLocalizations.of(context)!.pleaseWearTightFittedClothing}',
+      '${AppLocalizations.of(context)!.yourFullBodyMustBeVisibleInsideThePhoneScreen}',
+      '${AppLocalizations.of(context)!.ensureYourBackgroundAdjacentWithYourClothingColor}',
+      "${AppLocalizations.of(context)!.placeThePhoneAtAVerticalAngleInFrontOfYou}"
+    ];
+
     return SafeArea(
       child: Scaffold(
         appBar:AppBar(
@@ -68,7 +71,7 @@ class _GuideScreenState extends State<GuideScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: defaultButton(
-                  text: 'Continue',
+                  text: '${AppLocalizations.of(context)!.continueE}',
                   onPressFunction: (){
                     navigateTo(context, PosesGuideScreen(widget.height,widget.clothing,widget.category));
                   },

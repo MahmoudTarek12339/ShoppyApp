@@ -5,6 +5,7 @@ import 'package:shoppy/model/onboard_model.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   @override
@@ -15,33 +16,33 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   var onBoardController = PageController();
   int currentIndex=0;
 
-  List<OnBoard> list = [
-    OnBoard(
-        imageUrl: 'assets/images/easyShopping.json',
-        title: 'Easy Shopping',
-        description: 'Find your inspiration with a huge collection of products and exclusive brands'),
-    OnBoard(
-        imageUrl: 'assets/images/speedDelivery.json',
-        title: 'Quick Delivery',
-        description: 'delivery whenever you order wherever you are your order wil be there on time'),
-    OnBoard(
-        imageUrl: 'assets/images/easePayment.json',
-        title: 'Secure Payment',
-        description: 'your data is safe with us'),
-  ];
   @override
   void initState(){
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
+    List<OnBoard> list = [
+      OnBoard(
+          imageUrl: 'assets/images/easyShopping.json',
+          title: '${AppLocalizations.of(context)!.easyShopping}',
+          description: '${AppLocalizations.of(context)!.findYourInspirationWithAHugeCollectionOfProductsAndExclusiveBrands}'),
+      OnBoard(
+          imageUrl: 'assets/images/speedDelivery.json',
+          title: '${AppLocalizations.of(context)!.quickDelivery}',
+          description: '${AppLocalizations.of(context)!.deliveryWheneverYouOrderWhereverYouAreYourOrderWilBeThereOnTime}'),
+      OnBoard(
+          imageUrl: 'assets/images/easePayment.json',
+          title: '${AppLocalizations.of(context)!.securePayment}',
+          description: '${AppLocalizations.of(context)!.yourDataIsSafeWithUs}'),
+    ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
           TextButton(
             child: Text(
-              'skip',
+              '${AppLocalizations.of(context)!.skip}',
               style: Theme.of(context).textTheme.bodyText1!.copyWith(color:Theme.of(context).focusColor),
             ),
             onPressed: (){
@@ -57,7 +58,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         children: [
           Expanded(
             child: PageView.builder(
-              itemBuilder: (context,index)=>onBoard(index),
+              itemBuilder: (context,index)=>onBoard(index,list),
               controller: onBoardController,
               itemCount: list.length,
                 onPageChanged: (int index) {
@@ -96,7 +97,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 Spacer(),
                 TextButton(
                   child: Text(
-                    currentIndex<2?'Next':'Start',
+                    currentIndex<2?'${AppLocalizations.of(context)!.next}':'${AppLocalizations.of(context)!.start}',
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(color:Theme.of(context).focusColor),
                   ),
                   onPressed: (){
@@ -121,7 +122,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       )
     );
   }
-  Widget onBoard(int index)=>Column(
+  Widget onBoard(int index,List list)=>Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Lottie.asset(

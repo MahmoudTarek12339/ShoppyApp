@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
           defaultSnackBar(
             context: context,
             color: Colors.green,
-            title: 'Logged out successfully',
+            title: '${AppLocalizations.of(context)!.loggedOutSuccessfully}',
           );
         }
         else if(state is UserLoggedOutErrorState){
@@ -57,7 +57,6 @@ class HomeScreen extends StatelessWidget {
                 CacheHelper.saveData(
                     key: 'Screen1',
                     value: false).then((value){
-                  print('finished');
                 });
               },
               builder: Builder(
@@ -82,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         child: Showcase(
                           key: _one,
-                          description: 'click here to search for a product ',
+                          description: '${AppLocalizations.of(context)!.clickHereToSearchForAProduct}',
                           descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
                           showcaseBackgroundColor: Theme.of(context).focusColor,
                           child: Row(
@@ -107,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                               Showcase(
                                 key: _two,
-                                description: 'click here to login or edit your account data',
+                                description: '${AppLocalizations.of(context)!.clickHereToLoginOrEditYourAccountData}',
                                 descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
                                 showcaseBackgroundColor: Theme.of(context).focusColor,
                                 child: Padding(
@@ -138,7 +137,7 @@ class HomeScreen extends StatelessWidget {
                       actions: [
                         Showcase(
                           key: _three,
-                          description: 'click here to navigate your cart',
+                          description: '${AppLocalizations.of(context)!.clickHereToNavigateYourCart}',
                           descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
                           showcaseBackgroundColor: Theme.of(context).focusColor,
                           child: Badge(

@@ -32,7 +32,7 @@ class SignupScreen extends StatelessWidget {
             if(state is ShoppyInternetNotConnectedState){
               defaultSnackBar(
                   context: context,
-                  title: 'you are currently offline',
+                  title: '${AppLocalizations.of(context)!.youAreCurrentlyOffline}',
                   color: Colors.black);
             }
 
@@ -42,7 +42,7 @@ class SignupScreen extends StatelessWidget {
               defaultSnackBar(
                 context: context,
                 color: Colors.green,
-                title: 'Welcome ${myGoogleUser!.displayName}',
+                title: '${AppLocalizations.of(context)!.welcome} ${myGoogleUser!.displayName}',
               );
               CacheHelper.saveData(
                   key: 'uId',
@@ -55,7 +55,7 @@ class SignupScreen extends StatelessWidget {
               defaultSnackBar(
                 context: context,
                 color: Colors.green,
-                title: 'Welcome ${userData['name']}',
+                title: '${AppLocalizations.of(context)!.welcome} ${userData['name']}',
               );
               CacheHelper.saveData(
                   key: 'uId',
@@ -170,7 +170,7 @@ class SignupScreen extends StatelessWidget {
                                   type: TextInputType.name,
                                   validate: (value){
                                     if(value.toString().length<=2||!RegExp(validationName).hasMatch(value!)){
-                                      return 'please enter your name';
+                                      return '${AppLocalizations.of(context)!.pleaseEnterYourName}';
                                     }
                                     return null;
                                   },
@@ -185,7 +185,7 @@ class SignupScreen extends StatelessWidget {
                                   type: TextInputType.name,
                                   validate: (value){
                                     if(value.toString().length<=2||!RegExp(validationName).hasMatch(value!)){
-                                      return 'please enter your name';
+                                      return '${AppLocalizations.of(context)!.pleaseEnterYourName}';
                                     }
                                     return null;
                                   },
@@ -201,7 +201,7 @@ class SignupScreen extends StatelessWidget {
                             type: TextInputType.phone,
                             validate: (value){
                               if(value.toString().length!=11){
-                                return 'please enter Valid Number';
+                                return '${AppLocalizations.of(context)!.pleaseEnterValidNumber}';
                               }
                               return null;
                             },
@@ -214,7 +214,7 @@ class SignupScreen extends StatelessWidget {
                             type: TextInputType.emailAddress,
                             validate: (value){
                               if(!RegExp(validationEmail).hasMatch(value!)){
-                                return 'please enter your email';
+                                return '${AppLocalizations.of(context)!.pleaseEnterYourEmail}';
                               }
                               return null;
                             },
@@ -227,7 +227,7 @@ class SignupScreen extends StatelessWidget {
                             type: TextInputType.visiblePassword,
                             validate: (value){
                               if(value.toString().length<8){
-                                return 'Password Must be at least 8 characters';
+                                return '${AppLocalizations.of(context)!.passwordMustBeAtLeastCharacters}';
                               }
                               return null;
                             },
@@ -245,10 +245,10 @@ class SignupScreen extends StatelessWidget {
                             type: TextInputType.visiblePassword,
                             validate: (value){
                               if(value!.isEmpty){
-                                return 'please confirm your password';
+                                return '${AppLocalizations.of(context)!.pleaseConfirmYourPassword}';
                               }
                               else if(value!=passwordController.text.toString()){
-                                return 'this not match';
+                                return '${AppLocalizations.of(context)!.thisNotMatch}';
                               }
                               return null;
                             },

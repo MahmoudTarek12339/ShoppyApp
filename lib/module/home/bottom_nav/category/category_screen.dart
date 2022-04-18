@@ -4,6 +4,7 @@ import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/module/home/bottom_nav/category/category_products_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CategoriesScreen extends StatelessWidget {
 
@@ -24,6 +25,13 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> categories=[
+      '${AppLocalizations.of(context)!.shirts}',
+      '${AppLocalizations.of(context)!.tShirts}',
+      '${AppLocalizations.of(context)!.pants}',
+      '${AppLocalizations.of(context)!.shorts}',
+      '${AppLocalizations.of(context)!.jackets}',
+    ];
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
       listener: (context,state){},
       builder: (context,state){
@@ -33,7 +41,10 @@ class CategoriesScreen extends StatelessWidget {
             padding: EdgeInsets.only(left: 15,top: 15,right: 15),
             child: Column(
               children: [
-                categoryWidget(cubit: ShoppyCubit.get(context)),
+                categoryWidget(
+                  cubit: ShoppyCubit.get(context),
+                  categories: categories,
+                ),
               ],
             ),
           ),
@@ -43,6 +54,7 @@ class CategoriesScreen extends StatelessWidget {
   }
   Widget categoryWidget({
   required cubit,
+    required List<String> categories,
 })=>Expanded(
     child: ListView.separated(
       itemBuilder: (context,index)=>InkWell(
@@ -67,7 +79,7 @@ class CategoriesScreen extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                categoriesNameList[index],
+                categories[index],
                 style: TextStyle(
                   color: Colors.white70,
                   fontSize: 22,

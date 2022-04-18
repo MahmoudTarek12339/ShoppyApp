@@ -8,6 +8,7 @@ import 'package:shoppy/model/address_model.dart';
 import 'package:shoppy/module/home/bottom_nav/home/cart/cart_screen.dart';
 import 'package:shoppy/module/home/profile/user_managment/user_addresses/saved_addresses_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserLocationScreen extends StatefulWidget {
   final Placemark userPlace;
@@ -45,7 +46,7 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
           defaultSnackBar(
             context: context,
             color: Colors.green,
-            title: 'address Added Successfully',
+            title: '${AppLocalizations.of(context)!.addressAddedSuccessfully}',
           );
           widget.isCart?
             navigateTo(context,CartScreen())
@@ -67,7 +68,7 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              'Add Address',
+              '${AppLocalizations.of(context)!.addAddress}',
             ),
             centerTitle: true,
             backgroundColor: Theme.of(context).focusColor,
@@ -117,7 +118,7 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                                 primary: Colors.white,
                               ),
                               child: Text(
-                                'Refine Location',
+                                '${AppLocalizations.of(context)!.refineLocation}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -142,12 +143,12 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                         errorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.red),
                         ),
-                        labelText: 'Area',
+                        labelText: '${AppLocalizations.of(context)!.area}',
                         labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.grey),
                       ),
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'This field is Required';
+                          return '${AppLocalizations.of(context)!.thisFieldIsRequired}';
                         }
                         return null;
                       },
@@ -168,12 +169,12 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                         errorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.red),
                         ),
-                        labelText: 'Street Name',
+                        labelText: '${AppLocalizations.of(context)!.streetName}',
                         labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.grey),
                       ),
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'This field is Required';
+                          return '${AppLocalizations.of(context)!.thisFieldIsRequired}';
                         }
                         return null;
                       },
@@ -194,12 +195,12 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                         errorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.red),
                         ),
-                        labelText: 'Building name/number',
+                        labelText: '${AppLocalizations.of(context)!.buildingNumber}',
                         labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.grey),
                       ),
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'This field is Required';
+                          return '${AppLocalizations.of(context)!.thisFieldIsRequired}';
                         }
                         return null;
                       },
@@ -221,12 +222,12 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                         errorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.red),
                         ),
-                        labelText: 'Floor number',
+                        labelText: '${AppLocalizations.of(context)!.floorNumber}',
                         labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.grey),
                       ),
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'This field is Required';
+                          return '${AppLocalizations.of(context)!.thisFieldIsRequired}';
                         }
                         return null;
                       },
@@ -248,12 +249,12 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                         errorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.red),
                         ),
-                        labelText: 'Apartment number',
+                        labelText: '${AppLocalizations.of(context)!.apartmentNumber}',
                         labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.grey),
                       ),
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'This field is Required';
+                          return '${AppLocalizations.of(context)!.thisFieldIsRequired}';
                         }
                         return null;
                       },
@@ -275,17 +276,17 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                         errorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.red),
                         ),
-                        labelText: 'Mobile number',
+                        labelText: '${AppLocalizations.of(context)!.mobileNumber}',
                         labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.grey),
                         prefixText: '+20 ',
                         prefixStyle: Theme.of(context).textTheme.subtitle1,
                       ),
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'This field is Required';
+                          return '${AppLocalizations.of(context)!.thisFieldIsRequired}';
                         }
                         else if(value.length!=11){
-                          return 'Invalid phone Number';
+                          return '${AppLocalizations.of(context)!.invalidPhoneNumber}';
                         }
                         return null;
                       },
@@ -325,7 +326,7 @@ class _UserLocationScreenState extends State<UserLocationScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Save Address',
+                                    '${AppLocalizations.of(context)!.saveAddress}',
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,

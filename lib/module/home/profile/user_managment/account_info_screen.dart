@@ -19,7 +19,7 @@ class AccountInfoScreen extends StatelessWidget {
           defaultSnackBar(
             context: context,
             color: Colors.green,
-            title: 'Name Changed Successfully',
+            title: '${AppLocalizations.of(context)!.nameChangedSuccessfully}',
           );
           navigateAndFinish(context, ShoppyLayout());
         }
@@ -88,7 +88,7 @@ class AccountInfoScreen extends StatelessWidget {
                       ),
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'Name must n\'t Be Empty';
+                          return '${AppLocalizations.of(context)!.nameMustNotBeEmpty}';
                         }
                         return null;
                       },

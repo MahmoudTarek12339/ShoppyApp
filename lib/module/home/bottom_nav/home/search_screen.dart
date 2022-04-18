@@ -72,7 +72,7 @@ class SearchScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            ' Stores',
+                            ' ${AppLocalizations.of(context)!.stores}',
                             textAlign: TextAlign.left,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
@@ -110,7 +110,7 @@ class SearchScreen extends StatelessWidget {
                             height: 5,
                           ),
                           Text(
-                            ' Products',
+                            '${AppLocalizations.of(context)!.products}',
                             textAlign: TextAlign.left,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),

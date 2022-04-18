@@ -5,6 +5,7 @@ import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImagePickingScreen extends StatelessWidget {
 
@@ -18,7 +19,7 @@ class ImagePickingScreen extends StatelessWidget {
             defaultSnackBar(
               context: context,
               color: Colors.green,
-              title: 'Picture set successfully',
+              title: '${AppLocalizations.of(context)!.pictureSetSuccessfully}',
             );
             navigateAndFinish(context,ShoppyLayout());
           }
@@ -38,7 +39,7 @@ class ImagePickingScreen extends StatelessWidget {
                 TextButton(onPressed: (){
                   navigateAndFinish(context, ShoppyLayout());
                 }, child: Text(
-                  'Skip',
+                  '${AppLocalizations.of(context)!.skip}',
                   style:Theme.of(context).textTheme.subtitle1,
                 ))
               ],
@@ -95,7 +96,7 @@ class ImagePickingScreen extends StatelessWidget {
                               navigateAndFinish(context, ShoppyLayout());
                             }
                           },
-                          text: 'Set Profile Picture',
+                          text: '${AppLocalizations.of(context)!.setProfilePicture}',
                         ),
                         if(state is SocialUploadProfileImageLoadingState)
                           SizedBox(height: 5.0,),

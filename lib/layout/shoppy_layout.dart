@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShoppyLayout extends StatelessWidget {
 
@@ -14,7 +15,7 @@ class ShoppyLayout extends StatelessWidget {
         if(state is ShoppyInternetNotConnectedState){
           defaultSnackBar(
               context: context,
-              title: 'you are currently offline',
+              title: '${AppLocalizations.of(context)!.youAreCurrentlyOffline}',
               color: Colors.black);
         }
         else if(state is ShoppyLoginFirstState){
@@ -23,7 +24,7 @@ class ShoppyLayout extends StatelessWidget {
             builder: (BuildContext context) {
               return alertLogin(
                   context: context,
-                  title: 'Login First To Save your data '
+                  title: '${AppLocalizations.of(context)!.loginFirstToSaveYourData}'
               );
             },
           );
@@ -52,23 +53,23 @@ class ShoppyLayout extends StatelessWidget {
             items: [
               BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.home),
-                label: 'Home',
+                label: '${AppLocalizations.of(context)!.home}',
               ),
               BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.shopify),
-                label: 'Stores',
+                label: '${AppLocalizations.of(context)!.stores}',
               ),
               BottomNavigationBarItem(
                   icon: FaIcon(FontAwesomeIcons.listAlt),
-                  label: 'Categories'
+                  label: '${AppLocalizations.of(context)!.categories}'
               ),
               BottomNavigationBarItem(
                   icon: FaIcon(FontAwesomeIcons.heart),
-                  label: 'Wish List'
+                  label: '${AppLocalizations.of(context)!.wishList}'
               ),
               BottomNavigationBarItem(
                   icon: FaIcon(FontAwesomeIcons.infoCircle),
-                  label: 'info'
+                  label: '${AppLocalizations.of(context)!.info}'
               ),
             ],
           )
@@ -86,17 +87,17 @@ class ShoppyLayout extends StatelessWidget {
             color: Theme.of(context).focusColor.withOpacity(0.8)
         ),
         Text(
-          'Whoops',
+          '${AppLocalizations.of(context)!.whoops}',
           style: Theme.of(context).textTheme.bodyText1,
         ),
         SizedBox(height: 5,),
         Text(
-          'Slow Or no Internet connection. ',
+          '${AppLocalizations.of(context)!.slowConnection}',
           style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 16),
         ),
         SizedBox(height: 2,),
         Text(
-          'Please check your internet setting',
+          '${AppLocalizations.of(context)!.checkInternet}',
           style: Theme.of(context).textTheme.caption!.copyWith(fontSize: 16),
         ),
         SizedBox(height: 15,),
@@ -104,7 +105,7 @@ class ShoppyLayout extends StatelessWidget {
           onPressFunction: (){
             cubit.appStart(context:context);
           },
-          text: 'Try Again',
+          text: '${AppLocalizations.of(context)!.tryAgain}',
           context: context,
           width: 150
         )

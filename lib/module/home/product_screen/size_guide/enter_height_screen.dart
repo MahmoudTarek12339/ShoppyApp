@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../shared/components/components.dart';
 import 'clothing_size_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class EnterHeightScreen extends StatefulWidget {
   final String category;
 
@@ -55,22 +57,22 @@ class _EnterHeightScreenState extends State<EnterHeightScreen> {
                           keyboardType: TextInputType.number,
                           validator: (value){
                             if(value!.isEmpty){
-                              return 'Please enter your Height';
+                              return '${AppLocalizations.of(context)!.pleaseEnterHeight}';
                             }
                             else if(int.parse(value)>250||(int.parse(value)<100&&!isSwitched)){
-                              return 'Invalid Length';
+                              return '${AppLocalizations.of(context)!.invalidLength}';
                             }
                             else if(isSwitched&&(int.parse(value)>100||int.parse(value)<39)){
-                              return 'Invalid Length';
+                              return '${AppLocalizations.of(context)!.invalidLength}';
                             }
                             else if(isSwitched&&value.length>2){
-                              return 'Invalid Length';
+                              return '${AppLocalizations.of(context)!.invalidLength}';
                             }
                             return null;
                           },
                           maxLength: isSwitched?2:3,
                           decoration: InputDecoration(
-                            labelText: 'your Height',
+                            labelText: '${AppLocalizations.of(context)!.yourHeight}',
                             labelStyle: Theme.of(context).textTheme.caption,
                             enabledBorder:UnderlineInputBorder(
                               borderSide: BorderSide(color: Theme.of(context).textTheme.bodyText1!.color??Colors.white),
@@ -132,7 +134,7 @@ class _EnterHeightScreenState extends State<EnterHeightScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         textUtils(
-                            text: 'Go Next ',
+                            text: '${AppLocalizations.of(context)!.goNext}',
                             fontSize: 22.0,
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).focusColor

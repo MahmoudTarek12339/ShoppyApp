@@ -23,7 +23,7 @@ class ResetPasswordScreen extends StatelessWidget {
             defaultSnackBar(
               context: context,
               color: Colors.green,
-              title: 'Password Changed Successfully',
+              title: '${AppLocalizations.of(context)!.passwordChangedSuccessfully}',
             );
             Navigator.pop(context);
           }
@@ -74,13 +74,13 @@ class ResetPasswordScreen extends StatelessWidget {
                           type: TextInputType.visiblePassword,
                           validate: (value){
                             if(value!.isEmpty){
-                              return 'password mustn\'t be empty';
+                              return '${AppLocalizations.of(context)!.passwordMustBeAtLeastCharacters}';
                             }
                             else if(!validPass){
                               return 'password is not true';
                             }
                             else if(value.length<8){
-                              return 'password is too short';
+                              return '${AppLocalizations.of(context)!.passwordMustBeAtLeastCharacters}';
                             }
                             return null;
                           },
@@ -100,13 +100,13 @@ class ResetPasswordScreen extends StatelessWidget {
                           type: TextInputType.visiblePassword,
                           validate: (value){
                             if(value!.isEmpty){
-                              return 'password mustn\'t be empty';
+                              return '${AppLocalizations.of(context)!.passwordMustBeAtLeastCharacters}';
                             }
                             else if(value==currentPasswordController.text){
-                              return 'new password cannot be same as old password';
+                              return '${AppLocalizations.of(context)!.newPasswordCannot}';
                             }
                             else if(value.length<8){
-                              return 'password is too short';
+                              return '${AppLocalizations.of(context)!.passwordMustBeAtLeastCharacters}';
                             }
                             return null;
                           },
@@ -126,13 +126,13 @@ class ResetPasswordScreen extends StatelessWidget {
                           type: TextInputType.visiblePassword,
                           validate: (value){
                             if(value!.isEmpty){
-                              return 'password mustn\'t be empty';
+                              return '${AppLocalizations.of(context)!.passwordMustBeAtLeastCharacters}';
                             }
                             else if(value!=newPasswordController.text){
-                              return 'not Match';
+                              return '${AppLocalizations.of(context)!.thisNotMatch}';
                             }
                             else if(value.length<8){
-                              return 'password is too short';
+                              return '${AppLocalizations.of(context)!.passwordMustBeAtLeastCharacters}';
                             }
                             return null;
 

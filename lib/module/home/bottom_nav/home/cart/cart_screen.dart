@@ -10,7 +10,7 @@ import 'package:shoppy/module/home/bottom_nav/home/cart/payment_screen.dart';
 import 'package:shoppy/module/home/product_screen/product_screen.dart';
 import 'package:shoppy/module/home/profile/user_managment/user_addresses/location/user_location_map_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CartScreen extends StatelessWidget {
   late AlertDialog alertAddress;
   @override
@@ -22,7 +22,7 @@ class CartScreen extends StatelessWidget {
 
         alertAddress = AlertDialog(
           title: Text(
-            "Select Address",
+            "${AppLocalizations.of(context)!.selectAddress}",
             style:Theme.of(context).textTheme.bodyText1!.copyWith(color: Color(0xffec8d2f)),
           ),
           content: Container(
@@ -49,7 +49,7 @@ class CartScreen extends StatelessWidget {
           actions: [
             TextButton(
               child: Text(
-                "No",
+                "${AppLocalizations.of(context)!.no}",
                 style: TextStyle(
                   color: Color(0xffec8d2f),
                 ),
@@ -60,7 +60,7 @@ class CartScreen extends StatelessWidget {
             ),
             TextButton(
               child: Text(
-                  "OK",
+                  "${AppLocalizations.of(context)!.oK}",
                   style: TextStyle(
                     color: Color(0xffec8d2f),
                   )
@@ -130,7 +130,7 @@ class CartScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textUtils(
-                  text: 'total',
+                  text: '${AppLocalizations.of(context)!.total}',
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey
@@ -170,7 +170,7 @@ class CartScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Check Out',
+                      '${AppLocalizations.of(context)!.checkOut}',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -245,7 +245,7 @@ class CartScreen extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Color : ',
+                      '${AppLocalizations.of(context)!.color}',
                       style: Theme.of(context).textTheme.caption
                     ),
                     SizedBox(width: 2,),
@@ -260,7 +260,7 @@ class CartScreen extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  'Size : '+orderModel.size,
+                  '${AppLocalizations.of(context)!.size}'+orderModel.size,
                   style: Theme.of(context).textTheme.caption
                 ),
                 SizedBox(
@@ -313,7 +313,7 @@ class CartScreen extends StatelessWidget {
                         cubit.addProductToCart(orderModel);
                       }
                       else{
-                        defaultSnackBar(context: context, title: 'no more available items of this color', color: Colors.black);
+                        defaultSnackBar(context: context, title: '${AppLocalizations.of(context)!.noMoreAvailableItemsOfThisColor}', color: Colors.black);
                       }
                     },
                     icon: Icon(
@@ -359,7 +359,7 @@ class CartScreen extends StatelessWidget {
           text: TextSpan(
               children:[
                 TextSpan(
-                  text: 'Your Cart is ',
+                  text: '${AppLocalizations.of(context)!.yourCartIs}',
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1!.color,
                     fontSize: 30,
@@ -367,7 +367,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: 'Empty',
+                  text: '${AppLocalizations.of(context)!.empty}',
                   style: TextStyle(
                     color: Theme.of(context).focusColor,
                     fontSize: 30,
@@ -381,7 +381,7 @@ class CartScreen extends StatelessWidget {
           height: 10,
         ),
         Text(
-          'Add Item To Get Started',
+          '${AppLocalizations.of(context)!.addItemToGetStarted}',
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyText1!.color,
             fontSize: 15,
@@ -398,7 +398,7 @@ class CartScreen extends StatelessWidget {
               Navigator.pop(context);
             },
             child: Text(
-              'Go to Home',
+              '${AppLocalizations.of(context)!.goToHome}',
               style: TextStyle(
                 fontSize: 20,
               ),
@@ -485,9 +485,8 @@ class CartScreen extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Add Address',
+                '${AppLocalizations.of(context)!.addAddress}',
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 12,color: Colors.white),
-
               ),
             ),
             Padding(

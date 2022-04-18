@@ -55,7 +55,6 @@ class _ProductScreenState extends State<ProductScreen> {
               CacheHelper.saveData(
                   key: 'Screen2',
                   value: false).then((value){
-                print('finished');
               });
             },
             builder: Builder(
@@ -165,7 +164,7 @@ class _ProductScreenState extends State<ProductScreen> {
         ),
         Showcase(
           key: _two,
-          description: 'pick up color from here',
+          description: '${AppLocalizations.of(context)!.pickupColorFromHere}',
           descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
           showcaseBackgroundColor: Theme.of(context).focusColor,
           child: Container(
@@ -365,7 +364,7 @@ class _ProductScreenState extends State<ProductScreen> {
               key: _three,
               descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
               showcaseBackgroundColor: Theme.of(context).focusColor,
-              description: 'Press here to review product',
+              description: '${AppLocalizations.of(context)!.pressHereToReviewProduct}',
               child: ElevatedButton(
                 child: Text(
                   '${AppLocalizations.of(context)!.previewProduct}',
@@ -382,8 +381,8 @@ class _ProductScreenState extends State<ProductScreen> {
           trimLines: 3,
           trimMode: TrimMode.Line,
           textAlign: TextAlign.center,
-          trimCollapsedText: 'Show More',
-          trimExpandedText: 'Show Less',
+          trimCollapsedText: '${AppLocalizations.of(context)!.showMore}',
+          trimExpandedText: '${AppLocalizations.of(context)!.showLess}',
           lessStyle: TextStyle(
             fontWeight: FontWeight.bold,
             color: Theme.of(context).focusColor,
@@ -417,7 +416,7 @@ class _ProductScreenState extends State<ProductScreen> {
            ),
            Showcase(
              key: _one,
-             description: 'Click here if you don\'t know your sizes',
+             description: '${AppLocalizations.of(context)!.clickHereIfYouDoNotKnowYourSizes}',
              descTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color:Colors.white),
              showcaseBackgroundColor: Theme.of(context).focusColor,
              child: ElevatedButton(
@@ -431,7 +430,7 @@ class _ProductScreenState extends State<ProductScreen> {
                    if (recommendedSize != null) {
                      AlertDialog alertUpload = AlertDialog(
                        title: Text(
-                         "Size Guide",
+                         "${AppLocalizations.of(context)!.sizeGuide}",
                          style: Theme.of(context)
                              .textTheme
                              .bodyText1!
@@ -440,7 +439,7 @@ class _ProductScreenState extends State<ProductScreen> {
                        content: Column(
                          mainAxisSize: MainAxisSize.min,
                          children: [
-                           Text("You already have a recommended size",
+                           Text("${AppLocalizations.of(context)!.youAlreadyHaveARecommendedSize}",
                                style: Theme.of(context)
                                    .textTheme
                                    .subtitle1!
@@ -451,7 +450,7 @@ class _ProductScreenState extends State<ProductScreen> {
                        actions: [
                          TextButton(
                            child: Text(
-                             "Cancel",
+                             '${AppLocalizations.of(context)!.cancel}',
                              style: TextStyle(
                                color: Theme.of(context).focusColor,
                              ),
@@ -462,7 +461,7 @@ class _ProductScreenState extends State<ProductScreen> {
                          ),
                          TextButton(
                            child: Text(
-                             "Add New",
+                             "${AppLocalizations.of(context)!.addNew}",
                              style: TextStyle(
                                color: Theme.of(context).focusColor,
                              ),
@@ -496,7 +495,7 @@ class _ProductScreenState extends State<ProductScreen> {
                      builder: (BuildContext context) {
                        return alertLogin(
                          context: context,
-                         title: 'Login First to Use This Feature'
+                         title: '${AppLocalizations.of(context)!.loginFirstToUseThisFeature}'
                        );
                      },
                    );
@@ -513,7 +512,7 @@ class _ProductScreenState extends State<ProductScreen> {
          child: Row(
            children: [
              Text(
-               'Recommended Size:  ',
+               '${AppLocalizations.of(context)!.recommendedSize}',
                style: Theme
                    .of(context)
                    .textTheme
@@ -580,7 +579,7 @@ class _ProductScreenState extends State<ProductScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             textUtils(
-                text: 'price',
+                text: '${AppLocalizations.of(context)!.price}',
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey
@@ -635,7 +634,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   ));
                 }
                 else{
-                  defaultSnackBar(context: context, title: 'no more available items of this color', color: Colors.black);
+                  defaultSnackBar(context: context, title: '${AppLocalizations.of(context)!.noMoreAvailableItemsOfThisColor}', color: Colors.black);
                 }
               },
               style: ElevatedButton.styleFrom(

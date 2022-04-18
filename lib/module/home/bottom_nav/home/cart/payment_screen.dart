@@ -12,6 +12,8 @@ import 'package:shoppy/layout/shoppy_layout.dart';
 import 'package:shoppy/model/address_model.dart';
 import 'package:shoppy/model/user_orders_model.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class PaymentScreen extends StatefulWidget {
   final double total;
@@ -58,7 +60,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           defaultSnackBar(
             context: context,
             color: Colors.green,
-            title: 'Order order \'ll be there within Three Days ',
+            title: '${AppLocalizations.of(context)!.orderWillBeThereWithinThreeDays}',
           );
           ShoppyCubit.get(context).clearCart();
           navigateAndFinish(context, ShoppyLayout());
@@ -75,18 +77,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
         var cubit=ShoppyCubit.get(context);
         AlertDialog alertPayment = AlertDialog(
           title: Text(
-            "Confirm Purchase",
+            "${AppLocalizations.of(context)!.confirmPurchase}",
             style:Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).focusColor),
           ),
           content: Text(
-              "Are you Sure you Want to Buy On This Way.",
+              "${AppLocalizations.of(context)!.areYouSureYouWantToBuyOnThisWay}",
               style:Theme.of(context).textTheme.subtitle1
           ),
           backgroundColor: Theme.of(context).cardColor,
           actions: [
             TextButton(
               child: Text(
-                "No",
+                "${AppLocalizations.of(context)!.no}",
                 style: TextStyle(
                   color: Theme.of(context).focusColor,
                 ),
@@ -97,7 +99,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             TextButton(
               child: Text(
-                  "OK",
+                  "${AppLocalizations.of(context)!.oK}",
                   style: TextStyle(
                     color: Theme.of(context).focusColor,
                   )
@@ -134,7 +136,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 textUtils(
-                  text: 'Select your Payment Method',
+                  text: '${AppLocalizations.of(context)!.selectYourPaymentMethod}',
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).textTheme.bodyText1!.color,
@@ -200,7 +202,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           child:state is ShoppySendOrderLoadingState?
                           Center(child:CircularProgressIndicator(color: Colors.white,))
                               : Text(
-                            radioPaymentIndex==0?'Pay Now':'Order Now',
+                            '${AppLocalizations.of(context)!.orderNow}',
                             style: TextStyle(
                               fontSize: 22,
                               color: Colors.white,
@@ -279,7 +281,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     defaultSnackBar(
       context: context,
       color: Colors.green,
-      title: 'Order order \'ll be there within Three Days ',
+      title: '${AppLocalizations.of(context)!.orderWillBeThereWithinThreeDays}',
     );
     ShoppyCubit.get(context).clearCart();
     navigateAndFinish(context, ShoppyLayout());

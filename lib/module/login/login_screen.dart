@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
             if(state is ShoppyInternetNotConnectedState){
               defaultSnackBar(
                   context: context,
-                  title: 'you are currently offline',
+                  title: '${AppLocalizations.of(context)!.youAreCurrentlyOffline}',
                   color: Colors.black);
             }
             //login successfully
@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
               defaultSnackBar(
                 context: context,
                 color: Colors.green,
-                title: 'Welcome ${myGoogleUser!.displayName}',
+                title: '${AppLocalizations.of(context)!.welcome} ${myGoogleUser!.displayName}',
               );
               CacheHelper.saveData(
                   key: 'uId',
@@ -60,7 +60,7 @@ class LoginScreen extends StatelessWidget {
               defaultSnackBar(
                 context: context,
                 color: Colors.green,
-                title: 'Welcome ${userData['name']}',
+                title: '${AppLocalizations.of(context)!.welcome} ${userData['name']}',
               );
               CacheHelper.saveData(
                   key: 'uId',
@@ -200,7 +200,7 @@ class LoginScreen extends StatelessWidget {
                             type: TextInputType.visiblePassword,
                             validate: (value){
                               if(value.toString().length<8){
-                                return 'Password Must be at least 8 characters';
+                                return '${AppLocalizations.of(context)!.passwordMustBeAtLeastCharacters}';
                               }
                               return null;
                             },

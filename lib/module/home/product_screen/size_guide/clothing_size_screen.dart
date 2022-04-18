@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shoppy/module/home/product_screen/size_guide/guide_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class ClothingSizeScreen extends StatefulWidget {
   final double height;
   final String category;
@@ -29,7 +31,7 @@ class _ClothingSizeScreenState extends State<ClothingSizeScreen> {
             child: Column(
               children: [
                 Text(
-                  'What Are You Wearing Now?',
+                  '${AppLocalizations.of(context)!.whatAreYouWearing}',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 SizedBox(height: 20,),
@@ -65,7 +67,7 @@ class _ClothingSizeScreenState extends State<ClothingSizeScreen> {
                               ),
                             ),
                             Text(
-                              'Regular Fit',
+                              '${AppLocalizations.of(context)!.regularFit}',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ],
@@ -103,7 +105,7 @@ class _ClothingSizeScreenState extends State<ClothingSizeScreen> {
                               ),
                             ),
                             Text(
-                              'Tight Fit',
+                              '${AppLocalizations.of(context)!.tightFit}',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                           ],
@@ -116,7 +118,7 @@ class _ClothingSizeScreenState extends State<ClothingSizeScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: defaultButton(
-                    text: 'Continue',
+                    text: '${AppLocalizations.of(context)!.continueE}',
                     onPressFunction: (){
                       navigateTo(context, GuideScreen(height: widget.height,clothing: selectedIndex,category:widget.category));
                     },

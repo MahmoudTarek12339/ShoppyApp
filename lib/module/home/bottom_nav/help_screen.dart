@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shoppy/module/home/bottom_nav/web_view_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class HelpScreen extends StatelessWidget {
 
@@ -22,7 +24,7 @@ class HelpScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'FaceBook',
+                  '${AppLocalizations.of(context)!.faceBook}',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 Spacer(),
@@ -41,7 +43,7 @@ class HelpScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Twitter',
+                  '${AppLocalizations.of(context)!.twitter}',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 Spacer(),
@@ -60,7 +62,7 @@ class HelpScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Instagram',
+                  '${AppLocalizations.of(context)!.instagram}',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 Spacer(),

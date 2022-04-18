@@ -64,7 +64,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                          'If you Want to Recover Your Account, then please provide your email Id Below..',
+                          '${AppLocalizations.of(context)!.recoverAccount}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1!.color,

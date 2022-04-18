@@ -5,6 +5,8 @@ import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/model/product_model.dart';
 import 'package:shoppy/module/home/product_screen/product_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class WishListScreen extends StatelessWidget {
 
@@ -30,7 +32,7 @@ class WishListScreen extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    'Please, Add your Favorite Products',
+                    '${AppLocalizations.of(context)!.pleaseAddYourFavoriteProducts}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).textTheme.bodyText1!.color,

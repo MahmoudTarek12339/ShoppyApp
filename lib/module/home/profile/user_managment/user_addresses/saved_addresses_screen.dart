@@ -6,6 +6,7 @@ import 'package:shoppy/model/address_model.dart';
 import 'package:shoppy/shared/components/components.dart';
 
 import 'location/user_location_map_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SavedAddressesScreen extends StatelessWidget {
 
@@ -17,7 +18,7 @@ class SavedAddressesScreen extends StatelessWidget {
           defaultSnackBar(
             context: context,
             color: Colors.green,
-            title: 'address Removed Successfully',
+            title: '${AppLocalizations.of(context)!.addressRemovedSuccessfully}',
           );
         }
         else if(state is ShoppyRemoveFromAddressesErrorState){
@@ -131,7 +132,7 @@ class SavedAddressesScreen extends StatelessWidget {
           text: TextSpan(
               children:[
                 TextSpan(
-                  text: 'No Saved ',
+                  text: '${AppLocalizations.of(context)!.no}',
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1!.color,
                     fontSize: 30,
@@ -139,7 +140,7 @@ class SavedAddressesScreen extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: 'Addresses',
+                  text: '${AppLocalizations.of(context)!.addresses}',
                   style: TextStyle(
                     color: Theme.of(context).focusColor,
                     fontSize: 30,
@@ -153,7 +154,7 @@ class SavedAddressesScreen extends StatelessWidget {
           height: 15,
         ),
         Text(
-          'add one now to used for future orders',
+          '${AppLocalizations.of(context)!.addOneNow}',
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyText1!.color,
             fontSize: 14,
@@ -177,7 +178,7 @@ class SavedAddressesScreen extends StatelessWidget {
               }
             },
             child: Text(
-              'Add Address',
+              '${AppLocalizations.of(context)!.addAddress}',
               style: TextStyle(
                 fontSize: 24,
               ),

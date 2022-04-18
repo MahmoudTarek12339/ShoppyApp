@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class CameraScreen extends StatefulWidget {
   final double height;
@@ -61,7 +63,7 @@ class _CameraScreenState extends State<CameraScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                    "Your data is being processed",
+                    "${AppLocalizations.of(context)!.yourDataIsBeingProcessed}",
                     style:Theme.of(context).textTheme.subtitle1
                 ),
                 SizedBox(
@@ -74,7 +76,7 @@ class _CameraScreenState extends State<CameraScreen> {
             actions: [
               TextButton(
                 child: Text(
-                  "Cancel",
+                  '${AppLocalizations.of(context)!.cancel}',
                   style: TextStyle(
                     color: Theme.of(context).focusColor,
                   ),
@@ -131,7 +133,7 @@ class _CameraScreenState extends State<CameraScreen> {
           });
           defaultSnackBar(
               context: context,
-              title: 'Operation Canceled',
+              title: '${AppLocalizations.of(context)!.operationCanceled}',
               color: Colors.red
           );
         }
@@ -141,7 +143,7 @@ class _CameraScreenState extends State<CameraScreen> {
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: Theme.of(context).focusColor,
-              title: Text(currentPicture==0?'Front Picture':'Side Picture'),
+              title: Text(currentPicture==0?'${AppLocalizations.of(context)!.frontPicture}':'${AppLocalizations.of(context)!.sidePicture}'),
               centerTitle: true,
             ),
             body: FutureBuilder<void>(
@@ -202,7 +204,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                 print(sizes);
                               }
                             },
-                            text: 'Take Picture',
+                            text: '${AppLocalizations.of(context)!.takePicture}',
                             context: context
                         ),
                       )

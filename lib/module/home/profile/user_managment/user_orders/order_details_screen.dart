@@ -138,7 +138,7 @@ class OrderDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textUtils(
-                  text: 'total',
+                  text: '${AppLocalizations.of(context)!.total}',
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey
