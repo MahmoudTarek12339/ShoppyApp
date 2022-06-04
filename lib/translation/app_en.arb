@@ -162,5 +162,7 @@
   "selectAddress": "Select Address",
   "youAlreadyHaveARecommendedSize": "You already have a recommended size",
   "confirmCancel": "Confirm Cancel",
+  "delete": "Delete",
+
   "areYouSureYouWantToCancelThisOrder": "Are you Sure you Want to Cancel This Order."
 }

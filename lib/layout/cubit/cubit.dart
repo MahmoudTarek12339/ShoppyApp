@@ -373,8 +373,9 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
           .then((value) {
         value.docs.forEach((element) {
           if(products.where((e) => e.productUid==element.data()['productUid']).isNotEmpty){
-            cart.add(OrderModel.fromJson(element.data())..setUid(element.id));
-            cartTotal+=element.data()['price']*element.data()['quantity'];
+            double price=products.where((e) => e.productUid==element.data()['productUid']).first.price;
+            cart.add(OrderModel.fromJson(element.data())..setUid(element.id)..setPrice(price));
+            cartTotal+=price*element.data()['quantity'];
           }
           else{
             FirebaseFirestore.instance.collection('customers')
@@ -530,7 +531,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     });
   }
 
-  void updateProductQuantity(String brandId,String productUid,String size,String color){
+  Future updateProductQuantity(String brandId,String productUid,String size,String color)async{
     FirebaseFirestore.instance
         .collection('admins')
         .doc(brandId)
@@ -538,21 +539,9 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
         .doc(productUid)
         .get().then((value) {
        int productIndex=products.indexWhere((element) => element.productUid==productUid);
-
        products[productIndex].data[size][color]=value.data()!['data'][size][color];
-       int quantity=cart.where((element) => element.productUid==productUid&&element.color==color&&element.size==size).first.quantity;
        int fBQuantity=int.parse(products[productIndex].data[size][color]);
-       print(quantity);
        print(fBQuantity);
-       if(fBQuantity>quantity)
-         products[productIndex].data[size][color]=(fBQuantity-quantity).toString();
-       else {
-         products[productIndex].data[size][color] = '0';
-         cart.where((element) => element.productUid==productUid&&element.color==color&&element.size==size).first.quantity=quantity-(quantity-fBQuantity);
-       }
-       if(cart.where((element) => element.productUid==productUid&&element.color==color&&element.size==size).first.quantity==0){
-         removeProductFromCart(cart.where((element) => element.productUid==productUid&&element.color==color&&element.size==size).first);
-       }
     });
     }
   List<ProductModel> bestSellProducts=[];
@@ -691,6 +680,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       });
     });
     print(notAvailableOrders.length);
+    emit(ShoppyCheckOrdersSuccessState());
    return notAvailableOrders.isEmpty;
   }
 
@@ -792,9 +782,9 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
           .doc(userOrderModel.userOrderId)
           .delete()
           .then((value) {
-        emit(ShoppyRemoveFromOrdersSuccessState());
+        emit(ShoppyDeleteFromOrdersSuccessState());
       }).catchError((error) {
-        emit(ShoppyRemoveFromOrdersErrorState(error.toString()));
+        emit(ShoppyDeleteFromOrdersErrorState(error.toString()));
         print(error);
       });
     }
@@ -865,7 +855,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     if(connection) {
       emit(ShoppyAppStartingState());
       getAllProducts().then((value) async{
-        await Future.delayed(const Duration(milliseconds: 200));
+        await Future.delayed(const Duration(milliseconds: 500));
         getFavorites();
         getAllBrands();
         getUserAddresses();

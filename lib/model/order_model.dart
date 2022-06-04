@@ -25,12 +25,15 @@ class OrderModel{
     this.cartId=id;
   }
 
+  void setPrice(double price){
+    this.price=price;
+  }
+
   OrderModel.fromJson(Map<String,dynamic>? json) {
     productName=json!['name'];
     description=json['description'];
     productUid=json['productUid'];
     quantity=json['quantity'];
-    price=json['price'];
     photo=json['photo'];
     size=json['size'];
     color=json['color'];
@@ -43,7 +46,6 @@ class OrderModel{
         'description':description,
         'productUid':productUid,
         'quantity':quantity,
-        'price':price,
         'photo':photo,
         'size':size,
         'color':color,

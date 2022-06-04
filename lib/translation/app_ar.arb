@@ -158,5 +158,6 @@
   "selectAddress": "أختر عنوان",
   "youAlreadyHaveARecommendedSize": "لديك بالفعل حجم موصى به",
   "confirmCancel": "تأكيد الالغاء",
+  "delete": "حذف",
   "areYouSureYouWantToCancelThisOrder": "هل أنت متأكد أنك تريد إلغاء هذا الطلب."
 }

@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
               builder: Builder(
                 builder: (context) {
                   if(showCaseBool) {
-                    WidgetsBinding.instance!.addPostFrameCallback((_) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
                       ShowCaseWidget.of(context)!.startShowCase([
                         _one,
                         _two,

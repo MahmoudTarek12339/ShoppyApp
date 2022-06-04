@@ -151,13 +151,22 @@ class CartScreen extends StatelessWidget {
             child: SizedBox(
               height: 60,
               child: ElevatedButton(
-                onPressed: (){
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alertAddress;
-                    },
-                  );
+                onPressed: ()async{
+                  await cubit.checkOrderProducts().then((value){
+                    print(value);
+                    if(value){
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alertAddress;
+                        },
+                      );
+                    }
+                    else{
+                      defaultSnackBar(context: context, title: 'Some Products Quantity are currently not available', color: Colors.red);
+                    }
+                  });
+                  /**/
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -207,6 +216,7 @@ class CartScreen extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color:Theme.of(context).cardColor,
+          border:cubit.notAvailableOrders.where((element) => element.cartId==orderModel.cartId).isNotEmpty?Border.all(color: Color(4294901760),width: 2):null
         ),
       child: Row(
         children: [
@@ -307,18 +317,19 @@ class CartScreen extends StatelessWidget {
                         orderModel.productUid,
                         orderModel.size,
                         orderModel.color,
-                      );
-                      int availableQuantity=int.parse(cubit.products[cubit.products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]);
-                      if(availableQuantity>0) {
-                        cubit.addProductToCart(orderModel);
-                      }
-                      else{
-                        defaultSnackBar(context: context, title: '${AppLocalizations.of(context)!.noMoreAvailableItemsOfThisColor}', color: Colors.black);
-                      }
+                      ).then((val){
+                        int availableQuantity=int.parse(cubit.products[cubit.products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color]);
+                        if(availableQuantity>orderModel.quantity) {
+                          cubit.addProductToCart(orderModel);
+                        }
+                        else{
+                          defaultSnackBar(context: context, title: '${AppLocalizations.of(context)!.noMoreAvailableItemsOfThisColor}', color: Colors.black);
+                        }
+                      });
                     },
                     icon: Icon(
                       Icons.add_circle,
-                      color:int.parse(cubit.products[cubit.products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color])>0?
+                      color:int.parse(cubit.products[cubit.products.indexWhere((element) => element.productUid==orderModel.productUid)].data[orderModel.size][orderModel.color])>orderModel.quantity?
                         Theme.of(context).focusColor
                           :Theme.of(context).focusColor.withOpacity(0.3),
                     ),

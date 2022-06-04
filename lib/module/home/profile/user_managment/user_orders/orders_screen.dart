@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
@@ -45,6 +46,20 @@ class OrdersScreen extends StatelessWidget {
               title: state.error,
             );
           }
+          if(state is ShoppyDeleteFromOrdersSuccessState){
+            defaultSnackBar(
+              context: context,
+              color: Colors.green,
+              title: 'Order Deleted',
+            );
+          }
+          else if(state is ShoppyDeleteFromOrdersErrorState){
+            defaultSnackBar(
+              context: context,
+              color: Colors.red,
+              title: state.error,
+            );
+          }
         },
         builder: (context,state){
           var cubit=ShoppyCubit.get(context);
@@ -61,15 +76,22 @@ class OrdersScreen extends StatelessWidget {
                 builder: (context,snapShot) {
                   if(snapShot.hasData){
                     final  userOrders = snapShot.data as List<UserOrderModel>;
-                    print(userOrders.length);
-                    return ListView.separated(
+                    if(userOrders.length>0)
+                      return ListView.separated(
                         padding: EdgeInsets.only(top: 10),
-                        itemBuilder:(context,index)=> buildOrderCard(
+                        itemBuilder:(context,index) {
+                           var ob= cubit.brands.where((element) => element.brandUId==userOrders[index].orders[0].brandId);
+                           String? photo='https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80';
+                           if(ob.isNotEmpty)
+                             photo=ob.first.brandImage;
+                           print("photo"+photo);
+                          return buildOrderCard(
                           cubit: cubit,
                           context: context,
                           userOrderModel: userOrders[index],
-                          photo:cubit.brands.where((element) => element.brandUId==userOrders[index].orders[0].brandId).first.brandImage,
-                        ),
+                          photo:photo
+                        );
+                        },
                         separatorBuilder:(context,index)=> SizedBox(),
                         itemCount: userOrders.length);
                   }
@@ -142,7 +164,9 @@ class OrdersScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
+
                     image: DecorationImage(
+                      onError: (exception, stackTrace) =>new Image.asset('assets/images/default_login2.jpg'),
                       image:NetworkImage(photo),
                       fit: BoxFit.cover,
                     )
@@ -197,27 +221,13 @@ class OrdersScreen extends StatelessWidget {
                           },
                         );
                       }
-                      else{
-                        var date=DateFormat.d().add_yMMM().add_Hm().format(DateTime.now());
-                        cubit.sendOrder(UserOrderModel(
-                            orderState: 'In Progress',
-                            orderDate: date,
-                            userId: FirebaseAuth.instance.currentUser!.uid,
-                            orderPhoto: userOrderModel.orderPhoto,
-                            orderPrice: userOrderModel.orderPrice,
-                            orders: userOrderModel.orders,
-                            addressModel: userOrderModel.addressModel
-                        ));
-                      }
                       },
                     child: Row(
                       children: [
                         Text(
-                          userOrderModel.orderState=='In Progress'?'${AppLocalizations.of(context)!.cancel}':'${AppLocalizations.of(context)!.reOrder}',
+                          userOrderModel.orderState=='In Progress'?'${AppLocalizations.of(context)!.cancel}':'',
                           style: Theme.of(context).textTheme.subtitle1!.copyWith(color:Theme.of(context).focusColor),
                         ),
-                        if(userOrderModel.orderState!='In Progress')
-                          Icon(Icons.refresh,color: Theme.of(context).focusColor,size: 15,)
                       ],
                     ),
                   )
@@ -228,7 +238,7 @@ class OrdersScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.close,color: Colors.grey,size: 18,),
             onPressed: (){
-              if(userOrderModel.orderState=='Approved'){
+              if(userOrderModel.orderState!='Approved'){
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -333,7 +343,7 @@ class OrdersScreen extends StatelessWidget {
       style:Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).focusColor),
     ),
     content: Text(
-        "${AppLocalizations.of(context)!.areYouSureYouWantToBuyOnThisWay}.",
+        "${AppLocalizations.of(context)!.areYouSureYouWantToCancelThisOrder}.",
         style:Theme.of(context).textTheme.subtitle1
     ),
     backgroundColor: Theme.of(context).cardColor,

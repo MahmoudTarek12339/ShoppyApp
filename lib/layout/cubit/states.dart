@@ -143,6 +143,11 @@ class ShoppyRemoveFromOrdersErrorState extends ShoppyStates{
   final String error;
   ShoppyRemoveFromOrdersErrorState(this.error);
 }
+class ShoppyDeleteFromOrdersSuccessState extends ShoppyStates{}
+class ShoppyDeleteFromOrdersErrorState extends ShoppyStates{
+  final String error;
+  ShoppyDeleteFromOrdersErrorState(this.error);
+}
 class ShoppyInternetConnectedState extends ShoppyStates{}
 class ShoppyInternetNotConnectedState extends ShoppyStates{}
 
@@ -154,6 +159,8 @@ class ShoppyGetBrandErrorState extends ShoppyStates{
   final String error;
   ShoppyGetBrandErrorState(this.error);
 }
+class ShoppyCheckOrdersSuccessState extends ShoppyStates{}
+
 
 
 class ShoppyUpdateForYouSuccessState extends ShoppyStates{}

@@ -16,6 +16,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(userOrderModel.orderPrice);
     return BlocConsumer<ShoppyCubit,ShoppyStates>(
       listener: (context,state){},
       builder: (context,state){
@@ -80,9 +81,10 @@ class OrderDetailsScreen extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
-                image:NetworkImage(orderModel.photo),
-                fit: BoxFit.cover,
-              )
+                image:NetworkImage(orderModel.photo,),
+                fit: BoxFit.cover
+          )
+
           ),
         ),
         SizedBox(width: 10,),
@@ -113,10 +115,6 @@ class OrderDetailsScreen extends StatelessWidget {
               ),
               SizedBox(
                 height: 10,
-              ),
-              Text(
-                '${orderModel.price*orderModel.quantity}',
-                style: Theme.of(context).textTheme.caption
               ),
             ],
           ),
@@ -173,16 +171,8 @@ class OrderDetailsScreen extends StatelessWidget {
                     );
                   }
                   else{
-                    var date=DateFormat.d().add_yMMM().add_Hm().format(DateTime.now());
-                    cubit.sendOrder(UserOrderModel(
-                        orderState: 'In Progress',
-                        orderDate: date,
-                        userId: FirebaseAuth.instance.currentUser!.uid,
-                        orderPhoto: userOrderModel.orderPhoto,
-                        orderPrice: userOrderModel.orderPrice,
-                        orders: userOrderModel.orders,
-                        addressModel: userOrderModel.addressModel
-                    ));
+                    cubit.deleteOrder(userOrderModel);
+                    Navigator.pop(context);
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -196,7 +186,7 @@ class OrderDetailsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      userOrderModel.orderState!='${AppLocalizations.of(context)!.inProgress}'?'${AppLocalizations.of(context)!.reOrder}':'${AppLocalizations.of(context)!.cancel}',
+                      userOrderModel.orderState!='${AppLocalizations.of(context)!.inProgress}'?'${AppLocalizations.of(context)!.delete}':'${AppLocalizations.of(context)!.cancel}',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
