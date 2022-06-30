@@ -11,6 +11,7 @@ class ProductModel{
   late int bestSeller;
   late List photos;
   late Map<String,dynamic> data;
+  late Map<String,String> virtualImage;
 
  ProductModel({
    required this.productName,
@@ -23,6 +24,7 @@ class ProductModel{
    required this.offer,
    required this.photos,
    required this.data,
+   required this.virtualImage,
  });
 
   ProductModel.fromJson(Map<String,dynamic>? json,String uid,String _brandName,String _brandId) {
@@ -38,5 +40,6 @@ class ProductModel{
     bestSeller=json['bestSeller']??0;
     photos=json['photos'];
     data =json['data'];
+    virtualImage=json['virtualImage'].cast<String,String>();
   }
 }
