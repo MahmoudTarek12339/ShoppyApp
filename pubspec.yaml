@@ -90,6 +90,7 @@ flutter:
      - assets/categories/
      - assets/poses/
      - assets/payments/
+     - assets/skins/
      - assets/
 
   # To add assets to your application, add an assets section, like this:
