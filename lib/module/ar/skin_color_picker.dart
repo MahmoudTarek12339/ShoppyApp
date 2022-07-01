@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shoppy/module/ar/virtual_fitting.dart';
+import 'package:shoppy/shared/components/components.dart';
 
 class SkinColorPicker extends StatefulWidget {
   @override
@@ -81,7 +83,7 @@ class GamePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           onTap: (){
-
+            navigateTo(context, VirtualFittingScreen(index: index));
           },
           child: Image.asset(
             'assets/skins/model${index+1}.png',

@@ -160,6 +160,7 @@ class ShoppyGetBrandErrorState extends ShoppyStates{
   ShoppyGetBrandErrorState(this.error);
 }
 class ShoppyCheckOrdersSuccessState extends ShoppyStates{}
+class ShoppyChangeVisibilityVirtualSuccessState extends ShoppyStates{}
 
 
 

@@ -971,4 +971,9 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     }
     return res;
   }
+  bool vis=false;
+  void changeVisibilityVirtual(){
+    vis=!vis;
+    emit(ShoppyChangeVisibilityVirtualSuccessState());
+  }
 }
