@@ -11,6 +11,7 @@ import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/model/order_model.dart';
 import 'package:shoppy/model/product_model.dart';
+import 'package:shoppy/module/ar/skin_color_picker.dart';
 import 'package:shoppy/module/home/bottom_nav/category/category_products_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
@@ -371,7 +372,9 @@ class _ProductScreenState extends State<ProductScreen> {
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
                 style: ElevatedButton.styleFrom(primary: Theme.of(context).cardColor),
-                onPressed: (){},
+                onPressed: (){
+                  navigateTo(context, SkinColorPicker(widget.productModel,int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor])));
+                },
               ),
             ),
           ],

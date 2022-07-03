@@ -1,10 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shoppy/model/product_model.dart';
 import 'package:shoppy/module/ar/virtual_fitting.dart';
 import 'package:shoppy/shared/components/components.dart';
 
 class SkinColorPicker extends StatefulWidget {
+  final ProductModel product;
+  final int selectedColor;
+  SkinColorPicker(this.product,this.selectedColor);
   @override
   State<SkinColorPicker> createState() => _SkinColorPickerState();
 }
@@ -49,17 +53,17 @@ class _SkinColorPickerState extends State<SkinColorPicker> {
                   if (position == currentPageValue) {
                     return Transform.scale(
                       scale: 1,
-                      child: GamePage(position),
+                      child: GamePage(position,widget.product,widget.selectedColor),
                     );
                   } else if (position < currentPageValue) {
                     return Transform.scale(
                       scale: max(1 - (currentPageValue - position), 0.75),
-                      child: GamePage(position),
+                      child: GamePage(position,widget.product,widget.selectedColor),
                     );
                   } else {
                     return Transform.scale(
                       scale: max(1 - (position - currentPageValue), 0.75),
-                      child: GamePage(position),
+                      child: GamePage(position,widget.product,widget.selectedColor),
                     );
                   }
                 }),
@@ -72,8 +76,9 @@ class _SkinColorPickerState extends State<SkinColorPicker> {
 
 class GamePage extends StatelessWidget {
   final int index;
-
-  GamePage(this.index);
+  final ProductModel product;
+  final int selectedColor;
+  GamePage(this.index,this.product,this.selectedColor);
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +88,7 @@ class GamePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           onTap: (){
-            navigateTo(context, VirtualFittingScreen(index: index));
+            navigateTo(context, VirtualFittingScreen(index: index,product: product,selectedColor: selectedColor,));
           },
           child: Image.asset(
             'assets/skins/model${index+1}.png',

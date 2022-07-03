@@ -37,7 +37,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
 
   List<String> titles=[
     'Home',
-    'Brands',
+    'Stores',
     'Categories',
     'Wish List',
     'Info',
@@ -553,6 +553,10 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       return 0;
     });
     bestSellProducts.removeWhere((element) => element.bestSeller==0);
+    if(bestSellProducts.isEmpty){
+      bestSellProducts.addAll(products);
+      bestSellProducts.reversed;
+    }
     emit(ShoppyGetBestSellerProductsSuccessState());
   }
 

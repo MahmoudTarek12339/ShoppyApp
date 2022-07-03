@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
-import 'package:shoppy/module/ar/skin_color_picker.dart';
 import 'package:shoppy/module/spalsh_screen/splash_screen.dart';
 import 'package:shoppy/shared/bloc_observer.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
@@ -42,7 +41,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             darkTheme: darkTheme,
-            home:SkinColorPicker(),
+            home:SplashScreen(),
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

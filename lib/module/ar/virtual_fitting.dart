@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
+import 'package:shoppy/model/product_model.dart';
 
 class VirtualFittingScreen extends StatelessWidget {
   final int index;
-
-  const VirtualFittingScreen({required this.index});
+  final ProductModel product;
+  final int selectedColor;
+  const VirtualFittingScreen({required this.index,required this.product,required this.selectedColor});
 
   @override
   Widget build(BuildContext context) {
@@ -30,93 +32,38 @@ class VirtualFittingScreen extends StatelessWidget {
                     child: Image.asset(
                       'assets/skins/model${index + 1}.png',
                       height: double.infinity,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                   if (ShoppyCubit.get(context).vis)
                     Positioned(
-                      bottom: 50,
-                      right: 0,
-                      left: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  Container(
-                                      width: 100,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Theme.of(context).focusColor,
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                        'Your Cart',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption!
-                                            .copyWith(color: Colors.white),
-                                      ))
-                                  ),
-                                  SizedBox(height: 10,),
-                                  SizedBox(
-                                    height: 275,
-                                    width: 110,
-                                    child: ListView.separated(
-                                        itemBuilder: (context, index) =>
-                                            productItem(),
-                                        separatorBuilder: (context, index) =>
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                        itemCount: 10),
-                                  ),
-                                ],
-                              ),
-                            ],
+                      bottom:100,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Container(
+                          height: 120,
+                          width:320,
+                          child: ShoppyCubit.get(context).cart.isNotEmpty?
+                             ListView.separated(
+                          scrollDirection:Axis.horizontal,
+                          itemBuilder: (context, index) => productItem(
+                            productUid: ShoppyCubit.get(context).cart[index].productUid,
+                            context: context,
+                            color: int.parse(ShoppyCubit.get(context).cart[index].color),
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  Container(
-                                      width: 100,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Theme.of(context).focusColor,
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                        'For You',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption!
-                                            .copyWith(color: Colors.white),
-                                      ))),
-                                  SizedBox(height: 10,),
-                                  SizedBox(
-                                    height: 275,
-                                    width: 110,
-                                    child: ListView.separated(
-                                        itemBuilder: (context, index) =>
-                                            productItem(),
-                                        separatorBuilder: (context, index) =>
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                        itemCount: 10),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          separatorBuilder: (context, index) => SizedBox(width: 15,),
+                          itemCount: ShoppyCubit.get(context).cart.length,
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                        )
+                            :Container(
+                            color: Colors.grey.withOpacity(0.5),
+                            child: Center(child: Text(
+                              'Your Cart is Empty',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )),
                           ),
-                        ],
+                        ),
                       ),
                     )
                 ],
@@ -127,35 +74,43 @@ class VirtualFittingScreen extends StatelessWidget {
         listener: (context, state) {});
   }
 
-  Widget productItem() => InkWell(
-        onTap: () {},
+  Widget productItem({required String productUid,required context,required int color}) {
+    print(color);
+    print(ShoppyCubit.get(context).products
+        .where((element) => element.productUid==productUid).first.virtualImage);
+    String image=ShoppyCubit.get(context).products
+        .where((element) => element.productUid==productUid).first.virtualImage[color.toString()]??'https://m.media-amazon.com/images/I/61gqx7hslmL._UX569_.jpg';
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        height: 150.0,
+        width: 120.0,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 3.0,
+                  blurRadius: 5.0),
+            ]),
         child: Container(
-          height: 75.0,
-          width: 75.0,
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 3.0,
-                    blurRadius: 5.0),
-              ]),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Image.network(
-              'https://m.media-amazon.com/images/I/61gqx7hslmL._UX569_.jpg',
-              fit: BoxFit.fitHeight,
-              loadingBuilder: (context, child, loadingProgress) =>
-                  loadingProgress == null
-                      ? child
-                      : Center(child: CircularProgressIndicator()),
-              errorBuilder: (context, error, stackTrace) =>
-                  new Image.asset('assets/images/default_login2.jpg'),
-            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Image.network(
+            image,
+            fit: BoxFit.fitHeight,
+            loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null
+                ? child
+                : Center(child: CircularProgressIndicator()),
+            errorBuilder: (context, error, stackTrace) =>
+            new Image.asset('assets/images/default_login2.jpg'),
           ),
         ),
-      );
+      ),
+    );
+  }
 }
