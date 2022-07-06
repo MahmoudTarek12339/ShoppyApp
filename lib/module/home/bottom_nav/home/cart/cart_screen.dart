@@ -1,16 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/model/address_model.dart';
 import 'package:shoppy/model/order_model.dart';
 import 'package:shoppy/model/product_model.dart';
+import 'package:shoppy/module/ar/skin_color_picker.dart';
 import 'package:shoppy/module/home/bottom_nav/home/cart/payment_screen.dart';
 import 'package:shoppy/module/home/product_screen/product_screen.dart';
 import 'package:shoppy/module/home/profile/user_managment/user_addresses/location/user_location_map_screen.dart';
 import 'package:shoppy/shared/components/components.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class CartScreen extends StatelessWidget {
   late AlertDialog alertAddress;
   @override
@@ -19,7 +21,6 @@ class CartScreen extends StatelessWidget {
       listener: (context,state){},
       builder: (context,state){
         var cubit=ShoppyCubit.get(context);
-
         alertAddress = AlertDialog(
           title: Text(
             "${AppLocalizations.of(context)!.selectAddress}",
@@ -71,7 +72,6 @@ class CartScreen extends StatelessWidget {
             ),
           ],
         );
-
         return SafeArea(
             child: Scaffold(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -81,6 +81,14 @@ class CartScreen extends StatelessWidget {
                 elevation: 0,
                 backgroundColor: Theme.of(context).focusColor,
                 actions: [
+                  cubit.cart.isNotEmpty?IconButton(
+                    onPressed: (){
+                      ProductModel product=cubit.products.where((element) => element.productUid==cubit.cart.first.productUid).first;
+                      int color=int.parse(cubit.cart.first.color);
+                      navigateTo(context, SkinColorPicker(product,color));
+                    },
+                    icon: FaIcon(FontAwesomeIcons.tshirt),
+                  ):SizedBox(),
                   IconButton(
                     onPressed: (){
                       cubit.clearCart();

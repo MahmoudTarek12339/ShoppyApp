@@ -112,7 +112,7 @@ class _PosesGuideScreenState extends State<PosesGuideScreen> {
                         currentIndex>0?
                         TextButton(
                           child: Text(
-                            'Back',
+                            '${AppLocalizations.of(context)!.back}',
                             style: Theme.of(context).textTheme.bodyText1!.copyWith(color:Theme.of(context).focusColor),
                           ),
                           onPressed: (){

@@ -78,9 +78,9 @@ class VirtualFittingScreen extends StatelessWidget {
     print(color);
     print(ShoppyCubit.get(context).products
         .where((element) => element.productUid==productUid).first.virtualImage);
-    String image=ShoppyCubit.get(context).products
-        .where((element) => element.productUid==productUid).first.virtualImage[color.toString()]??'https://m.media-amazon.com/images/I/61gqx7hslmL._UX569_.jpg';
-    return InkWell(
+    String? image=ShoppyCubit.get(context).products
+        .where((element) => element.productUid==productUid).first.virtualImage[color.toString()];
+    return image!=null? InkWell(
       onTap: () {},
       child: Container(
         height: 150.0,
@@ -111,6 +111,6 @@ class VirtualFittingScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ):SizedBox();
   }
 }

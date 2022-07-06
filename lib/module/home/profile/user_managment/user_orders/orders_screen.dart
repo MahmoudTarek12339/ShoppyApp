@@ -1,9 +1,6 @@
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
 import 'package:shoppy/layout/cubit/states.dart';
 import 'package:shoppy/layout/shoppy_layout.dart';
@@ -80,7 +77,7 @@ class OrdersScreen extends StatelessWidget {
                       return ListView.separated(
                         padding: EdgeInsets.only(top: 10),
                         itemBuilder:(context,index) {
-                           var ob= cubit.brands.where((element) => element.brandUId==userOrders[index].orders[0].brandId);
+                           var ob= cubit.brands.where((element) => element.brandUId==userOrders[index].orders.first.brandId);
                            String? photo='https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80';
                            if(ob.isNotEmpty)
                              photo=ob.first.brandImage;

@@ -35,7 +35,7 @@ class CategoryProductsScreen extends StatelessWidget {
                 mainAxisSpacing: 10.0,
                 crossAxisSpacing: 10.0,
                 childAspectRatio: 1/1.45,
-                physics: NeverScrollableScrollPhysics(),
+                physics: BouncingScrollPhysics(),
                 children: List.generate(
                   myProducts.length,
                   (index)=>buildCardItem(
