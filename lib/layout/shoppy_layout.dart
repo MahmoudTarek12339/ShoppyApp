@@ -37,7 +37,7 @@ class ShoppyLayout extends StatelessWidget {
           appBar: cubit.currentIndex==0?
             null
               :AppBar(
-            title: Text(cubit.titles[cubit.currentIndex]),
+            title: Text(cubit.getTitle(context,cubit.currentIndex)),
             centerTitle: true,
             backgroundColor: Theme.of(context).focusColor,
             elevation: 0.0,

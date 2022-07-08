@@ -52,7 +52,7 @@ class ResetPasswordScreen extends StatelessWidget {
         builder: (context,state){
           return Scaffold(
             appBar: AppBar(
-              title: Text('Reset Password'),
+              title: Text('${AppLocalizations.of(context)!.changePassword}'),
               centerTitle: true,
               elevation: 0,
               backgroundColor: Theme.of(context).focusColor,

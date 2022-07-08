@@ -35,7 +35,7 @@ class SavedAddressesScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            title: Text('Saved Addresses'),
+            title: Text('${AppLocalizations.of(context)!.savedAddresses}'),
             centerTitle: true,
             elevation: 0,
             backgroundColor: Theme.of(context).focusColor,
@@ -132,7 +132,7 @@ class SavedAddressesScreen extends StatelessWidget {
           text: TextSpan(
               children:[
                 TextSpan(
-                  text: '${AppLocalizations.of(context)!.no}',
+                  text: '${AppLocalizations.of(context)!.noAddress} ',
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1!.color,
                     fontSize: 30,
@@ -140,7 +140,7 @@ class SavedAddressesScreen extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: '${AppLocalizations.of(context)!.addresses}',
+                  text: '${AppLocalizations.of(context)!.savedAddresses}',
                   style: TextStyle(
                     color: Theme.of(context).focusColor,
                     fontSize: 30,

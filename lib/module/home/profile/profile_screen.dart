@@ -24,7 +24,7 @@ class ProfileScreen extends StatelessWidget {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             backgroundColor: Theme.of(context).focusColor,
-            title: Text('Profile'),
+            title: Text('${AppLocalizations.of(context)!.profile}'),
             centerTitle: true,
           ),
           body: Padding(

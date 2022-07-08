@@ -76,7 +76,7 @@ class CartScreen extends StatelessWidget {
             child: Scaffold(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               appBar: AppBar(
-                title: Text('Cart Items'),
+                title: Text('${AppLocalizations.of(context)!.cartItems}'),
                 centerTitle: true,
                 elevation: 0,
                 backgroundColor: Theme.of(context).focusColor,

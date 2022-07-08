@@ -63,7 +63,7 @@ class OrdersScreen extends StatelessWidget {
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: AppBar(
-              title: Text("Orders"),
+              title: Text('${AppLocalizations.of(context)!.orders}'),
               centerTitle: true,
               elevation: 0,
               backgroundColor: Theme.of(context).focusColor,

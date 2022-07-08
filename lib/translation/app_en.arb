@@ -14,7 +14,6 @@
   "accountInfo": "Account Info",
   "savedAddresses": "Saved Addresses",
   "changePassword": "Change Password",
-
   "orders": "Orders",
   "logOut": "Log Out",
   "logIn": "LOGIN",
@@ -88,6 +87,7 @@
   "total": "Total",
   "somethingWentWrong": "Something went wrong",
   "noOrder": "No order ",
+  "noAddress": "No ",
   "placed": "Placed",
   "orderPlacedWillBeDisplayedHere": "order placed will be displayed here",
   "orderNow": "Order Now",
@@ -164,6 +164,9 @@
   "youAlreadyHaveARecommendedSize": "You already have a recommended size",
   "confirmCancel": "Confirm Cancel",
   "delete": "Delete",
+  "areYouSureYouWantToCancelThisOrder": "Are you Sure you Want to Cancel This Order.",
+  "profile": "profile",
+  "cartItems": "cart Items",
+  "payment": "payment"
 
-  "areYouSureYouWantToCancelThisOrder": "Are you Sure you Want to Cancel This Order."
 }

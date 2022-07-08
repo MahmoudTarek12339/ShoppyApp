@@ -38,7 +38,7 @@ class AccountInfoScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            title: Text('Account Info'),
+            title: Text('${AppLocalizations.of(context)!.accountInfo}'),
             centerTitle: true,
             elevation: 0,
             backgroundColor: Theme.of(context).focusColor,

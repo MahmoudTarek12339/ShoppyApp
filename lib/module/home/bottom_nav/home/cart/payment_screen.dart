@@ -125,7 +125,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            title: Text('Payment'),
+            title: Text('${AppLocalizations.of(context)!.payment}'),
             centerTitle: true,
             elevation: 0,
             backgroundColor: Theme.of(context).focusColor,

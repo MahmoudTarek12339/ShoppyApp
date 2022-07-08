@@ -21,6 +21,7 @@ import 'package:shoppy/module/home/bottom_nav/home/home_screen.dart';
 import 'package:shoppy/module/home/bottom_nav/wish_list_screen.dart';
 import 'package:shoppy/shared/network/local/cache_helper.dart';
 import 'package:shoppy/shared/network/remote/size_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class ShoppyCubit extends Cubit<ShoppyStates> {
@@ -42,6 +43,14 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     'Wish List',
     'Info',
   ];
+  String getTitle(context,index){
+    if(index==0) return ' ${AppLocalizations.of(context)!.home}';
+    else if(index==1) return ' ${AppLocalizations.of(context)!.stores}';
+    else if(index==2) return ' ${AppLocalizations.of(context)!.categories}';
+    else if(index==3) return ' ${AppLocalizations.of(context)!.wishList}';
+    else return ' ${AppLocalizations.of(context)!.info}';
+
+  }
   int currentIndex=0;
   void changeBottomNav(int index){
     currentIndex=index;

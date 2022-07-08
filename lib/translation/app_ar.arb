@@ -9,7 +9,7 @@
   "chooseYourSize": "أختر المقاس",
   "chooseYourColor": "أختر اللون",
   "accountInfo": "معلومات الحساب",
-  "savedAddresses": "العناوين المحفوظة",
+  "savedAddresses": "عناوين محفوظة",
   "changePassword": "تغيير كلمة السر",
   "orders": "الطلبات",
   "logOut": "تسجيل الخروج",
@@ -84,8 +84,9 @@
   "total": "الاجمالي",
   "somethingWentWrong": "حدث شئ خطأ",
   "noOrder": "لا يوجد ",
+  "noAddress": "لا يوجد ",
   "placed": "طلبات",
-  "orderPlacedWillBeDisplayedHere": "سيتم عرض الطلبات هنا",
+  "orderPlacedWillBeDisplayedHere": "سيتم عرض طلباتك هنا",
   "orderNow": "أطلب الآن",
   "orderCancelledSuccessfully": "تم الغاء الطلب بنجاح",
   "reOrderedSuccessfully": "تم اعادة الطلب بنجاح",
@@ -117,7 +118,7 @@
   "addressRemovedSuccessfully": "تمت إزالة العنوان بنجاح",
   "noSaved": "لا توجد",
   "addresses": "عناوين محفوظة",
-  "addOneNow": "add one now to used for future orders",
+  "addOneNow": "أضف عنوانك الان",
   "addressAddedSuccessfully": "تم اضافة العنوان بنجاح",
   "refineLocation": "أعادة الأختيار",
   "area": "المنطقة",
@@ -160,5 +161,11 @@
   "youAlreadyHaveARecommendedSize": "لديك بالفعل حجم موصى به",
   "confirmCancel": "تأكيد الالغاء",
   "delete": "حذف",
-  "areYouSureYouWantToCancelThisOrder": "هل أنت متأكد أنك تريد إلغاء هذا الطلب."
+  "areYouSureYouWantToCancelThisOrder": "هل أنت متأكد أنك تريد إلغاء هذا الطلب.",
+  "profile": "الحساب",
+  "cartItems": "عربه التسوق",
+  "payment": "الدفع",
+  "noNo": "لا يوجد"
+
+
 }
