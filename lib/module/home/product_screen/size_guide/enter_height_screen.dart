@@ -26,7 +26,7 @@ class _EnterHeightScreenState extends State<EnterHeightScreen> {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          title: Text('Size Guide'),
+          title: Text('${AppLocalizations.of(context)!.sizeGuide}'),
           centerTitle: true,
           backgroundColor: Theme.of(context).focusColor,
         ),

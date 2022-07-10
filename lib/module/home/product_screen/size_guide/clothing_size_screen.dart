@@ -21,7 +21,7 @@ class _ClothingSizeScreenState extends State<ClothingSizeScreen> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).focusColor,
           centerTitle: true,
-          title: Text('Size Guide'),
+          title: Text('${AppLocalizations.of(context)!.sizeGuide}'),
           elevation: 0.0,
 
         ),
@@ -45,7 +45,7 @@ class _ClothingSizeScreenState extends State<ClothingSizeScreen> {
                         });
                       },
                       child: Container(
-                        height: 380,
+                        height: 390,
                         decoration: BoxDecoration(
                             color: selectedIndex==0?Theme.of(context).focusColor.withOpacity(0.9):null,
                             borderRadius: BorderRadius.circular(20),
@@ -84,7 +84,7 @@ class _ClothingSizeScreenState extends State<ClothingSizeScreen> {
                         });
                       },
                       child: Container(
-                        height: 380,
+                        height: 390,
                         decoration: BoxDecoration(
                           color: selectedIndex==1?Theme.of(context).focusColor.withOpacity(0.9):null,
                           borderRadius: BorderRadius.circular(20),

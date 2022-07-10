@@ -32,7 +32,7 @@ class _GuideScreenState extends State<GuideScreen> {
     return SafeArea(
       child: Scaffold(
         appBar:AppBar(
-          title: Text('Quick Guide'),
+          title: Text('${AppLocalizations.of(context)!.sizeGuide}'),
           centerTitle: true,
           backgroundColor: Theme.of(context).focusColor,
         ),
