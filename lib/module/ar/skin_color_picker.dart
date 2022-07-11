@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shoppy/model/product_model.dart';
 import 'package:shoppy/module/ar/virtual_fitting.dart';
 import 'package:shoppy/shared/components/components.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SkinColorPicker extends StatefulWidget {
   final ProductModel product;
@@ -34,14 +35,14 @@ class _SkinColorPickerState extends State<SkinColorPicker> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).focusColor,
-        title: Text('Skin Color'),
+        title: Text('${AppLocalizations.of(context)!.skinColor}'),
         centerTitle: true,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
-            'Please Select Your skin Color',
+            '${AppLocalizations.of(context)!.selectSkinColor}',
             style: Theme.of(context).textTheme.bodyText1,
           ),
           SizedBox(

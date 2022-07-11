@@ -371,9 +371,15 @@ class _ProductScreenState extends State<ProductScreen> {
                   '${AppLocalizations.of(context)!.previewProduct}',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
-                style: ElevatedButton.styleFrom(primary: Theme.of(context).cardColor),
+                style: ElevatedButton.styleFrom(primary: Theme.of(context).cardColor,),
                 onPressed: (){
-                  navigateTo(context, SkinColorPicker(widget.productModel,int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor])));
+                  String c=widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor];
+                  if(widget.productModel.virtualImage.keys.contains(c)){
+                    navigateTo(context, SkinColorPicker(widget.productModel,int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor])));
+                  }
+                  else{
+                    defaultSnackBar(context: context, title: 'No Virtual Image available for selected color ', color: Colors.grey);
+                  }
                 },
               ),
             ),
@@ -511,7 +517,7 @@ class _ProductScreenState extends State<ProductScreen> {
      ),
      recommendedSize!=null?
        Padding(
-         padding: const EdgeInsets.only(left: 15.0),
+         padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 5),
          child: Row(
            children: [
              Text(

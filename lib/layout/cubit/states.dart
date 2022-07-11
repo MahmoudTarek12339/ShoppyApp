@@ -195,4 +195,14 @@ class ShoppyGetSizesErrorState extends ShoppyStates{
   final String error;
   ShoppyGetSizesErrorState(this.error);
 }
+
 class ShoppyCancelSizesSuccessState extends ShoppyStates{}
+
+class ShoppyVirtualSelectionChangeState extends ShoppyStates{}
+
+class ShoppySendVirtualLoadingState extends ShoppyStates{}
+class ShoppyGetVirtualSuccessState extends ShoppyStates{}
+class ShoppyGetVirtualErrorState extends ShoppyStates{
+  final String error;
+  ShoppyGetVirtualErrorState(this.error);
+}

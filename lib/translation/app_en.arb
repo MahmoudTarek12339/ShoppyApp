@@ -167,6 +167,8 @@
   "areYouSureYouWantToCancelThisOrder": "Are you Sure you Want to Cancel This Order.",
   "profile": "profile",
   "cartItems": "cart Items",
-  "payment": "payment"
+  "payment": "payment",
+  "selectSkinColor": "Please Select Your skin Color",
+  "skinColor": "Skin Color"
 
 }

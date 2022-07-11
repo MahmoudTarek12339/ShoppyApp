@@ -11,7 +11,7 @@ class SizeService{
     required String height,
   })async{
     final request=http.MultipartRequest(
-        'POST',Uri.parse('https://94f8-197-33-157-137.ngrok.io/size_recommend'));
+        'POST',Uri.parse('https://7c94-197-33-157-137.ngrok.io/size_recommend'));
     final headers={"Content-type":"multipart/form-data"};
     request.files.add(
       http.MultipartFile('image',
@@ -23,9 +23,6 @@ class SizeService{
             selectedImage2.readAsBytes().asStream(), selectedImage2.lengthSync(),
             filename: height+'_'+selectedImage2.path.split('/').last)
     );
-    request.fields.addAll({
-      
-    });
     request.headers.addAll(headers);
     final response=await request.send().timeout(Duration(seconds: 30));
     http.Response res=await http.Response.fromStream(response);
@@ -33,7 +30,7 @@ class SizeService{
     List<String?> lst=resJson['size'].cast<String?>();
     return lst;
   }
-  Future sendDataToVirtual({
+  Future<File> sendDataToVirtual({
     required String selectedImage,
     required String selectedImage2,
     required String category,
@@ -49,7 +46,7 @@ class SizeService{
       image2=value;
     });
     final request=http.MultipartRequest(
-        'POST',Uri.parse('https://94f8-197-33-157-137.ngrok.io/virtual'));
+        'POST',Uri.parse('https://7c94-197-33-157-137.ngrok.io/virtual'));
     final headers={"Content-type":"multipart/form-data"};
     request.files.add(
         http.MultipartFile('image1',

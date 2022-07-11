@@ -165,7 +165,9 @@
   "profile": "الحساب",
   "cartItems": "عربه التسوق",
   "payment": "الدفع",
-  "noNo": "لا يوجد"
+  "noNo": "لا يوجد",
+  "selectSkinColor": "أختر لون بشرتك",
+  "skinColor": "لون البشرة"
 
 
 }

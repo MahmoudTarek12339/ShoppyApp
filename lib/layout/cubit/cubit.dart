@@ -959,10 +959,11 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
             .get()
             .then((value){
               if(value.data()!['sizes']!=null)
-                userSizes=value.data()!['sizes'];
+                userSizes=value.data()!['sizes'].cast<String?>();
             emit(ShoppyGetSizesSuccessState());
         }).catchError((error){
           emit(ShoppyGetSizesErrorState(error.toString()));
+          print(error.toString());
         });
 
       }
@@ -989,4 +990,39 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     vis=!vis;
     emit(ShoppyChangeVisibilityVirtualSuccessState());
   }
+  int upSelection= -1;
+  int lowSelection= -1;
+
+  changeSelectionVirtual(int index,String category){
+    if(category=='Pants'||category=='Shorts'){
+      lowSelection=index;
+    }
+    else{
+      upSelection=index;
+    }
+    emit(ShoppyVirtualSelectionChangeState());
+  }
+  File? virResult;
+  void sendToVirtual({
+    required String selectedImage,
+    required String selectedImage2,
+    required String category,
+    required String category2,
+    required int index,
+}) {
+    emit(ShoppySendVirtualLoadingState());
+    SizeService().sendDataToVirtual(
+        selectedImage: selectedImage,
+        selectedImage2: selectedImage2,
+        category: category,
+        category2: category2,
+        index: index).then((value) {
+      virResult = value;
+      emit(ShoppyGetVirtualSuccessState());
+    }).catchError((error){
+      emit(ShoppyGetVirtualErrorState(error.toString()));
+      print(error.toString());
+    });
+  }
+
 }
