@@ -89,7 +89,11 @@ class _VirtualFittingScreenState extends State<VirtualFittingScreen> {
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     child: ShoppyCubit.get(context).virResult!=null?
-                       Image.file(ShoppyCubit.get(context).virResult!)
+                       Image.file(
+                         ShoppyCubit.get(context).virResult!,
+                         height: double.infinity,
+                         fit: BoxFit.fitWidth,
+                       )
                         :Image.asset(
                       'assets/skins/model${widget.index + 1}.png',
                       height: double.infinity,

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -985,7 +984,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     }
     return res;
   }
-  bool vis=false;
+  bool vis=true;
   void changeVisibilityVirtual(){
     vis=!vis;
     emit(ShoppyChangeVisibilityVirtualSuccessState());
@@ -1011,6 +1010,11 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
     required int index,
 }) {
     emit(ShoppySendVirtualLoadingState());
+    if(virResult!=null) {
+      File('${virResult?.path}').delete();
+      imageCache.clear();
+      virResult=null;
+    }
     SizeService().sendDataToVirtual(
         selectedImage: selectedImage,
         selectedImage2: selectedImage2,
@@ -1023,6 +1027,7 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       emit(ShoppyGetVirtualErrorState(error.toString()));
       print(error.toString());
     });
+
   }
 
 }

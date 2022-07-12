@@ -11,7 +11,7 @@ class SizeService{
     required String height,
   })async{
     final request=http.MultipartRequest(
-        'POST',Uri.parse('https://7c94-197-33-157-137.ngrok.io/size_recommend'));
+        'POST',Uri.parse('https://806a-197-62-232-82.ngrok.io/size_recommend'));
     final headers={"Content-type":"multipart/form-data"};
     request.files.add(
       http.MultipartFile('image',
@@ -42,11 +42,11 @@ class SizeService{
     await convLinkToFile(selectedImage,'1').then((value) {
       image1=value;
     });
-    await convLinkToFile(selectedImage,'2').then((value) {
+    await convLinkToFile(selectedImage2,'2').then((value) {
       image2=value;
     });
     final request=http.MultipartRequest(
-        'POST',Uri.parse('https://7c94-197-33-157-137.ngrok.io/virtual'));
+        'POST',Uri.parse('https://806a-197-62-232-82.ngrok.io/virtual'));
     final headers={"Content-type":"multipart/form-data"};
     request.files.add(
         http.MultipartFile('image1',
@@ -61,14 +61,17 @@ class SizeService{
     request.fields.addAll({
       'category1':category,
       'category2':category2,
-      'model_index':index.toString(),
+      'model_index':(index+1).toString(),
     });
     request.headers.addAll(headers);
     final response=await request.send().timeout(Duration(seconds: 30));
-    http.Response res=await http.Response.fromStream(response);
-    final tempDir = await getTemporaryDirectory();
-    File file = await File('${tempDir.path}/image.png').create();
-    file.writeAsBytesSync(res.bodyBytes);
+    late File file;
+    await http.Response.fromStream(response).then((value) async{
+      Uint8List int8lst=value.bodyBytes;
+      var tempDir = await getTemporaryDirectory();
+      file=File('${tempDir.path}/image.png');
+      file.writeAsBytes(int8lst);
+    });
     return file;
   }
   Future<File> convLinkToFile(String url,String index)async{
