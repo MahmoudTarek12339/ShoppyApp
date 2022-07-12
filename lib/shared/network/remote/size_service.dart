@@ -11,7 +11,7 @@ class SizeService{
     required String height,
   })async{
     final request=http.MultipartRequest(
-        'POST',Uri.parse('https://806a-197-62-232-82.ngrok.io/size_recommend'));
+        'POST',Uri.parse('https://e346-197-62-232-82.ngrok.io/size_recommend'));
     final headers={"Content-type":"multipart/form-data"};
     request.files.add(
       http.MultipartFile('image',
@@ -46,7 +46,7 @@ class SizeService{
       image2=value;
     });
     final request=http.MultipartRequest(
-        'POST',Uri.parse('https://806a-197-62-232-82.ngrok.io/virtual'));
+        'POST',Uri.parse('https://e346-197-62-232-82.ngrok.io/virtual'));
     final headers={"Content-type":"multipart/form-data"};
     request.files.add(
         http.MultipartFile('image1',

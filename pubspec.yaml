@@ -74,7 +74,12 @@ dev_dependencies:
   camera: ^0.9.4+14
   path_provider:
   path:
+  flutter_launcher_icons: "^0.9.2"
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/my_logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
