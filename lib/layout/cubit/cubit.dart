@@ -644,16 +644,14 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
   List<BrandModel> brands=[];
   void getAllBrands()async{
     brands.clear();
-    if(FirebaseAuth.instance.currentUser!=null){
-      await FirebaseFirestore.instance.collection('admins').get().then((value) {
-        value.docs.forEach((element) {
-          brands.add(BrandModel.fromJson(element.data()));
-        });
-        emit(ShoppyGetBrandSuccessState());
-      }).catchError((error) {
-        emit(ShoppyGetBrandErrorState(error.toString()));
+    await FirebaseFirestore.instance.collection('admins').get().then((value) {
+      value.docs.forEach((element) {
+        brands.add(BrandModel.fromJson(element.data()));
       });
-    }
+      emit(ShoppyGetBrandSuccessState());
+    }).catchError((error) {
+      emit(ShoppyGetBrandErrorState(error.toString()));
+    });
   }
   //get user orders
   List<UserOrderModel> userOrders=[];
