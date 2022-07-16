@@ -546,6 +546,7 @@ class _ProductScreenState extends State<ProductScreen> {
            itemBuilder: (context,index)=>GestureDetector(
              onTap: (){
                setState(() {
+                 currentColor=0;
                  widget.currentSelected=index;
                });
              },
