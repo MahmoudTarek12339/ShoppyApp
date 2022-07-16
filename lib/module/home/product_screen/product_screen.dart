@@ -374,8 +374,9 @@ class _ProductScreenState extends State<ProductScreen> {
                 style: ElevatedButton.styleFrom(primary: Theme.of(context).cardColor,),
                 onPressed: (){
                   String c=widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor];
+                  String size=widget.productModel.data.keys.toList()[widget.currentSelected];
                   if(widget.productModel.virtualImage.keys.contains(c)){
-                    navigateTo(context, SkinColorPicker(widget.productModel,int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor])));
+                    navigateTo(context, SkinColorPicker(widget.productModel,int.parse(widget.productModel.data[widget.productModel.data.keys.toList()[widget.currentSelected]]!.keys.toList()[currentColor]),size));
                   }
                   else{
                     defaultSnackBar(context: context, title: 'No Virtual Image available for selected color ', color: Colors.grey);

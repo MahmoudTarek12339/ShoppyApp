@@ -11,7 +11,7 @@ class SizeService{
     required String height,
   })async{
     final request=http.MultipartRequest(
-        'POST',Uri.parse('size_recommend'));
+        'POST',Uri.parse('https://ebd4-197-62-14-46.ngrok.io/size_recommend'));
     final headers={"Content-type":"multipart/form-data"};
     request.files.add(
       http.MultipartFile('image',
@@ -37,6 +37,7 @@ class SizeService{
     required String category2,
     required int index,
   })async{
+    print(index);
     late File image1;
     late File image2;
     await convLinkToFile(selectedImage,'1').then((value) {
@@ -46,7 +47,7 @@ class SizeService{
       image2=value;
     });
     final request=http.MultipartRequest(
-        'POST',Uri.parse('https://6539-197-62-14-46.ngrok.io/virtual'));
+        'POST',Uri.parse('https://ebd4-197-62-14-46.ngrok.io/virtual'));
     final headers={"Content-type":"multipart/form-data"};
     request.files.add(
         http.MultipartFile('image1',

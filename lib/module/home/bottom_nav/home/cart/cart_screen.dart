@@ -85,7 +85,8 @@ class CartScreen extends StatelessWidget {
                     onPressed: (){
                       ProductModel product=cubit.products.where((element) => element.productUid==cubit.cart.first.productUid).first;
                       int color=int.parse(cubit.cart.first.color);
-                      navigateTo(context, SkinColorPicker(product,color));
+                      String size=cubit.cart.first.size;
+                      navigateTo(context, SkinColorPicker(product,color,size));
                     },
                     icon: FaIcon(FontAwesomeIcons.tshirt),
                   ):SizedBox(),

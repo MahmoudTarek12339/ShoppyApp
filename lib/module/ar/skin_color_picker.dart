@@ -9,7 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SkinColorPicker extends StatefulWidget {
   final ProductModel product;
   final int selectedColor;
-  SkinColorPicker(this.product,this.selectedColor);
+  final String selectedSize;
+  SkinColorPicker(this.product,this.selectedColor,this.selectedSize);
   @override
   State<SkinColorPicker> createState() => _SkinColorPickerState();
 }
@@ -54,17 +55,17 @@ class _SkinColorPickerState extends State<SkinColorPicker> {
                   if (position == currentPageValue) {
                     return Transform.scale(
                       scale: 1,
-                      child: GamePage(position,widget.product,widget.selectedColor),
+                      child: GamePage(position,widget.product,widget.selectedColor,widget.selectedSize),
                     );
                   } else if (position < currentPageValue) {
                     return Transform.scale(
                       scale: max(1 - (currentPageValue - position), 0.75),
-                      child: GamePage(position,widget.product,widget.selectedColor),
+                      child: GamePage(position,widget.product,widget.selectedColor,widget.selectedSize),
                     );
                   } else {
                     return Transform.scale(
                       scale: max(1 - (position - currentPageValue), 0.75),
-                      child: GamePage(position,widget.product,widget.selectedColor),
+                      child: GamePage(position,widget.product,widget.selectedColor,widget.selectedSize),
                     );
                   }
                 }),
@@ -76,10 +77,11 @@ class _SkinColorPickerState extends State<SkinColorPicker> {
 }
 
 class GamePage extends StatelessWidget {
-  final int index;
-  final ProductModel product;
-  final int selectedColor;
-  GamePage(this.index,this.product,this.selectedColor);
+  int index;
+  ProductModel product;
+  int selectedColor;
+  String selectedSize;
+  GamePage(this.index,this.product,this.selectedColor,this.selectedSize);
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,7 @@ class GamePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           onTap: (){
-            navigateTo(context, VirtualFittingScreen(index: index,product: product,selectedColor: selectedColor,));
+            navigateTo(context, VirtualFittingScreen(index: index,product: product,selectedColor: selectedColor,selectedSize: selectedSize,));
           },
           child: Image.asset(
             'assets/skins/model${index+1}.png',

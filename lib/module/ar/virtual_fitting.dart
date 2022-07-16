@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/layout/cubit/cubit.dart';
@@ -11,7 +13,8 @@ class VirtualFittingScreen extends StatefulWidget {
   final int index;
   final ProductModel product;
   final int selectedColor;
-  const VirtualFittingScreen({required this.index,required this.product,required this.selectedColor});
+  final String selectedSize;
+  const VirtualFittingScreen({required this.index,required this.product,required this.selectedColor,required this.selectedSize});
 
   @override
   State<VirtualFittingScreen> createState() => _VirtualFittingScreenState();
@@ -32,14 +35,15 @@ class _VirtualFittingScreenState extends State<VirtualFittingScreen> {
       virCategory.add(widget.product.category);
     }
     ShoppyCubit.get(context).cart.forEach((element) {
-      if(element.productUid!=widget.product.productUid) {
+      String c=widget.selectedColor.toString();
+      if(element.productUid!=widget.product.productUid||(element.productUid==widget.product.productUid&&element.color!=c)) {
         ProductModel prod = ShoppyCubit
             .get(context)
             .products
             .where((element1) => element.productUid == element1.productUid)
             .first;
         String? c = prod.virtualImage[element.color];
-        if (c != null) {
+        if (c != null&&!virImage.contains(c)) {
           virImage.add(c);
           virCategory.add(prod.category);
         }
@@ -63,6 +67,14 @@ class _VirtualFittingScreenState extends State<VirtualFittingScreen> {
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: AppBar(
+              leading: IconButton(icon: Icon(Icons.arrow_back),onPressed: (){
+                if(ShoppyCubit.get(context).virResult!=null){
+                  File('${ShoppyCubit.get(context).virResult?.path}').delete();
+                  imageCache.clear();
+                  ShoppyCubit.get(context).virResult=null;
+                }
+                Navigator.pop(context);
+              },),
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               actions: [
                 if(ShoppyCubit.get(context).upSelection!=-1&&ShoppyCubit.get(context).lowSelection!=-1)
@@ -125,7 +137,7 @@ class _VirtualFittingScreenState extends State<VirtualFittingScreen> {
                             :Container(
                             color: Colors.grey.withOpacity(0.5),
                             child: Center(child: Text(
-                              'Your Cart is Empty',
+                              'No Virtual Images in your Cart ',
                               style: Theme.of(context).textTheme.bodyText1,
                             )),
                           ),

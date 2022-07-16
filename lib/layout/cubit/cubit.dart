@@ -1012,19 +1012,22 @@ class ShoppyCubit extends Cubit<ShoppyStates> {
       File('${virResult?.path}').delete();
       imageCache.clear();
       virResult=null;
-    }
-    SizeService().sendDataToVirtual(
-        selectedImage: selectedImage,
-        selectedImage2: selectedImage2,
-        category: category,
-        category2: category2,
-        index: index).then((value) {
-      virResult = value;
       emit(ShoppyGetVirtualSuccessState());
-    }).catchError((error){
-      emit(ShoppyGetVirtualErrorState(error.toString()));
-      print(error.toString());
-    });
+    }
+    else{
+      SizeService().sendDataToVirtual(
+          selectedImage: selectedImage,
+          selectedImage2: selectedImage2,
+          category: category,
+          category2: category2,
+          index: index).then((value) {
+        virResult = value;
+        emit(ShoppyGetVirtualSuccessState());
+      }).catchError((error){
+        emit(ShoppyGetVirtualErrorState(error.toString()));
+        print(error.toString());
+      });
+    }
 
   }
 
